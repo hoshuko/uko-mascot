@@ -1,5 +1,13 @@
 # Changelog
 
+## 2.5.0 — 2 octobre 2026
+- **Starter : les trois personnages.** Aituko le robot et Meowuko le chat rejoignent Uko dans la version gratuite :
+  moteur web (9 états) et fichiers Rive (4 états) pour chacun.
+- Bras levés : la célébration garde le haut du bras visible avec les cheveux courts, le crâne rasé, les boucles et
+  Meowuko (le V s'ouvre en Y, comme il le faisait déjà pour les gros volumes). Les autres coiffures ne changent pas.
+- Pack complet : les 14 autres coiffures, les mouvements, le regard sur toute la page, et les fichiers Rive des 3
+  personnages avec les 9 états.
+
 ## 2.4.0 — 2 octobre 2026
 - **Starter : les 9 états** dans le moteur web (`thinking`, `error`, `empty`, `sleep`, `wake` en plus). Le fichier Rive
   gratuit garde 4 états.

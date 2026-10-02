@@ -1,12 +1,12 @@
 {
-  "file": "uko.riv",
-  "character": "uko",
+  "file": "aituko.riv",
+  "character": "aituko",
   "edition": "starter",
   "rig": "bones",
-  "artboard": "Uko",
+  "artboard": "Aituko",
   "stateMachine": "Uko",
-  "bytes": 75503,
-  "keyFrames": 3808,
+  "bytes": 73663,
+  "keyFrames": 3797,
   "inputs": {
     "state": "number: 0 idle, 2 loading",
     "welcome": "trigger",
@@ -17,12 +17,14 @@
     "colors": [
       "bodyColor",
       "lineColor",
-      "hairColor"
+      "hairColor",
+      "accentColor"
     ]
   },
   "layers": [
     "Body",
-    "Blink"
+    "Blink",
+    "Antenna"
   ],
   "states": [
     "I0",
@@ -133,6 +135,11 @@
     {
       "name": "Blink",
       "seconds": 6.4,
+      "loop": true
+    },
+    {
+      "name": "Antenna",
+      "seconds": 6,
       "loop": true
     }
   ]

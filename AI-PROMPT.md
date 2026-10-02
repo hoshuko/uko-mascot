@@ -9,7 +9,7 @@ se branche avec quelques lignes de code. Un assistant de code (Claude, ChatGPT, 
 **Comment faire :** ouvre ton projet dans ton assistant, ajoute les fichiers du pack au projet,
 puis colle le prompt ci-dessous. Remplace ce qui est entre crochets si tu veux guider davantage.
 
-> **Starter (gratuit) :** seuls Uko et les coiffures `original`, `classique`, `chauve` existent (avec les 9 états), sans mouvements ni `lookAt()` ; le fichier Rive gratuit a 4 états.
+> **Starter (gratuit) :** les trois personnages (Uko, Aituko, Meowuko), les coiffures `original`, `classique`, `chauve` et les 9 états, sans mouvements ni `lookAt()` ; les fichiers Rive gratuits ont 4 états.
 > Le prompt le précise à l'assistant : il n'utilisera pas le reste.
 
 ---
@@ -24,9 +24,9 @@ Contexte
   uko-mascot-engine.js (lisible, pour comprendre), uko-mascot-engine.min.js (à charger en production),
   rive/*.riv (pour une app mobile native : iOS, Android, Flutter, React Native).
 - Lis d'abord README.md en entier. N'invente aucune méthode ni attribut : utilise seulement ceux documentés.
-- Si le moteur indique edition "starter", seuls le personnage uko et les coiffures original, classique, chauve
-  existent (les 9 états sont là) : n'utilise ni climb(), ni lookAt(). Le fichier Rive gratuit n'a que idle, welcome,
-  loading et success.
+- Si le moteur indique edition "starter", les personnages uko, aituko, meowuko et les coiffures original, classique,
+  chauve existent (les 9 états sont là) : n'utilise ni climb(), ni lookAt(). Les fichiers Rive gratuits n'ont que idle,
+  welcome, loading et success.
 
 Ce que je veux
 1. Propose-moi d'abord un plan court : les moments de mon app (chargement, enregistrement réussi,
@@ -59,9 +59,9 @@ Context
   uko-mascot-engine.js (readable, to understand it), uko-mascot-engine.min.js (to load in production),
   rive/*.riv (for a native mobile app: iOS, Android, Flutter, React Native).
 - Read README.en.md in full first. Do not invent any method or attribute: only use the documented ones.
-- If the engine reports edition "starter", only the uko character and the original, classique, chauve hairstyles
-  exist (all 9 states are there): do not use climb() or lookAt(). The free Rive file only has idle, welcome,
-  loading and success.
+- If the engine reports edition "starter", the uko, aituko and meowuko characters and the original, classique,
+  chauve hairstyles exist (all 9 states are there): do not use climb() or lookAt(). The free Rive files only have
+  idle, welcome, loading and success.
 
 What I want
 1. First, propose a short plan: the moments of my app (loading, successful save, invalid form,
@@ -94,9 +94,9 @@ Contexto
   uko-mascot-engine.js (legible, para entenderlo), uko-mascot-engine.min.js (para cargar en producción),
   rive/*.riv (para una app móvil nativa: iOS, Android, Flutter, React Native).
 - Lee primero README.es.md entero. No inventes ningún método ni atributo: usa solo los documentados.
-- Si el motor indica edition "starter", solo existen el personaje uko y los peinados original, classique, chauve
-  (los 9 estados están): no uses climb() ni lookAt(). El archivo Rive gratuito solo tiene idle, welcome,
-  loading y success.
+- Si el motor indica edition "starter", existen los personajes uko, aituko y meowuko y los peinados original,
+  classique, chauve (los 9 estados están): no uses climb() ni lookAt(). Los archivos Rive gratuitos solo tienen
+  idle, welcome, loading y success.
 
 Lo que quiero
 1. Primero, propón un plan corto: los momentos de mi app (carga, guardado correcto, formulario

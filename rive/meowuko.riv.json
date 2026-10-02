@@ -1,12 +1,12 @@
 {
-  "file": "uko.riv",
-  "character": "uko",
+  "file": "meowuko.riv",
+  "character": "meowuko",
   "edition": "starter",
   "rig": "bones",
-  "artboard": "Uko",
+  "artboard": "Meowuko",
   "stateMachine": "Uko",
-  "bytes": 75503,
-  "keyFrames": 3808,
+  "bytes": 74301,
+  "keyFrames": 3849,
   "inputs": {
     "state": "number: 0 idle, 2 loading",
     "welcome": "trigger",
@@ -22,7 +22,9 @@
   },
   "layers": [
     "Body",
-    "Blink"
+    "Blink",
+    "Ears",
+    "TailSway"
   ],
   "states": [
     "I0",
@@ -133,6 +135,16 @@
     {
       "name": "Blink",
       "seconds": 6.4,
+      "loop": true
+    },
+    {
+      "name": "Ears",
+      "seconds": 5.3,
+      "loop": true
+    },
+    {
+      "name": "TailSway",
+      "seconds": 3.7,
       "loop": true
     }
   ]
