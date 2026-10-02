@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Uko Starter — Web Component</title>
+  <style>
+    body { font-family: system-ui, sans-serif; display: grid; place-items: center; gap: 16px; min-height: 100vh; margin: 0; }
+    uko-mascot { width: 240px; height: 360px; }
+    .row { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; }
+  </style>
+</head>
+<body>
+  <uko-mascot id="uko" state="idle" hair="original" brand="#FFFFFF"></uko-mascot>
+  <div class="row" id="states"></div>
+  <script src="../uko-mascot-engine.min.js"></script>
+  <script>
+    const uko = document.getElementById('uko');
+    for (const s of UkoMascot.ORDER) {
+      const b = document.createElement('button');
+      b.textContent = s;
+      b.onclick = () => uko.setAttribute('state', s);
+      document.getElementById('states').append(b);
+    }
+    uko.addEventListener('complete', e => console.log('fini :', e.detail.state));
+  </script>
+</body>
+</html>

@@ -1,0 +1,139 @@
+{
+  "file": "uko.riv",
+  "character": "uko",
+  "edition": "starter",
+  "rig": "bones",
+  "artboard": "Uko",
+  "stateMachine": "Uko",
+  "bytes": 76189,
+  "keyFrames": 3868,
+  "inputs": {
+    "state": "number: 0 idle, 2 loading",
+    "welcome": "trigger",
+    "success": "trigger"
+  },
+  "viewModel": {
+    "name": "Appearance",
+    "colors": [
+      "bodyColor",
+      "lineColor",
+      "hairColor"
+    ]
+  },
+  "layers": [
+    "Body",
+    "Blink"
+  ],
+  "states": [
+    "I0",
+    "G_IdleGlance",
+    "I1",
+    "G_IdleShrug",
+    "I2",
+    "G_IdleTap",
+    "I3",
+    "G_IdleLookUp",
+    "Welcome",
+    "Success",
+    "LoadingEnter",
+    "L0",
+    "G_LoadCheck",
+    "L1",
+    "G_LoadLean",
+    "L2",
+    "G_LoadPeek",
+    "L3",
+    "G_LoadSigh",
+    "L4",
+    "G_LoadTap",
+    "LoadingExit",
+    "LoadingToSuccess"
+  ],
+  "animations": [
+    {
+      "name": "Idle",
+      "seconds": 8,
+      "loop": true
+    },
+    {
+      "name": "Welcome",
+      "seconds": 3.53,
+      "loop": false
+    },
+    {
+      "name": "Success",
+      "seconds": 3.93,
+      "loop": false
+    },
+    {
+      "name": "LoadingEnter",
+      "seconds": 1,
+      "loop": false
+    },
+    {
+      "name": "Loading",
+      "seconds": 7.2,
+      "loop": true
+    },
+    {
+      "name": "LoadingExit",
+      "seconds": 0.9,
+      "loop": false
+    },
+    {
+      "name": "LoadingToSuccess",
+      "seconds": 0.43,
+      "loop": false
+    },
+    {
+      "name": "IdleGlance",
+      "seconds": 1.7,
+      "loop": false
+    },
+    {
+      "name": "IdleLookUp",
+      "seconds": 1.9,
+      "loop": false
+    },
+    {
+      "name": "IdleShrug",
+      "seconds": 1.2,
+      "loop": false
+    },
+    {
+      "name": "IdleTap",
+      "seconds": 1.5,
+      "loop": false
+    },
+    {
+      "name": "LoadCheck",
+      "seconds": 1.4,
+      "loop": false
+    },
+    {
+      "name": "LoadLean",
+      "seconds": 1.8,
+      "loop": false
+    },
+    {
+      "name": "LoadPeek",
+      "seconds": 1.6,
+      "loop": false
+    },
+    {
+      "name": "LoadSigh",
+      "seconds": 1.7,
+      "loop": false
+    },
+    {
+      "name": "LoadTap",
+      "seconds": 1.5,
+      "loop": false
+    },
+    {
+      "name": "Blink",
+      "seconds": 6.4,
+      "loop": true
+    }
+  ]
+}

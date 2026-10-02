@@ -1,0 +1,4739 @@
+/**
+ * Uko Mascot Engine v2.3.0 · vector runtime (SVG, 60 FPS)
+ * Canonical fixed-length skeleton with soft IK, blended state transitions,
+ * modular hairstyles with secondary motion, attention tracking, walk cycle,
+ * WCAG contrast helpers. Each instance is fully isolated.
+ *
+ * Generated file — edit mascot_engine/src/ and run build_mascot_engine.js.
+ * Starter edition (free): Uko, 3 hairstyles (original, classique, chauve), 4 states (idle, welcome, loading, success). Full pack: https://uko-mascot.pages.dev/#prix
+ */
+(function (root) {
+  'use strict';
+
+  const DEBUG_BUILD = false;
+  const DATA = {"poses":{"idle":{"viewBox":"0 0 1024 1536","status":"Idle","head_center":[505,345],"head_radius":185,"neck":[507,528],"shoulder_L":[500,532],"elbow_L":[437,690],"wrist_L":[340.9197842725788,934.8495820150412],"shoulder_R":[514,532],"elbow_R":[580,690],"wrist_R":[672.4417560399017,933.7100841051954],"pelvis":[506,894],"hip_L":[500,894],"knee_L":[456,1095],"ankle_L":[361.596401071283,1364.790677330598],"hip_R":[512,894],"knee_R":[557,1095],"ankle_R":[658.4120202922168,1364.9689855267688],"hand_L_center":[328.5,966.5],"hand_R_center":[684.5,965.5],"foot_L_center":[354,1386.5],"foot_R_center":[666.5,1386.5]},"welcome":{"viewBox":"0 0 1024 1536","status":"Welcome","head_center":[506,341],"head_radius":184,"neck":[513,541],"shoulder_L":[503,549],"elbow_L":[356,635],"wrist_L":[231.35075348087776,432.9370109058439],"shoulder_R":[526,571],"elbow_R":[615,726],"wrist_R":[715.1988986294567,865.8609626702834],"pelvis":[496,862],"hip_L":[490,862],"knee_L":[455,1088],"ankle_L":[371.13201380140464,1345.1337159275615],"hip_R":[502,862],"knee_R":[562,1088],"ankle_R":[698.1742695054671,1376.2044471040367],"hand_L_center":[213.5,404],"hand_R_center":[735,893.5],"foot_L_center":[364,1367],"foot_R_center":[708,1397]},"loading":{"viewBox":"0 0 1024 1536","status":"Loading","head_center":[462,398],"head_radius":176,"neck":[444,577],"shoulder_L":[432,575],"elbow_L":[334,782],"wrist_L":[555,716],"shoulder_R":[444,577],"elbow_R":[490,705],"wrist_R":[684,738],"pelvis":[450,876],"hip_L":[444,876],"knee_L":[414,1065],"ankle_L":[334.0845446313369,1293.7865322268583],"hip_R":[456,876],"knee_R":[525,1065],"ankle_R":[622.7675045387776,1303.2222293691343],"occluded":[["elbow_R","wrist_R"]],"hand_L_center":[587,708],"hand_R_center":[716,742],"foot_L_center":[326.5,1315.5],"foot_R_center":[631.5,1324.5]},"success":{"viewBox":"0 0 1024 1536","status":"Success","head_center":[520,414],"head_radius":182,"neck":[553,598],"shoulder_L":[553,679],"elbow_L":[404,605],"wrist_L":[239.19947387914388,493.99446427092596],"shoulder_R":[568,692],"elbow_R":[639,631],"wrist_R":[823.7279990275963,464.74480087516326],"pelvis":[557,784],"hip_L":[552,790],"knee_L":[532,890],"ankle_L":[357.5926112938244,965.8292994374676],"hip_R":[562,790],"knee_R":[535,982],"ankle_R":[530.8066394110415,1296.5020441718923],"hand_L_center":[211,475],"hand_R_center":[849,442],"foot_L_center":[336.5,975],"foot_R_center":[530.5,1319.5]}},"keyframes":{"welcome":[{"t":0,"pose":{"viewBox":"0 0 1024 1536","status":"Idle","head_center":[505,345],"head_radius":185,"neck":[507,528],"shoulder_L":[500,532],"elbow_L":[437,690],"wrist_L":[340.9197842725788,934.8495820150412],"shoulder_R":[514,532],"elbow_R":[580,690],"wrist_R":[672.4417560399017,933.7100841051954],"pelvis":[506,894],"hip_L":[500,894],"knee_L":[456,1095],"ankle_L":[361.596401071283,1364.790677330598],"hip_R":[512,894],"knee_R":[557,1095],"ankle_R":[658.4120202922168,1364.9689855267688],"hand_L_center":[328.5,966.5],"hand_R_center":[684.5,965.5],"foot_L_center":[354,1386.5],"foot_R_center":[666.5,1386.5]}},{"t":0.14,"pose":{"viewBox":"0 0 1024 1536","status":"Idle","head_center":[503,347],"head_radius":185,"neck":[506,529],"shoulder_L":[500.84,536.76],"elbow_L":[414.32,674.6],"wrist_L":[310.2404556509025,794.314062104466],"shoulder_R":[514,532],"elbow_R":[580,690],"wrist_R":[672.4417560399017,933.7100841051954],"pelvis":[506,894],"hip_L":[500,894],"knee_L":[456,1095],"ankle_L":[361.596401071283,1364.790677330598],"hip_R":[512,894],"knee_R":[557,1095],"ankle_R":[658.4120202922168,1364.9689855267688],"hand_L_center":[296.3,809],"hand_R_center":[684.5,965.5],"foot_L_center":[354,1386.5],"foot_R_center":[666.5,1386.5]}},{"t":0.32,"pose":{"viewBox":"0 0 1024 1536","status":"Welcome","head_center":[506,341],"head_radius":184,"neck":[513,541],"shoulder_L":[503,549],"elbow_L":[356,635],"wrist_L":[231.35075348087776,432.9370109058439],"shoulder_R":[526,571],"elbow_R":[615,726],"wrist_R":[715.1988986294567,865.8609626702834],"pelvis":[496,862],"hip_L":[490,862],"knee_L":[455,1088],"ankle_L":[371.13201380140464,1345.1337159275615],"hip_R":[502,862],"knee_R":[562,1088],"ankle_R":[698.1742695054671,1376.2044471040367],"hand_L_center":[213.5,404],"hand_R_center":[735,893.5],"foot_L_center":[364,1367],"foot_R_center":[708,1397]}},{"t":0.42,"pose":{"viewBox":"0 0 1024 1536","status":"Welcome","head_center":[506,341],"head_radius":184,"neck":[513,541],"shoulder_L":[503,549],"elbow_L":[356,635],"wrist_L":[201.35075348087776,432.9370109058439],"shoulder_R":[526,571],"elbow_R":[615,726],"wrist_R":[715.1988986294567,865.8609626702834],"pelvis":[496,862],"hip_L":[490,862],"knee_L":[455,1088],"ankle_L":[371.13201380140464,1345.1337159275615],"hip_R":[502,862],"knee_R":[562,1088],"ankle_R":[698.1742695054671,1376.2044471040367],"hand_L_center":[179.5,404],"hand_R_center":[735,893.5],"foot_L_center":[364,1367],"foot_R_center":[708,1397]}},{"t":0.52,"pose":{"viewBox":"0 0 1024 1536","status":"Welcome","head_center":[506,341],"head_radius":184,"neck":[513,541],"shoulder_L":[503,549],"elbow_L":[356,635],"wrist_L":[261.35075348087776,432.9370109058439],"shoulder_R":[526,571],"elbow_R":[615,726],"wrist_R":[715.1988986294567,865.8609626702834],"pelvis":[496,862],"hip_L":[490,862],"knee_L":[455,1088],"ankle_L":[371.13201380140464,1345.1337159275615],"hip_R":[502,862],"knee_R":[562,1088],"ankle_R":[698.1742695054671,1376.2044471040367],"hand_L_center":[247.5,404],"hand_R_center":[735,893.5],"foot_L_center":[364,1367],"foot_R_center":[708,1397]}},{"t":0.62,"pose":{"viewBox":"0 0 1024 1536","status":"Welcome","head_center":[506,341],"head_radius":184,"neck":[513,541],"shoulder_L":[503,549],"elbow_L":[356,635],"wrist_L":[209.35075348087776,432.9370109058439],"shoulder_R":[526,571],"elbow_R":[615,726],"wrist_R":[715.1988986294567,865.8609626702834],"pelvis":[496,862],"hip_L":[490,862],"knee_L":[455,1088],"ankle_L":[371.13201380140464,1345.1337159275615],"hip_R":[502,862],"knee_R":[562,1088],"ankle_R":[698.1742695054671,1376.2044471040367],"hand_L_center":[188.5,404],"hand_R_center":[735,893.5],"foot_L_center":[364,1367],"foot_R_center":[708,1397]}},{"t":0.7,"pose":{"viewBox":"0 0 1024 1536","status":"Welcome","head_center":[506,341],"head_radius":184,"neck":[513,541],"shoulder_L":[503,549],"elbow_L":[356,635],"wrist_L":[231.35075348087776,432.9370109058439],"shoulder_R":[526,571],"elbow_R":[615,726],"wrist_R":[715.1988986294567,865.8609626702834],"pelvis":[496,862],"hip_L":[490,862],"knee_L":[455,1088],"ankle_L":[371.13201380140464,1345.1337159275615],"hip_R":[502,862],"knee_R":[562,1088],"ankle_R":[698.1742695054671,1376.2044471040367],"hand_L_center":[213.5,404],"hand_R_center":[735,893.5],"foot_L_center":[364,1367],"foot_R_center":[708,1397]}},{"t":0.94,"pose":{"viewBox":"0 0 1024 1536","status":"Idle","head_center":[505,345],"head_radius":185,"neck":[507,528],"shoulder_L":[500,532],"elbow_L":[437,690],"wrist_L":[340.9197842725788,934.8495820150412],"shoulder_R":[514,532],"elbow_R":[580,690],"wrist_R":[672.4417560399017,933.7100841051954],"pelvis":[506,894],"hip_L":[500,894],"knee_L":[456,1095],"ankle_L":[361.596401071283,1364.790677330598],"hip_R":[512,894],"knee_R":[557,1095],"ankle_R":[658.4120202922168,1364.9689855267688],"hand_L_center":[328.5,966.5],"hand_R_center":[684.5,965.5],"foot_L_center":[354,1386.5],"foot_R_center":[666.5,1386.5]}},{"t":1,"pose":{"viewBox":"0 0 1024 1536","status":"Idle","head_center":[505,345],"head_radius":185,"neck":[507,528],"shoulder_L":[500,532],"elbow_L":[437,690],"wrist_L":[340.9197842725788,934.8495820150412],"shoulder_R":[514,532],"elbow_R":[580,690],"wrist_R":[672.4417560399017,933.7100841051954],"pelvis":[506,894],"hip_L":[500,894],"knee_L":[456,1095],"ankle_L":[361.596401071283,1364.790677330598],"hip_R":[512,894],"knee_R":[557,1095],"ankle_R":[658.4120202922168,1364.9689855267688],"hand_L_center":[328.5,966.5],"hand_R_center":[684.5,965.5],"foot_L_center":[354,1386.5],"foot_R_center":[666.5,1386.5]}}],"success":[{"t":0,"pose":{"viewBox":"0 0 1024 1536","status":"Idle","head_center":[505,345],"head_radius":185,"neck":[507,528],"shoulder_L":[500,532],"elbow_L":[437,690],"wrist_L":[340.9197842725788,934.8495820150412],"shoulder_R":[514,532],"elbow_R":[580,690],"wrist_R":[672.4417560399017,933.7100841051954],"pelvis":[506,894],"hip_L":[500,894],"knee_L":[456,1095],"ankle_L":[361.596401071283,1364.790677330598],"hip_R":[512,894],"knee_R":[557,1095],"ankle_R":[658.4120202922168,1364.9689855267688],"hand_L_center":[328.5,966.5],"hand_R_center":[684.5,965.5],"foot_L_center":[354,1386.5],"foot_R_center":[666.5,1386.5]}},{"t":0.1,"pose":{"viewBox":"0 0 1024 1536","status":"Idle","head_center":[505,353],"head_radius":185,"neck":[507,536],"shoulder_L":[500,540],"elbow_L":[447,702],"wrist_L":[350.9197842725788,946.8495820150412],"shoulder_R":[514,540],"elbow_R":[570,702],"wrist_R":[662.4417560399017,945.7100841051954],"pelvis":[506,916],"hip_L":[500,916],"knee_L":[456,1109],"ankle_L":[361.596401071283,1369.790677330598],"hip_R":[512,916],"knee_R":[557,1109],"ankle_R":[658.4120202922168,1369.9689855267688],"hand_L_center":[338.5,978.5],"hand_R_center":[674.5,977.5],"foot_L_center":[354,1391.5],"foot_R_center":[666.5,1391.5]}},{"t":0.18,"pose":{"viewBox":"0 0 1024 1536","status":"Idle","head_center":[505,367],"head_radius":185,"neck":[507,550],"shoulder_L":[500,554],"elbow_L":[459,718],"wrist_L":[362.9197842725788,962.8495820150412],"shoulder_R":[514,554],"elbow_R":[558,718],"wrist_R":[650.4417560399017,961.7100841051954],"pelvis":[506,952],"hip_L":[500,952],"knee_L":[456,1137],"ankle_L":[361.596401071283,1374.790677330598],"hip_R":[512,952],"knee_R":[557,1137],"ankle_R":[658.4120202922168,1374.9689855267688],"hand_L_center":[350.5,994.5],"hand_R_center":[662.5,993.5],"foot_L_center":[354,1396.5],"foot_R_center":[666.5,1396.5]}},{"t":0.27,"pose":{"head_center":[510.7,340.65],"neck":[524.48,526.6],"shoulder_L":[520.14,587.86],"elbow_L":[421.82,650.9],"wrist_L":[294.1284414915987,714.0562278527482],"hand_L_center":[274.45,722.41],"shoulder_R":[534.52,592.8],"elbow_R":[607.14,662.86],"wrist_R":[742.0334278142412,699.9860538193806],"hand_R_center":[760.17,706.69],"pelvis":[525.38,848.48],"hip_L":[519.76,854.48],"knee_L":[492.48,996.6],"ankle_L":[359.6745819781029,1173.2892159418955],"foot_L_center":[345.6,1188.98],"hip_R":[531,854.48],"knee_R":[550.84,1063.36],"ankle_R":[622.6825136454877,1345.7982419474033],"foot_R_center":[628.42,1367.74],"head_radius":183.95,"viewBox":"0 0 1024 1536","status":"Success"}},{"t":0.36,"pose":{"head_center":[516.7,363.76],"neck":[542.88,548.6],"shoulder_L":[541.34,646.66],"elbow_L":[408.62,616.9],"wrist_L":[253.44031733422477,533.7141807551021],"hand_L_center":[227.45,521.81],"shoulder_R":[556.12,656.8],"elbow_R":[630.74,639.26],"wrist_R":[802.547925009319,508.3999405273678],"hand_R_center":[825.97,493.28999999999996],"pelvis":[545.78,806.88],"hip_L":[540.56,812.88],"knee_L":[521.36,918.7],"ankle_L":[358.15314186266863,1021.6838923425059],"foot_L_center":[338.95,1032.6100000000001],"hip_R":[551,812.88],"knee_R":[543.36,1024.94],"ankle_R":[579.2966841458881,1322.5194818867453],"foot_R_center":[582.1800000000001,1344.96],"head_radius":182.84,"viewBox":"0 0 1024 1536","status":"Success"}},{"t":0.43,"pose":{"head_center":[519.55,403.80999999999995],"neck":[551.62,587.9],"shoulder_L":[551.41,674.59],"elbow_L":[404.99,607.55],"wrist_L":[242.25108319094693,507.2201178032494],"hand_L_center":[214.525,489.745],"shoulder_R":[566.38,687.2],"elbow_R":[637.23,632.77],"wrist_R":[819.1894117379654,478.8137593720642],"hand_R_center":[844.065,457.70500000000004],"pelvis":[555.47,787.3],"hip_L":[550.44,793.12],"knee_L":[529.72,896.15],"ankle_L":[357.71272498714814,977.7981407742616],"foot_L_center":[337.025,987.345],"hip_R":[560.5,793.12],"knee_R":[535.66,985.39],"ankle_R":[534.6348008374767,1298.5560524125385],"foot_R_center":[534.58,1321.51],"head_radius":182.09,"viewBox":"0 0 1024 1536","status":"Success"}},{"t":0.45,"pose":{"viewBox":"0 0 1024 1536","status":"Success","head_center":[520,414],"head_radius":182,"neck":[553,598],"shoulder_L":[553,679],"elbow_L":[404,605],"wrist_L":[239.19947387914388,493.99446427092596],"shoulder_R":[568,692],"elbow_R":[639,631],"wrist_R":[823.7279990275963,464.74480087516326],"pelvis":[557,784],"hip_L":[552,790],"knee_L":[532,890],"ankle_L":[357.5926112938244,965.8292994374676],"hip_R":[562,790],"knee_R":[535,982],"ankle_R":[530.8066394110415,1296.5020441718923],"hand_L_center":[211,475],"hand_R_center":[849,442],"foot_L_center":[336.5,975],"foot_R_center":[530.5,1319.5]}},{"t":0.59,"pose":{"viewBox":"0 0 1024 1536","status":"Success","head_center":[520,414],"head_radius":182,"neck":[553,598],"shoulder_L":[553,679],"elbow_L":[404,605],"wrist_L":[239.19947387914388,493.99446427092596],"shoulder_R":[568,692],"elbow_R":[639,631],"wrist_R":[823.7279990275963,464.74480087516326],"pelvis":[557,784],"hip_L":[552,790],"knee_L":[532,890],"ankle_L":[357.5926112938244,965.8292994374676],"hip_R":[562,790],"knee_R":[535,982],"ankle_R":[530.8066394110415,1296.5020441718923],"hand_L_center":[211,475],"hand_R_center":[849,442],"foot_L_center":[336.5,975],"foot_R_center":[530.5,1319.5]}},{"t":0.67,"pose":{"head_center":[514.9,389.18000000000006],"neck":[537.36,574.2],"shoulder_L":[534.98,629.02],"elbow_L":[411.92,625.4],"wrist_L":[263.61234837356824,599.7996925295135],"hand_L_center":[239.2,592.96],"shoulder_R":[549.64,637.6],"elbow_R":[624.84,645.16],"wrist_R":[787.4193007105496,577.296468850371],"hand_R_center":[809.52,567.64],"pelvis":[539.66,839.4],"hip_L":[534.32,843.36],"knee_L":[506.15999999999997,959.7],"ankle_L":[358.9538998181603,1101.476167921132],"foot_L_center":[342.45,1114.91],"hip_R":[545,843.36],"knee_R":[542.48,1020.42],"ankle_R":[574.1924689106411,1319.7808042325503],"foot_R_center":[576.74,1342.28],"head_radius":183.02,"viewBox":"0 0 1024 1536","status":"Idle"}},{"t":0.75,"pose":{"viewBox":"0 0 1024 1536","status":"Idle","head_center":[505,367],"head_radius":185,"neck":[507,550],"shoulder_L":[500,554],"elbow_L":[422.15,651.75],"wrist_L":[291.1456445955331,744.4647790301893],"shoulder_R":[514,554],"elbow_R":[606.55,663.45],"wrist_R":[744.5205653843643,730.6757066516809],"pelvis":[506,946],"hip_L":[500,946],"knee_L":[456,1133],"ankle_L":[361.596401071283,1371.790677330598],"hip_R":[512,946],"knee_R":[557,1133],"ankle_R":[658.4120202922168,1371.9689855267688],"hand_L_center":[271.625,753.325],"hand_R_center":[762.525,737.925],"foot_L_center":[354,1393.5],"foot_R_center":[666.5,1393.5]}},{"t":0.82,"pose":{"viewBox":"0 0 1024 1536","status":"Idle","head_center":[505,335],"head_radius":185,"neck":[507,518],"shoulder_L":[500,522],"elbow_L":[432.38,678.1],"wrist_L":[328.6789408174979,869.129865530865],"shoulder_R":[514,522],"elbow_R":[588.26,681.74],"wrist_R":[691.6218300581791,864.0549444529909],"pelvis":[506,876],"hip_L":[500,876],"knee_L":[456,1087],"ankle_L":[361.596401071283,1364.790677330598],"hip_R":[512,876],"knee_R":[557,1087],"ankle_R":[658.4120202922168,1364.9689855267688],"hand_L_center":[314.05,893.69],"hand_R_center":[705.53,888.21],"foot_L_center":[354,1386.5],"foot_R_center":[666.5,1386.5]}},{"t":0.89,"pose":{"viewBox":"0 0 1024 1536","status":"Idle","head_center":[505,345],"head_radius":185,"neck":[507,528],"shoulder_L":[500,532],"elbow_L":[437,690],"wrist_L":[340.9197842725788,934.8495820150412],"shoulder_R":[514,532],"elbow_R":[580,690],"wrist_R":[672.4417560399017,933.7100841051954],"pelvis":[506,894],"hip_L":[500,894],"knee_L":[456,1095],"ankle_L":[361.596401071283,1364.790677330598],"hip_R":[512,894],"knee_R":[557,1095],"ankle_R":[658.4120202922168,1364.9689855267688],"hand_L_center":[328.5,966.5],"hand_R_center":[684.5,965.5],"foot_L_center":[354,1386.5],"foot_R_center":[666.5,1386.5]}},{"t":1,"pose":{"viewBox":"0 0 1024 1536","status":"Idle","head_center":[505,345],"head_radius":185,"neck":[507,528],"shoulder_L":[500,532],"elbow_L":[437,690],"wrist_L":[340.9197842725788,934.8495820150412],"shoulder_R":[514,532],"elbow_R":[580,690],"wrist_R":[672.4417560399017,933.7100841051954],"pelvis":[506,894],"hip_L":[500,894],"knee_L":[456,1095],"ankle_L":[361.596401071283,1364.790677330598],"hip_R":[512,894],"knee_R":[557,1095],"ankle_R":[658.4120202922168,1364.9689855267688],"hand_L_center":[328.5,966.5],"hand_R_center":[684.5,965.5],"foot_L_center":[354,1386.5],"foot_R_center":[666.5,1386.5]}}]},"faceModes":{"idle":"idle","welcome":"welcome","loading":"idle","success":"success"},"headRot":{"idle":0,"welcome":0,"loading":0,"success":0}};
+  const EDITION = "starter";
+  const FULL_ORDER = ["idle","welcome","thinking","loading","success","error","empty","sleep","wake"];
+  const ORDER = ["idle","welcome","loading","success"];
+  // Characters sharing the skeleton. Starter (free): Uko only, 3 hairstyles, 4 states; full pack: all three, 17 hairstyles, 9 states.
+  const CHARACTER_LIST = ["uko"];
+  const FULL_PACK_URL = "https://uko-mascot.pages.dev/#prix";
+  const DUR = { idle: 4000, welcome: 3200, thinking: 1000, loading: 1000, success: 3600, error: 3800, empty: 3400, sleep: 2600, wake: 2200 };
+  const MASCOT_SVG_STYLES = ".bone{stroke:var(--bodyStrokeColor, #0B0B0B);stroke-width:15;stroke-linecap:round;}\n.hand{fill:var(--handFillColor, #FFFFFF);stroke:var(--bodyStrokeColor, #0B0B0B);stroke-width:15;}\n.foot{fill:var(--footFillColor, #FFFFFF);stroke:var(--bodyStrokeColor, #0B0B0B);stroke-width:15;}\n.headCircle{fill:var(--headFillColor, #FFFFFF);stroke:var(--bodyStrokeColor, #0B0B0B);stroke-width:15;}\n.hair{fill:none;stroke:var(--hairColor, #0B0B0B);stroke-width:15;stroke-linecap:round;stroke-linejoin:round;}\n.hairStroke{fill:none;stroke:var(--hairColor, #0B0B0B);stroke-linecap:round;stroke-linejoin:round;}\n.hairFill{fill:var(--hairColor, #0B0B0B);}\n.moustache{fill:none;stroke:var(--hairColor, #0B0B0B);stroke-linecap:round;stroke-linejoin:round;}\n.hairDetail{fill:none;stroke:var(--hairDetailColor, #FFFFFF);stroke-width:4.5;stroke-linecap:round;opacity:.58;}\n.hairFadeMid{fill:var(--hairColor, #0B0B0B);opacity:.68;}\n.hairFadeTip{fill:var(--hairColor, #0B0B0B);opacity:.42;}\n.faceStroke{fill:none;stroke:var(--detailColor, #0B0B0B);stroke-width:11;stroke-linecap:round;stroke-linejoin:round;}\n.eye{fill:var(--detailColor, #0B0B0B);}\n.accessory{fill:none;stroke:var(--bodyStrokeColor, #0B0B0B);stroke-width:12;stroke-linecap:round;stroke-linejoin:round;}\n.blue{stroke:var(--bodyStrokeColor, #0B0B0B);fill:none;}\n.red{stroke:var(--bodyStrokeColor, #0B0B0B);fill:none;}\n.fxLoading .loadingSpinner{fill:none;stroke:var(--bodyStrokeColor, #0B0B0B);stroke-width:12;stroke-linecap:round;}\n.fxWelcome .accessory,.fxEmpty .accessory{stroke:var(--bodyStrokeColor, #0B0B0B);}\n.fxSuccess .accessory{stroke:var(--bodyStrokeColor, #0B0B0B);}\n.fxError .accessory{stroke:var(--bodyStrokeColor, #0B0B0B);}\n.fxError circle{fill:var(--bodyStrokeColor, #0B0B0B);}\n.fxSleep .accessory{stroke:var(--bodyStrokeColor, #0B0B0B);}\n.fxSleep text{fill:var(--bodyStrokeColor, #0B0B0B);}\n.fxThoughtBubble .bubble{fill:var(--surfaceColor, #FFFFFF);stroke:var(--bodyStrokeColor, #0B0B0B);stroke-width:12;stroke-linejoin:round;}\n.fxThoughtBubble .bubbleTail{fill:var(--surfaceColor, #FFFFFF);stroke:var(--bodyStrokeColor, #0B0B0B);stroke-width:10;}\n.fxThoughtBubble .question{fill:none;stroke:var(--bodyStrokeColor, #0B0B0B);stroke-width:12;stroke-linecap:round;stroke-linejoin:round;}\n.fxThoughtBubble .questionDot{fill:var(--bodyStrokeColor, #0B0B0B);}\n.faceOpenMouth{fill:var(--headFillColor, #FFFFFF);stroke:var(--detailColor, #0B0B0B);stroke-width:11;stroke-linejoin:round;}\n.thinkingForeground .hand{fill:var(--handFillColor, #FFFFFF);stroke:var(--bodyStrokeColor, #0B0B0B);stroke-width:15;}\n.loadingLaptop .laptopSurface{fill:var(--stageBackground, #FFFFFF);stroke:var(--bodyStrokeColor, #0B0B0B);stroke-width:9;stroke-linecap:round;stroke-linejoin:round;}\n.loadingLaptop .laptopEdge{fill:var(--stageBackground, #FFFFFF);stroke:var(--bodyStrokeColor, #0B0B0B);stroke-width:8;stroke-linecap:round;stroke-linejoin:round;}\n.loadingLaptop .laptopDetail{fill:none;stroke:var(--bodyStrokeColor, #0B0B0B);stroke-width:5;stroke-linecap:round;opacity:.58;}\n.blush{fill:var(--blushColor, #F6A7B7);opacity:.55;}\n.eyeShine{fill:var(--headFillColor, #FFFFFF);}\n.fxSpark{fill:var(--bodyStrokeColor, #0B0B0B);}\n.boneHalo{stroke:var(--surfaceColor, #FFFFFF);stroke-width:29;stroke-linecap:round;}\n.robotScreen{fill:#1C2033;}\n.robotGlare{fill:none;stroke:#FFFFFF;stroke-width:10;stroke-linecap:round;opacity:.35;}\n.robotMark{fill:var(--characterAccent, #FFC93C);stroke:var(--bodyStrokeColor, #0B0B0B);stroke-width:12;}\n.led{fill:none;stroke:#6CF0E0;stroke-width:14;stroke-linecap:round;stroke-linejoin:round;}\n.ledFill{fill:#6CF0E0;stroke:#6CF0E0;stroke-width:6;stroke-linejoin:round;}\n.catInnerEar{fill:var(--blushColor, #F6A7B7);}\n.catNose{fill:#F48FA2;stroke:var(--detailColor, #0B0B0B);stroke-width:5;stroke-linejoin:round;}\n.catWhisker{fill:none;stroke:var(--detailColor, #0B0B0B);stroke-width:7;stroke-linecap:round;}\n.catTail{fill:none;stroke:var(--bodyStrokeColor, #0B0B0B);stroke-width:15;stroke-linecap:round;stroke-linejoin:round;}\n.touchInk{fill:none;stroke:var(--bodyStrokeColor, #0B0B0B);stroke-width:10;stroke-linecap:round;stroke-linejoin:round;}\n.touchBold{stroke-width:16;}\n.touchDot{fill:var(--bodyStrokeColor, #0B0B0B);}\n.touchStar{fill:#FFC93C;stroke:var(--bodyStrokeColor, #0B0B0B);stroke-width:7;stroke-linejoin:round;}\n.touchHeart{fill:#FF7AAE;stroke:var(--bodyStrokeColor, #0B0B0B);stroke-width:7;stroke-linejoin:round;}\n.touchPuff{fill:var(--surfaceColor, #FFFFFF);stroke:var(--bodyStrokeColor, #0B0B0B);stroke-width:7;}\n.touchConfetti{stroke:var(--bodyStrokeColor, #0B0B0B);stroke-width:4;}\n.touchC0{fill:#FFC93C;}.touchC1{fill:#FF7AAE;}.touchC2{fill:#3B5BFF;}.touchC3{fill:#3DDC97;}\n.touchNote{fill:#3B5BFF;stroke:var(--bodyStrokeColor, #0B0B0B);stroke-width:6;}";
+
+  // Public hairstyle catalogue. Names are neutral: any style fits any character.
+  // id → French label shown in UIs. Old ids stay accepted through HAIR_ALIASES.
+  const HAIR_CATALOG = {
+    original: ['Original'],
+    classique: ['Classique'],
+    tres_court: ['Très court'],
+    degrade: ['Dégradé'],
+    pixie: ['Pixie'],
+    mi_long: ['Mi-long'],
+    lisse: ['Lisse'],
+    ondule: ['Ondulé'],
+    boucles: ['Boucles'],
+    afro: ['Afro'],
+    dreadlocks: ['Dreadlocks'],
+    tresses: ['Tresses'],
+    tresses_plaquees: ['Tresses plaquées'],
+    chignon: ['Chignon'],
+    queue_de_cheval: ['Queue de cheval'],
+    chauve: ['Chauve'],
+    barbe: ['Barbe']
+  };
+  const HAIR_ALIASES = {
+    afro_femme: 'afro', chignon_femme: 'chignon', tresses_femme: 'tresses',
+    bald: 'chauve', medium: 'mi_long', fade: 'degrade', cornrows: 'tresses_plaquees',
+    ponytail: 'queue_de_cheval', straight: 'lisse', wavy: 'ondule', curly: 'boucles', beard: 'barbe'
+  };
+  function normalizeHairStyle(id) {
+    const key = String(id || '').trim();
+    if (HAIR_CATALOG[key]) return key;
+    if (HAIR_ALIASES[key] && HAIR_CATALOG[HAIR_ALIASES[key]]) return HAIR_ALIASES[key];
+    if (EDITION === 'starter') { console.info(`[UkoMascot] hairStyle "${key}" : pack complet → ${FULL_PACK_URL}`); return 'original'; }
+    console.warn(`[UkoMascot] Unknown hairStyle "${key}". Available: ${Object.keys(HAIR_CATALOG).join(', ')}`);
+    return 'dreadlocks';
+  }
+
+  for (const k of Object.keys(HAIR_CATALOG)) if (!['original', 'classique', 'chauve'].includes(k)) delete HAIR_CATALOG[k];   // Starter : 3 coupes
+
+  function createUkoMascot(target, userOptions) {
+    const el = typeof target === 'string' ? document.querySelector(target) : target;
+    if (!el) throw new Error('[UkoMascot] Container element not found.');
+
+    // Instance-local clock and the bindings the legacy layer expects to find.
+    // Everything here is re-created for each mascot, so two mascots on the same
+    // page never share time, state, hair simulation, walk or orientation.
+
+    const CLOCK = {
+      time: 0,
+      lastWall: null,
+      paused: false,
+      reduced: typeof window !== 'undefined' && window.matchMedia ? window.matchMedia('(prefers-reduced-motion: reduce)').matches : false
+    };
+    function motionNow() { return CLOCK.time; }
+
+    // Legacy motion globals. The runtime writes them before each frame; the legacy
+    // clip sampler, face and FX code only read them.
+    let current = 'idle', start = 0, entered = false;
+    let thinkExitStart = 0, thinkExitPose = null, lastPose = null;
+    // smMode=true makes Wake a finite clip; bridges are handled by the runtime blend.
+    let smMode = true, smLogical = 'Idle', smInternal = null, smBridge = null, smExit = null, smFaceHold = null;
+    let HOLD_THINKING_FRONT = false;
+    // Dark theme: hair gets a contour in the line colour (set by the runtime).
+    let HAIR_OUTLINE_FILTER = null;
+    const INSTANCE_ID = 'uko' + Math.random().toString(36).slice(2, 8);
+
+    // Inert stand-ins for the prototype's QA controls.
+    const freeze = { checked: false };
+    const slow = { checked: false };
+    const showP = { checked: false };
+    const showG = { checked: false };
+    const piv = { innerHTML: '' };
+    const ghost = { innerHTML: '' };
+    const walkPlay = { textContent: '' };
+    const microTapBtn = { textContent: '' };
+    const microVariationBtn = { textContent: '' };
+    const microStatus = { textContent: '' };
+    const smLog = { textContent: '' };
+    let smLogLines = [];
+    const thinkingExit = { classList: { add() {}, remove() {} } };
+    const badge = { textContent: '' };
+    const desc = { textContent: '' };
+    const durationEl = { textContent: '' };
+    const DESC = { idle: '' };
+    const DURATION_LABEL = { idle: '' };
+    function renderGhost() {}
+    function tabsRender() {}
+    function smWrite() {}
+    function smRefresh() {}
+    function smRefreshPersistentPhase() {}
+    function smToIdle() {}
+    function smSetVisual() {}
+    function stateName(s) {
+      const map = { idle: 'Idle', welcome: 'Welcome', loading: 'LoadingLoop', thinking: 'ThinkingLoop', success: 'Success', error: 'Error', empty: 'Empty', sleep: 'SleepLoop', wake: 'Wake' };
+      return map[s] || s;
+    }
+
+    // Legacy rig, face, hair, orientation, walk, FX and micro-interaction code (v16.4.14).
+    // Evaluated inside each mascot instance; every top-level binding is instance-local.
+      function cpy(p){return JSON.parse(JSON.stringify(p))}
+    function lp(a,b,t){return a+(b-a)*t} function ease(t){return t<.5?2*t*t:1-Math.pow(-2*t+2,2)/2}
+    function clamp(v,a=0,b=1){return Math.max(a,Math.min(b,v))}
+    function smooth3(t){t=clamp(t);return t*t*(3-2*t)}
+    function smooth5(t){t=clamp(t);return t*t*t*(t*(t*6-15)+10)}
+    function motionWindow(t,a,b){if(t<=a||t>=b)return 0;const q=Math.sin(Math.PI*(t-a)/(b-a));return q*q}
+    const POINTS=['head_center','neck','shoulder_L','elbow_L','wrist_L','hand_L_center','shoulder_R','elbow_R','wrist_R','hand_R_center','pelvis','hip_L','knee_L','ankle_L','foot_L_center','hip_R','knee_R','ankle_R','foot_R_center'];
+    function lerpPose(a,b,t){const r={};POINTS.forEach(k=>{r[k]=[lp(a[k][0],b[k][0],t),lp(a[k][1],b[k][1],t)]});r.head_radius=lp(a.head_radius,b.head_radius,t);return r}
+    function nearly(a,b,eps=.0001){return Math.abs(a-b)<=eps}
+    function motionTension(state){if(state==='sleep')return .22;if(state==='error')return .22;if(state==='welcome')return .62;if(state==='success')return .42;return .70}
+    function findSegment(ks,t){for(let i=0;i<ks.length-1;i++)if(t>=ks[i].t&&t<=ks[i+1].t)return i;return ks.length-2}
+    function coordAt(ks,key,dim,j){return ks[j].pose[key][dim]}
+    function scalarAt(ks,key,j){return ks[j].pose[key]}
+    function derivativeCoord(ks,key,dim,j,state){
+      const cur=coordAt(ks,key,dim,j), n=ks.length;
+      if(j>0&&nearly(cur,coordAt(ks,key,dim,j-1)))return 0;
+      if(j<n-1&&nearly(cur,coordAt(ks,key,dim,j+1)))return 0;
+      let d;
+      if(j===0){const dt=ks[1].t-ks[0].t;d=(coordAt(ks,key,dim,1)-cur)/dt;}
+      else if(j===n-1){const dt=ks[n-1].t-ks[n-2].t;d=(cur-coordAt(ks,key,dim,n-2))/dt;}
+      else{const dt=ks[j+1].t-ks[j-1].t;d=(coordAt(ks,key,dim,j+1)-coordAt(ks,key,dim,j-1))/dt;}
+      return d*(1-motionTension(state));
+    }
+    function derivativeScalar(ks,key,j,state){
+      const cur=scalarAt(ks,key,j),n=ks.length;
+      if(j>0&&nearly(cur,scalarAt(ks,key,j-1)))return 0;
+      if(j<n-1&&nearly(cur,scalarAt(ks,key,j+1)))return 0;
+      let d;
+      if(j===0)d=(scalarAt(ks,key,1)-cur)/(ks[1].t-ks[0].t);
+      else if(j===n-1)d=(cur-scalarAt(ks,key,n-2))/(ks[n-1].t-ks[n-2].t);
+      else d=(scalarAt(ks,key,j+1)-scalarAt(ks,key,j-1))/(ks[j+1].t-ks[j-1].t);
+      return d*(1-motionTension(state));
+    }
+    function hermite(p0,p1,m0,m1,u){const u2=u*u,u3=u2*u;return (2*u3-3*u2+1)*p0+(u3-2*u2+u)*m0+(-2*u3+3*u2)*p1+(u3-u2)*m1}
+    function pointTime(state,key,t){
+      if(state==='success'||state==='sleep'||state==='error')return clamp(t,0,1);
+      let off=0,w=0;
+      if(state==='welcome'){
+        if(t>.14&&t<.32){w=motionWindow(t,.14,.32);if(key==='shoulder_L')off=.006*w;else if(key==='elbow_L')off=.002*w;else if(key==='wrist_L'||key==='hand_L_center')off=-.010*w;else if(key==='wrist_R'||key==='hand_R_center')off=-.003*w;}
+        else if(t>.70&&t<.94){w=motionWindow(t,.70,.94);if(key==='shoulder_L')off=.006*w;else if(key==='elbow_L')off=.001*w;else if(key==='wrist_L'||key==='hand_L_center')off=-.012*w;}
+      }else if(state==='success'){
+        if(t>.15&&t<.45){w=motionWindow(t,.15,.45);if(['pelvis','hip_L','hip_R','knee_L','knee_R','ankle_L','ankle_R','foot_L_center','foot_R_center'].includes(key))off=.007*w;else if(['wrist_L','hand_L_center','wrist_R','hand_R_center'].includes(key))off=-.010*w;else if(key==='head_center'||key==='neck')off=.003*w;}
+        else if(t>.59&&t<.88){w=motionWindow(t,.59,.88);if(['pelvis','hip_L','hip_R','knee_L','knee_R','ankle_L','ankle_R'].includes(key))off=.007*w;else if(['head_center','neck','wrist_L','hand_L_center','wrist_R','hand_R_center'].includes(key))off=-.006*w;}
+      }else if(state==='error'){
+        if(t>.15&&t<.46){w=motionWindow(t,.15,.46);if(key==='head_center'||key==='neck')off=.004*w;else if(key==='shoulder_R')off=.003*w;else if(key==='elbow_R')off=.006*w;else if(key==='wrist_R'||key==='hand_R_center')off=.009*w;else if(key==='wrist_L'||key==='hand_L_center')off=-.004*w;}
+        else if(t>.64&&t<.92){w=motionWindow(t,.64,.92);if(key==='head_center'||key==='neck')off=-.003*w;else if(key==='wrist_R'||key==='hand_R_center')off=-.007*w;}
+      }else if(state==='empty'){
+        if(t>.14&&t<.34){w=motionWindow(t,.14,.34);if(key==='shoulder_L'||key==='shoulder_R')off=.006*w;else if(key==='elbow_L'||key==='elbow_R')off=.002*w;else if(['wrist_L','hand_L_center','wrist_R','hand_R_center'].includes(key))off=-.006*w;else if(key==='head_center')off=.002*w;}
+        else if(t>.58&&t<.90){w=motionWindow(t,.58,.90);if(key==='shoulder_L'||key==='shoulder_R')off=.004*w;else if(['wrist_L','hand_L_center','wrist_R','hand_R_center'].includes(key))off=-.006*w;}
+      }else if(state==='sleep'){
+        if(t>.12&&t<.94){w=motionWindow(t,.12,.94);if(key==='head_center'||key==='neck')off=.010*w;else if(key==='shoulder_L')off=.010*w;else if(key==='elbow_L')off=.017*w;else if(key==='wrist_L'||key==='hand_L_center')off=.024*w;else if(key==='shoulder_R'||key==='elbow_R'||key==='wrist_R'||key==='hand_R_center')off=.007*w;else if(['knee_L','ankle_L','foot_L_center','knee_R','ankle_R','foot_R_center'].includes(key))off=-.006*w;}
+      }
+      return clamp(t+off,0,1);
+    }
+    function samplePoint(ks,key,t,state){
+      if(t<=ks[0].t)return ks[0].pose[key].slice();if(t>=ks[ks.length-1].t)return ks[ks.length-1].pose[key].slice();
+      const i=findSegment(ks,t),a=ks[i],b=ks[i+1],dt=b.t-a.t,u=(t-a.t)/dt,out=[];
+      for(let dim=0;dim<2;dim++){
+        const p0=a.pose[key][dim],p1=b.pose[key][dim];
+        if(nearly(p0,p1)){out.push(p0);continue;}
+        const m0=derivativeCoord(ks,key,dim,i,state)*dt,m1=derivativeCoord(ks,key,dim,i+1,state)*dt;
+        out.push(hermite(p0,p1,m0,m1,u));
+      }
+      return out;
+    }
+    function sampleScalar(ks,key,t,state){
+      if(t<=ks[0].t)return ks[0].pose[key];if(t>=ks[ks.length-1].t)return ks[ks.length-1].pose[key];
+      const i=findSegment(ks,t),a=ks[i],b=ks[i+1],dt=b.t-a.t,u=(t-a.t)/dt,p0=a.pose[key],p1=b.pose[key];
+      if(nearly(p0,p1))return p0;
+      return hermite(p0,p1,derivativeScalar(ks,key,i,state)*dt,derivativeScalar(ks,key,i+1,state)*dt,u);
+    }
+    function addOffset(p,key,dx,dy){if(!p[key])return;p[key][0]+=dx;p[key][1]+=dy}
+    function applyMotionArcs(state,t,p){
+      if(state==='success'||state==='sleep')return p;
+      if(state==='welcome'){
+        if(t>.14&&t<.32){const w=motionWindow(t,.14,.32);addOffset(p,'wrist_L',-10*w,-6*w);addOffset(p,'hand_L_center',-10*w,-6*w);addOffset(p,'elbow_L',-3*w,-2*w);}
+        if(t>.32&&t<.70){const ks=DATA.keyframes.welcome,i=findSegment(ks,t),u=(t-ks[i].t)/(ks[i+1].t-ks[i].t);let arc=Math.sin(Math.PI*u);arc*=arc;addOffset(p,'wrist_L',0,-7*arc);addOffset(p,'hand_L_center',0,-7*arc);}
+        if(t>.70&&t<.94){const w=motionWindow(t,.70,.94);addOffset(p,'wrist_L',8*w,-4*w);addOffset(p,'hand_L_center',8*w,-4*w);}
+      }else if(state==='success'){
+        if(t>.15&&t<.45){const w=motionWindow(t,.15,.45);addOffset(p,'wrist_L',-7*w,-5*w);addOffset(p,'hand_L_center',-7*w,-5*w);addOffset(p,'wrist_R',7*w,-5*w);addOffset(p,'hand_R_center',7*w,-5*w);}
+      }else if(state==='sleep'){
+        if(t>.40&&t<.94){const w=motionWindow(t,.40,.94);addOffset(p,'head_center',-3*w,0);addOffset(p,'wrist_L',-4*w,1*w);addOffset(p,'hand_L_center',-4*w,1*w);}
+      }
+      return p;
+    }
+    function enforceTopology(state,p){
+      if(state==='success'){
+        // 1) Head must remain physically connected to the neck.
+        const bottom=p.head_center[1]+p.head_radius;
+        const gap=p.neck[1]-bottom;
+        if(gap>3)p.head_center[1]+=gap-2;
+
+        // 2) Torso endpoint (pelvis) must remain connected to the hip root.
+        const hx=(p.hip_L[0]+p.hip_R[0])*.5,hy=(p.hip_L[1]+p.hip_R[1])*.5;
+        const dx=p.pelvis[0]-hx,dy=p.pelvis[1]-hy,d=Math.hypot(dx,dy);
+        if(d>6.5){
+          const s=6.5/d;
+          p.pelvis[0]=hx+dx*s;
+          p.pelvis[1]=hy+dy*s;
+        }
+      }
+      if(state==='sleep'){
+        // During the descent the neck must stay in contact with the head contour.
+        // The approved final Sleep target already has its own horizontal geometry.
+        const dx=p.neck[0]-p.head_center[0],dy=p.neck[1]-p.head_center[1];
+        const d=Math.hypot(dx,dy),allowed=p.head_radius+12;
+        if(d>allowed&&d>0){
+          const e=d-allowed;
+          p.head_center[0]+=dx/d*e;
+          p.head_center[1]+=dy/d*e;
+        }
+      }
+      return p;
+    }
+    function timelinePose(state,t){
+      if(state==='success')return celebrationPose(t);
+      if(state==='welcome'&&t<=.32){
+        // v15.6: one continuous lift. The old .14 staging point is bypassed,
+        // removing the slow pickup / small acceleration break seen at the start.
+        const u=clamp(t/.32);
+        const q=smooth3(u);
+        const target=DATA.keyframes.welcome.find(k=>Math.abs(k.t-.32)<1e-6).pose;
+        const r=lerpPose(DATA.poses.idle,target,q);
+
+        // Shallow curved arm path. Offset returns to zero at both endpoints.
+        const arc=Math.sin(Math.PI*q);
+        addOffset(r,'elbow_L',-2.5*arc,-1.5*arc);
+        addOffset(r,'wrist_L',-8*arc,-5*arc);
+        addOffset(r,'hand_L_center',-10*arc,-6*arc);
+        return r;
+      }
+      if(state==='error'){
+        // Dedicated C2-continuous Error gesture:
+        // zero velocity/acceleration at Idle, target arrival, target departure and final settle.
+        let q;
+        if(t<=.46)q=smooth5(clamp(t/.46));
+        else if(t<=.64)q=1;
+        else if(t<.94)q=1-smooth5(clamp((t-.64)/.30));
+        else q=0;
+        const r=lerpPose(DATA.poses.idle,DATA.poses.error,q);
+
+        // Small continuous arm arc; it is driven by q, so it is smooth in both directions.
+        const arc=Math.sin(Math.PI*q);
+        addOffset(r,'elbow_R',6*arc,-4*arc);
+        addOffset(r,'wrist_R',10*arc,-8*arc);
+        addOffset(r,'hand_R_center',14*arc,-10*arc);
+        return r;
+      }
+      const ks=DATA.keyframes[state];if(!ks)return DATA.poses[state];
+      if(t<=ks[0].t)return cpy(ks[0].pose);if(t>=ks[ks.length-1].t)return cpy(ks[ks.length-1].pose);
+      const r={};POINTS.forEach(k=>r[k]=samplePoint(ks,k,pointTime(state,k,t),state));r.head_radius=sampleScalar(ks,'head_radius',t,state);
+      return enforceTopology(state,applyMotionArcs(state,t,r));
+    }
+    function headRotationFor(state,t,entered=false){
+    if(state==='thinking'){
+      const target=DATA.headRot.thinking||0;
+      if(entered)return target+Math.sin(motionNow()/850)*1.1;
+      return target*smooth5(clamp(t));
+    }
+    if(state==='wake')return (DATA.headRot.sleep||0)*(1-smooth3(clamp(t)));
+    if(state==='sleep'){if(entered)return DATA.headRot.sleep||0;return (DATA.headRot.sleep||0)*smooth5(clamp((t-.12)/.82));}
+    if(state==='error'){
+      const target=DATA.headRot.error||0;
+      if(t<.15)return 0;if(t<.46)return target*smooth5((t-.15)/.31);if(t<=.64)return target;if(t<.92)return target*(1-smooth5((t-.64)/.28));return 0;
+    }
+    return DATA.headRot[state]||0;
+    }
+    function seg(a,b,cls='bone',dash=false){return `<line class="${cls}" x1="${a[0]}" y1="${a[1]}" x2="${b[0]}" y2="${b[1]}" ${dash?'stroke-dasharray="15 12"':''}/>`}
+    function angle(a,b){return Math.atan2(b[1]-a[1],b[0]-a[0])*180/Math.PI}
+    function faceParts(mode,cx,cy,r,blink=0,eyeOffset=[0,0]){
+      const s=r/185;
+      const E=(x,y,rx,ry)=>{
+        const minRy=2.2*s;
+        const bry=Math.max(minRy,ry*(1-blink)+minRy*blink);
+        const ox=eyeOffset[0]||0, oy=eyeOffset[1]||0;
+        // Kawaii catch-light: a small shine that follows the gaze, hidden when the eye closes.
+        const shine=bry>ry*.55?`<circle class="eyeShine" cx="${x+ox-rx*.32}" cy="${y+oy-bry*.38}" r="${rx*.36}"/>`:'';
+        return `<ellipse class="eye" cx="${x+ox}" cy="${y+oy}" rx="${rx}" ry="${bry}"/>${shine}`;
+      };
+      const P=d=>`<path class="faceStroke" d="${d}"/>`;
+      const O=d=>`<path class="faceOpenMouth" d="${d}"/>`;
+
+      let brows='',eyes='',mouth='';
+
+      if(mode==='tapSurprised'){
+        brows=
+          P(`M ${cx-72*s} ${cy-90*s} Q ${cx-48*s} ${cy-112*s} ${cx-24*s} ${cy-90*s}`)+
+          P(`M ${cx+22*s} ${cy-90*s} Q ${cx+46*s} ${cy-112*s} ${cx+70*s} ${cy-90*s}`);
+        eyes=
+          E(cx-48*s,cy-16*s,15*s,32*s)+
+          E(cx+45*s,cy-16*s,15*s,32*s);
+        mouth=`<ellipse class="faceStroke" cx="${cx+2*s}" cy="${cy+60*s}" rx="${17*s}" ry="${23*s}"/>`;
+      }
+      else if(mode==='tapPlayful'){
+        brows=
+          P(`M ${cx-68*s} ${cy-72*s} Q ${cx-48*s} ${cy-88*s} ${cx-28*s} ${cy-72*s}`)+
+          P(`M ${cx+24*s} ${cy-76*s} Q ${cx+45*s} ${cy-88*s} ${cx+65*s} ${cy-70*s}`);
+        eyes=
+          P(`M ${cx-68*s} ${cy-10*s} Q ${cx-48*s} ${cy+12*s} ${cx-28*s} ${cy-10*s}`)+
+          E(cx+45*s,cy-10*s,13*s,28*s);
+        mouth=P(`M ${cx-45*s} ${cy+52*s} Q ${cx+5*s} ${cy+90*s} ${cx+58*s} ${cy+42*s}`);
+      }
+      else if(mode==='tapOuch'){
+        brows=
+          P(`M ${cx-70*s} ${cy-76*s} L ${cx-30*s} ${cy-94*s}`)+
+          P(`M ${cx+24*s} ${cy-94*s} L ${cx+64*s} ${cy-74*s}`);
+        eyes=
+          P(`M ${cx-68*s} ${cy-12*s} Q ${cx-48*s} ${cy+10*s} ${cx-28*s} ${cy-12*s}`)+
+          E(cx+45*s,cy-12*s,13*s,28*s);
+        mouth=`<ellipse class="faceStroke" cx="${cx+4*s}" cy="${cy+60*s}" rx="${15*s}" ry="${20*s}"/>`;
+      }
+      else if(mode==='tapSquint'){
+        brows=
+          P(`M ${cx-66*s} ${cy-72*s} Q ${cx-48*s} ${cy-84*s} ${cx-28*s} ${cy-70*s}`)+
+          P(`M ${cx+25*s} ${cy-70*s} Q ${cx+45*s} ${cy-84*s} ${cx+64*s} ${cy-68*s}`);
+        eyes=
+          P(`M ${cx-68*s} ${cy-12*s} Q ${cx-48*s} ${cy+10*s} ${cx-28*s} ${cy-12*s}`)+
+          P(`M ${cx+24*s} ${cy-12*s} Q ${cx+44*s} ${cy+10*s} ${cx+64*s} ${cy-12*s}`);
+        mouth=P(`M ${cx-42*s} ${cy+52*s} Q ${cx+4*s} ${cy+84*s} ${cx+52*s} ${cy+48*s}`);
+      }
+      else if(mode==='thinking'){
+        brows=
+          P(`M ${cx-68*s} ${cy-78*s} Q ${cx-48*s} ${cy-92*s} ${cx-28*s} ${cy-76*s}`)+
+          P(`M ${cx+24*s} ${cy-82*s} Q ${cx+46*s} ${cy-94*s} ${cx+66*s} ${cy-76*s}`);
+        eyes=
+          E(cx-40*s,cy-30*s,13*s,27*s)+
+          E(cx+54*s,cy-34*s,13*s,27*s);
+        mouth=P(`M ${cx-18*s} ${cy+60*s} Q ${cx+4*s} ${cy+48*s} ${cx+25*s} ${cy+58*s}`);
+      }
+      else if(mode==='success'){
+        eyes=
+          P(`M ${cx-62*s} ${cy-22*s} Q ${cx-43*s} ${cy-45*s} ${cx-23*s} ${cy-22*s}`)+
+          P(`M ${cx+23*s} ${cy-22*s} Q ${cx+43*s} ${cy-45*s} ${cx+63*s} ${cy-22*s}`);
+        mouth=O(`M ${cx-48*s} ${cy+26*s} Q ${cx} ${cy+90*s} ${cx+50*s} ${cy+16*s} Q ${cx+8*s} ${cy+118*s} ${cx-48*s} ${cy+26*s}`);
+      }
+      else if(mode==='sleep'){
+        eyes=
+          P(`M ${cx-72*s} ${cy-16*s} Q ${cx-52*s} ${cy+10*s} ${cx-28*s} ${cy-14*s}`)+
+          P(`M ${cx+15*s} ${cy-34*s} Q ${cx+37*s} ${cy-8*s} ${cx+57*s} ${cy-34*s}`);
+        mouth=P(`M ${cx-20*s} ${cy+50*s} Q ${cx+18*s} ${cy+72*s} ${cx+52*s} ${cy+35*s}`);
+      }
+      else if(mode==='error'){
+        brows=
+          P(`M ${cx-68*s} ${cy-80*s} L ${cx-32*s} ${cy-105*s}`)+
+          P(`M ${cx+24*s} ${cy-105*s} L ${cx+65*s} ${cy-82*s}`);
+        eyes=
+          E(cx-48*s,cy-20*s,13*s,28*s)+
+          E(cx+45*s,cy-20*s,13*s,28*s);
+        mouth=P(`M ${cx-55*s} ${cy+72*s} Q ${cx} ${cy+22*s} ${cx+55*s} ${cy+72*s}`);
+      }
+      else if(mode==='empty'){
+        brows=
+          P(`M ${cx-66*s} ${cy-72*s} Q ${cx-48*s} ${cy-85*s} ${cx-28*s} ${cy-70*s}`)+
+          P(`M ${cx+25*s} ${cy-70*s} Q ${cx+45*s} ${cy-84*s} ${cx+64*s} ${cy-68*s}`);
+        eyes=
+          E(cx-48*s,cy-10*s,13*s,28*s)+
+          E(cx+45*s,cy-10*s,13*s,28*s);
+        mouth=P(`M ${cx-15*s} ${cy+60*s} Q ${cx} ${cy+42*s} ${cx+17*s} ${cy+60*s}`);
+      }
+      else if(mode==='welcome'){
+        brows=
+          P(`M ${cx-66*s} ${cy-70*s} Q ${cx-48*s} ${cy-84*s} ${cx-28*s} ${cy-70*s}`)+
+          P(`M ${cx+25*s} ${cy-70*s} Q ${cx+45*s} ${cy-84*s} ${cx+65*s} ${cy-68*s}`);
+        eyes=
+          E(cx-48*s,cy-10*s,13*s,28*s)+
+          E(cx+45*s,cy-10*s,13*s,28*s);
+        mouth=O(`M ${cx-50*s} ${cy+30*s} Q ${cx} ${cy+92*s} ${cx+55*s} ${cy+24*s} Q ${cx+12*s} ${cy+112*s} ${cx-50*s} ${cy+30*s}`);
+      }
+      else{
+        brows=
+          P(`M ${cx-66*s} ${cy-70*s} Q ${cx-48*s} ${cy-84*s} ${cx-28*s} ${cy-70*s}`)+
+          P(`M ${cx+25*s} ${cy-70*s} Q ${cx+45*s} ${cy-84*s} ${cx+65*s} ${cy-68*s}`);
+        eyes=
+          E(cx-48*s,cy-10*s,13*s,28*s)+
+          E(cx+45*s,cy-10*s,13*s,28*s);
+        mouth=P(`M ${cx-45*s} ${cy+58*s} Q ${cx} ${cy+84*s} ${cx+55*s} ${cy+50*s}`);
+      }
+
+      // Kawaii cheeks, under and outside the eyes (hidden by a beard).
+      const cheeks=(typeof APPEARANCE==='undefined'||APPEARANCE.cheeks!==false)&&!wearsBeard()
+        ?`<ellipse class="blush" cx="${cx-86*s}" cy="${cy+30*s}" rx="${25*s}" ry="${14*s}"/><ellipse class="blush" cx="${cx+84*s}" cy="${cy+30*s}" rx="${25*s}" ry="${14*s}"/>`:'';
+      brows=cheeks+brows;
+      return {brows,eyes,mouth};
+    }
+
+    // Beard style: a horseshoe moustache that follows the upper lip of the mouth
+    // being drawn (any expression, any turn) and drops at the corners into the
+    // beard. The mouth geometry is recorded (head units, relative to the head
+    // centre, before head rotation) so the beard opens exactly around it.
+    const FACE_X={shift:0,scaleX:1};
+    let BEARD_MOUTH=null;
+    // Level of detail: below ~200 device pixels wide, the faint texture strokes of the hair (opacity
+    // ≤ .3) are thinner than a pixel and invisible, but they are most of the DOM of the
+    // afro, dreadlocks and braids. The runtime sets this flag before each render.
+    let HAIR_LOD=false;
+    const hairLod=svg=>svg.indexOf('hairDetail')<0?svg:svg.replace(/<path [^>]*class="hairDetail" style="[^"]*opacity:(0?\.[0-2]\d*|\.30*)"\/>/g,'');
+    function quadMaxY(y0,qy,y1){const d=y0-2*qy+y1,t=d?clamp((y0-qy)/d):0;return Math.max(y0,y1,(1-t)*(1-t)*y0+2*(1-t)*t*qy+t*t*y1);}
+    // The beard is one of Uko's hairstyles: the other characters never wear it.
+    function wearsBeard(){return typeof APPEARANCE!=='undefined'&&APPEARANCE.hairStyle==='barbe'&&!characterDef();}
+    function beardMoustache(mouth,cx,cy,s){
+      if(!wearsBeard()||!mouth)return '';
+      let q=null,bottom=-1e9;
+      const m=/d="M\s*(-?[\d.]+)\s+(-?[\d.]+)\s*Q\s*(-?[\d.]+)\s+(-?[\d.]+)\s+(-?[\d.]+)\s+(-?[\d.]+)(?:\s*Q\s*(-?[\d.]+)\s+(-?[\d.]+)\s+(-?[\d.]+)\s+(-?[\d.]+))?/.exec(mouth);
+      if(m){
+       const v=m.slice(1).map(Number);q=v.slice(0,6);
+       bottom=quadMaxY(v[1],v[3],v[5]);
+       if(!isNaN(v[6]))bottom=Math.max(bottom,quadMaxY(v[5],v[7],v[9]));
+      }else{
+       const e=/cx="(-?[\d.]+)" cy="(-?[\d.]+)" rx="(-?[\d.]+)" ry="(-?[\d.]+)"/.exec(mouth);
+       if(e){const [ex,ey,rx,ry]=e.slice(1).map(Number);q=[ex-rx,ey,ex,ey-2*ry,ex+rx,ey];bottom=ey+ry;}
+      }
+      if(!q)return '';
+      let [x0,y0,qx,qy,x1,y1]=q;if(x0>x1)[x0,y0,x1,y1]=[x1,y1,x0,y0];
+      const B=t=>[(1-t)*(1-t)*x0+2*(1-t)*t*qx+t*t*x1,(1-t)*(1-t)*y0+2*(1-t)*t*qy+t*t*y1];
+      const th=20*s,off=7*s+th/2,side=off+3*s;
+      const hole=Math.max(88,(bottom-cy)/s+14);
+      const drop=y=>Math.max(y+26*s,cy+(hole+10)*s),pts=[[x0-side,drop(y0)]];
+      for(let i=0;i<=10;i++){
+       const t=i/10,p=B(t),a=B(Math.max(0,t-.05)),b=B(Math.min(1,t+.05)),l=Math.hypot(b[0]-a[0],b[1]-a[1])||1;
+       let nx=(b[1]-a[1])/l,ny=-(b[0]-a[0])/l;if(ny>0){nx=-nx;ny=-ny;}
+       // Upward above the lip, turning outward at the corners (clear of the eyes).
+       const w=smooth5(clamp(Math.min(t,1-t)/.22)),ox=lp(t<.5?-1:1,nx,w),oy=lp(0,ny,w),ol=Math.hypot(ox,oy)||1;
+       pts.push([p[0]+ox/ol*off,p[1]+oy/ol*off]);
+      }
+      pts.push([x1+side,drop(y1)]);
+      // Stay on the head: in profile the lip reaches the contour.
+      const lim=176*s;
+      for(const p of pts){const dx=p[0]-cx,dy=p[1]-cy,d=Math.hypot(dx,dy);if(d>lim){p[0]=cx+dx*lim/d;p[1]=cy+dy*lim/d;}}
+      const X=x=>(FACE_X.shift+(x-cx)*FACE_X.scaleX)/s;
+      BEARD_MOUTH={x0:X(x0-side),x1:X(x1+side),y0:(y0-cy)/s,y1:(y1-cy)/s,hole};
+      return `<path class="moustache" d="${hairSmoothPath(pts)}" style="stroke-width:${th}"${HAIR_OUTLINE_FILTER?` filter="url(#${HAIR_OUTLINE_FILTER})"`:''}/>`;
+    }
+
+    function face(mode,cx,cy,r,rot=0,blink=0,eyeOffset=[0,0]){
+      const p=faceParts(mode,cx,cy,r,blink,eyeOffset);
+      return `<g transform="rotate(${rot} ${cx} ${cy})">${p.brows}${p.eyes}${beardMoustache(p.mouth,cx,cy,r/185)}${p.mouth}</g>`;
+    }
+
+    function faceBlend(spec,cx,cy,r,rot=0,blink=0,eyeOffset=[0,0]){
+      // Animator's trick: the expression changes while the eyes are closed, so the
+      // viewer never sees two faces at once (no cross-fade, no ghost eyes).
+      const u=clamp(spec.u);
+      const shut=smooth5(clamp(1-Math.abs(u-.5)/.2));
+      return face(u<.5?spec.from:spec.to,cx,cy,r,rot,Math.max(blink,shut),eyeOffset);
+    }
+
+    function renderFaceSpec(spec,cx,cy,r,rot=0,blink=0,eyeOffset=[0,0]){
+      return typeof spec==='string'
+        ? face(spec,cx,cy,r,rot,blink,eyeOffset)
+        : faceBlend(spec,cx,cy,r,rot,blink,eyeOffset);
+    }
+
+    function faceSpecHasThinking(spec){
+      if(typeof spec==='string')return spec==='thinking';
+      if(!spec)return false;
+      return (spec.from==='thinking'&&spec.u<.88)||(spec.to==='thinking'&&spec.u>.12);
+    }
+    const APPEARANCE={
+      hairStyle:'mi_long'
+    };
+
+    function screenFaceDirFromYaw(yaw){
+      // Yaw is expressed in CHARACTER turn direction: + = character turns right.
+      // From the viewer, that means the face points to screen-left, so facial/head
+      // projection is the opposite sign. This keeps body near/far depth and the
+      // surviving eye anatomically consistent through 3/4 -> profile.
+      return yaw<0?1:-1;
+    }
+
+    const HAIR_STYLES=HAIR_CATALOG;
+    const HAIR_DYNAMICS={model:null,style:null,chains:[],last:0,frame:null,sleepSettled:null,sleepSettleCount:0};
+    const HAIR_MODELS=new Map();
+    const hMix=(a,b,t)=>a.length===3?[a[0]+(b[0]-a[0])*t,a[1]+(b[1]-a[1])*t,a[2]+(b[2]-a[2])*t]:a.map((v,i)=>v+(b[i]-v)*t);
+    const hLen=(a,b)=>a.length===3?Math.hypot(a[0]-b[0],a[1]-b[1],a[2]-b[2]):a.length===2?Math.hypot(a[0]-b[0],a[1]-b[1]):Math.hypot(...a.map((v,i)=>v-b[i]));
+    function hairModel(style){
+     if(HAIR_MODELS.has(style))return HAIR_MODELS.get(style);
+     const m={style,cap:[],locks:[],details:[],curls:[],ink:[],groom:null,bun:null};
+     const short=style==='tres_court'||style==='degrade';
+     const scalpR=short?188:192;
+     const hairline=lon=>{
+      const f=Math.max(0,Math.cos(lon));
+      // Temples follow the round skull; the nape is lower, without a straight helmet edge.
+      if(style==='mi_long')return 1.97-1.08*Math.pow(f,.60)-.12*Math.pow(Math.sin(lon),2);
+      if(style==='classique')return 1.67-.80*Math.pow(f,.65)-.14*Math.pow(Math.sin(lon),2);
+      if(style==='afro')return 1.55-.87*Math.pow(f,.7)+.25*Math.max(0,-Math.cos(lon));
+      if(style==='dreadlocks')return .79+.88*smooth5(clamp((Math.acos(Math.cos(lon))-.68)/1.22));
+      return 1.93-.99*Math.pow(f,.65)-.17*Math.pow(Math.sin(lon),2);
+     };
+     const scalp=(lon,phi,extra=0)=>{
+      const crown=Math.pow(Math.max(0,Math.cos(phi)),2);
+      const lift=style==='mi_long'?91*crown:style==='classique'?77*crown:style==='degrade'?16*crown:0;
+      const rr=scalpR+extra;
+      return [rr*Math.sin(phi)*Math.sin(lon),-rr*Math.cos(phi)-lift,rr*Math.sin(phi)*Math.cos(lon)];
+     };
+     const curve=(a,b,c,d,n=18)=>Array.from({length:n},(_,i)=>{const t=i/(n-1),q=1-t;return a.map((v,j)=>q*q*q*v+3*q*q*t*b[j]+3*q*t*t*c[j]+t*t*t*d[j]);});
+     const lock=(points,width,stiffness=30,anchor=2,texture='flow',isStatic=false)=>m.locks.push({points,width,stiffness,anchor,texture,isStatic,lengths:points.slice(1).map((p,i)=>hLen(p,points[i])),bends:points.slice(2).map((p,i)=>hLen(p,points[i]))});
+     if(style==='chauve'){HAIR_MODELS.set(style,m);return m;}
+     if(style==='original'){
+      for(let i=0;i<3;i++){
+       const root=scalp(-.65+i*.42,.94-i*.12);
+       lock(curve(root,[root[0]-10,root[1]-40,root[2]],[root[0]+30,-215-i*8,root[2]-25],[root[0]+78,-205-i*5,root[2]-45]),13,110,2,'plain');
+      }
+      HAIR_MODELS.set(style,m);return m;
+     }
+     // Volume styles (src/core/hair-styles.js): afro, curls, straight, wavy, pixie,
+     // ponytail, braids, cornrows, beard.
+     if(EXTRA_HAIR[style]){EXTRA_HAIR[style](m,{scalp,curve,lock});HAIR_MODELS.set(style,m);return m;}
+     for(let i=0;i<64;i++){
+      const a=-Math.PI+i*Math.PI/32,b=a+Math.PI/32,points=[];
+      if(style==='mi_long'||style==='classique'||style==='afro')continue;
+      for(let j=0;j<=15;j++)points.push(scalp(a,(style==='dreadlocks'?.86:hairline(a))*j/15));
+      for(let j=15;j>=0;j--)points.push(scalp(b,(style==='dreadlocks'?.86:hairline(b))*j/15));
+      m.cap.push(points);
+     }
+     // Hand-drawn front silhouettes plus matched profile contours form a 2.5D rig.
+     // Corresponding points deform continuously; scalp anchors and tip compliance
+     // are shared with the head rig rather than transformed as a floating decal.
+     const sample=(d,n,map=p=>p)=>{
+      const path=document.createElementNS('http://www.w3.org/2000/svg','path');path.setAttribute('d',d);
+      const length=path.getTotalLength();
+      return Array.from({length:n},(_,i)=>{const p=path.getPointAtLength(length*i/(n-1));return map([p.x,p.y]);});
+     };
+     const groom=(outer,inner,profileOuter,profileInner,frontLines,profileLines,map)=>{
+      m.groom={outer:sample(outer,150,map),inner:sample(inner,85,map),profileOuter:sample(profileOuter,150),profileInner:sample(profileInner,85),lines:[]};
+      const quarter=style==='classique'
+       ?'M 170 33 Q 151 -7 123 -29 Q 105 -43 104 -63 L 98 -14 L 88 -31 L 85 -84 Q 57 -120 26 -126 C -39 -144 -108 -141 -155 -119 Q -177 -92 -182 -29'
+       :'M 171 92 Q 160 111 149 112 Q 161 86 149 72 Q 158 48 140 30 Q 118 28 123 2 Q 98 -13 88 -56 Q 77 -103 45 -119 Q 4 -138 -33 -127 Q -102 -140 -129 -100 Q -149 -80 -144 -57 Q -135 -33 -148 -15 Q -157 -4 -146 7';
+      m.groom.quarterInner=sample(quarter,85);
+      // Match endpoints exactly to the outer silhouette at 45 degrees.
+      m.groom.quarterInner[0]=hMix(m.groom.outer.at(-1),m.groom.profileOuter.at(-1),.5);
+      m.groom.quarterInner[84]=hMix(m.groom.outer[0],m.groom.profileOuter[0],.5);
+      // Opposite profiles have their own flow lines: mirroring a sweep would
+      // reverse its direction and collapse the curls halfway through the turn.
+      const leftLines=style==='classique'?[
+       'M -146 -155 C -131 -174 -99 -180 -83 -166 Q -71 -151 -98 -143',
+       'M -147 -186 C -117 -213 -57 -214 -29 -181 Q -16 -157 -57 -137',
+       'M -113 -219 C -70 -246 -8 -221 23 -181 Q 39 -155 7 -134',
+       'M -57 -247 C -4 -260 54 -222 76 -181 Q 93 -155 70 -143',
+       'M 1 -254 C 61 -243 115 -195 109 -153',
+       'M 74 -220 Q 126 -193 146 -155',
+       'M -148 -101 Q -158 -63 -150 -22',
+       'M 161 -153 Q 169 -132 163 -119',
+       'M -142 -144 Q -130 -130 -110 -136'
+      ]:[
+       'M -145 -163 C -160 -181 -122 -251 -68 -272 C -11 -288  70 -247 116 -174',
+       'M -163 -133 C -169 -166 -119 -227 -72 -247 C -16 -265 64 -221 109 -155',
+       'M -177 -97 C -173 -132 -120 -203 -72 -220 C -16 -239 54 -200 96 -144',
+       'M -170 -60 C -163 -97 -116 -177 -70 -194 C -17 -214 46 -177  80 -133',
+       'M -160 -17 C -178 -48 -110 -139 -53 -151',
+       'M -146 38 Q -164 12 -130 -18',
+       'M 7 -257 C 58 -250 120 -200 147 -174 Q 162 -157 178 -161',
+       'M 53 -222 C 98 -207 127 -176 143 -156 Q 153 -142 168 -141',
+       'M  90 -189 Q 139 -156 153 -126',
+       'M -145 54 Q -136 81 -130 95'
+      ];
+      for(let i=0;i<frontLines.length;i++)m.groom.lines.push({front:sample(frontLines[i],35,map),profile:sample(profileLines[i],35),leftProfile:sample(leftLines[i],35,p=>[-p[0],p[1]])});
+     };
+     if(style==='classique'){
+      groom(
+       'M 32 208 C 28 191 26 179 26 168 L 22 173 L 25 160 L 21 163 L 25 153 L 22 155 Q 24 148 30 144 L 24 144 Q 27 137 35 136 L 30 133 Q 36 128 44 128 L 40 124 Q 49 126 54 123 L 47 119 Q 58 120 66 123 Q 65 119 61 117 Q 73 116 82 123 Q 83 119 80 117 Q 92 121 96 130 L 95 121 Q 104 127 106 136 L 109 127 Q 115 136 111 146 Q 116 144 118 141 Q 120 149 115 156 L 121 153 Q 120 160 116 164 L 119 165 Q 114 176 113 190 L 110 209',
+       'M 110 209 L 109 182 Q 109 166 103 165 C 84 159 58 159 40 164 Q 33 166 33 179 L 32 208',
+       'M -168 -101 Q -177 -120 -174 -151 L -186 -145 Q -181 -162 -171 -174 L -188 -171 Q -183 -184 -165 -190 L -181 -195 Q -169 -207 -150 -207 L -160 -217 Q -141 -220 -121 -225 L -137 -238 Q -109 -237 -85 -247 L -92 -256 Q -60 -253 -40 -266 Q -21 -266 -7 -261 L -4 -266 Q 20 -266 41 -251 L 42 -257 Q 68 -248 88 -227 L 90 -234 Q 111 -213 126 -185 L 130 -190 Q 156 -144 162 -103 Q 177 -57 164 7 L 154 19',
+       'M 154 19 Q 143 -17 111 -28 Q 65 -40 38 -74 L 27 -25 L 18 -37 L 16 -100 Q -9 -130 -40 -143 Q -88 -157 -139 -139 Q -158 -126 -168 -101',
+       [
+        'M 29 153 C 38 144 49 145 49 150 C 48 155 39 157 36 157',
+        'M 33 144 C 41 137 53 136 62 141 C 73 147 65 156 48 159',
+        'M 43 132 C 55 128 73 132 79 141 C 85 151 71 160 60 160',
+        'M 58 126 C 73 125 88 133 88 143 C 88 153 80 157 76 158',
+        'M 80 127 C 98 133 102 148 91 158',
+        'M 101 139 Q 112 151 103 163',
+        'M 30 169 Q 33 174 31 189',
+        'M 112 167 Q 110 177 111 189',
+        'M 27 158 Q 31 162 36 160'
+       ],
+       [
+        'M -167 -174 Q -128 -179 -104 -169',
+        'M -160 -202 C -91 -208 -77 -175 -105 -158',
+        'M -120 -227 C -43 -236 -13 -185 -45 -153',
+        'M -65 -249 C 13 -259 55 -186 19 -137',
+        'M 5 -254 C 75 -232 105 -152 49 -95',
+        'M 73 -225 Q 144 -129 91 -63',
+        'M -151 -147 Q -155 -133 -161 -120',
+        'M 140 -111 Q 158 -49 153 -6',
+        'M -171 -155 Q -159 -167 -144 -164'
+       ],p=>{const y=(p[1]-196)*3.60;return [(p[0]-72)*3.82*(1+.21*smooth5(clamp((y+110)/160))),y];}
+      );
+     }
+     HAIR_MODELS.set(style,m);return m;
+    }
+    function hairFrameBasis(f){
+     if(f.basis)return f.basis;
+     const a=-f.yaw*Math.PI/2,b=f.rot*Math.PI/180;
+     return f.basis={c:Math.cos(a),s:Math.sin(a),cr:Math.cos(b),sr:Math.sin(b),back:1-.15*smooth5(Math.abs(f.yaw)),dir:screenFaceDirFromYaw(f.yaw)};
+    }
+    function hairTransform(p,f){
+     const {c,s,cr,sr,back,dir}=hairFrameBasis(f);
+     let x=p[0]*c+p[2]*s;const y=p[1];
+     if(x*dir<0)x*=back;
+     return [f.cx+f.scale*(x*cr-y*sr),f.cy+f.scale*(x*sr+y*cr),f.scale*(p[2]*c-p[0]*s)];
+    }
+    function hairLocal(p,f){
+     const {c,s,cr,sr,back,dir}=hairFrameBasis(f),dx=(p[0]-f.cx)/f.scale,dy=(p[1]-f.cy)/f.scale;
+     let x=dx*cr+dy*sr;const y=-dx*sr+dy*cr,z=p[2]/f.scale;
+     if(x*dir<0)x/=back;
+     return [x*c-z*s,y,x*s+z*c];
+    }
+    function updateHairPhysics(now,cx,cy,r,rot,yaw){
+     const h=HAIR_DYNAMICS,model=hairModel(APPEARANCE.hairStyle),f={cx,cy,scale:r/185,rot,yaw};
+     const reset=h.style!==model.style||!h.frame||Math.hypot(cx-h.frame.cx,cy-h.frame.cy)>100||Math.abs(yaw-(h.frame?.yaw||0))>.8||Math.abs(rot-(h.frame?.rot||0))>50;
+     if(reset){h.style=model.style;h.model=model;h.chains=model.locks.map(lock=>{const p=lock.points.map(p=>hairTransform(p,f));return {p,old:p.map(p=>p.slice())};});h.last=now;h.soft={offset:[0,0,0],velocity:[0,0,0],tipOffset:[0,0],tipVelocity:[0,0],base:hairTransform([0,-230,0],f),baseVelocity:[0,0,0]};h.sleepSettled=null;h.sleepSettleCount=0;}
+     const dt=Math.min(.05,Math.max(0,(now-h.last)/1000));h.last=now;h.frame=f;
+     if(freeze.checked||CLOCK.reduced){h.soft.offset=[0,0,0];h.soft.velocity=[0,0,0];h.soft.tipOffset=[0,0];h.soft.tipVelocity=[0,0];h.soft.base=hairTransform([0,-230,0],f);h.soft.baseVelocity=[0,0,0];for(let k=0;k<model.locks.length;k++){const pts=model.locks[k].points.map(p=>hairTransform(p,f));h.chains[k]={p:pts,old:pts.map(p=>p.slice())};}return;}
+     if(!dt)return;
+     if(current==='sleep'&&entered){
+      if(h.sleepSettleCount<12){
+       h.sleepSettleCount++;
+      } else {
+       if(!h.sleepSettled){
+        h.sleepSettled=h.chains.map(c=>({p:c.p.map(pt=>pt.slice()),old:c.old.map(pt=>pt.slice())}));
+       }
+       for(let k=0;k<h.chains.length;k++){
+        h.chains[k].p=h.sleepSettled[k].p.map(pt=>pt.slice());
+        h.chains[k].old=h.sleepSettled[k].old.map(pt=>pt.slice());
+       }
+       return;
+      }
+     } else {
+      h.sleepSettled=null;h.sleepSettleCount=0;
+     }
+     // A tied bun is firm; a puff has small distributed compliance. Both stay rooted.
+     const soft=h.soft,base=hairTransform([0,-230,0],f),vel=base.map((v,i)=>lp(soft.baseVelocity[i],(v-soft.base[i])/dt,1-Math.exp(-dt/.04)));
+     const acceleration=vel.map((v,i)=>clamp((v-soft.baseVelocity[i])/dt,-4000,4000));
+     // Activity gate: hair only shows secondary motion when the head really moves
+     // (jump, walk, turn). Breathing and eye-tracking drift stay below the threshold,
+     // so at rest the hair is carried rigidly by the head. Rises fast, settles slowly.
+     {
+      const rotVel=Math.abs(rot-(h.prevRot===undefined?rot:h.prevRot))/dt;h.prevRot=rot;
+      const drive=clamp(Math.max((Math.hypot(acceleration[0],acceleration[1])-120*f.scale)/(700*f.scale),(rotVel-6)/40));
+      h.activity=lp(h.activity||0,drive,1-Math.exp(-dt/(drive>(h.activity||0)?.06:.9)));
+     }
+     const stiffness=model.soft?model.soft.stiffness:model.style==='mi_long'?140:210,limit=(model.soft?model.soft.limit:model.style==='mi_long'?4:2.5)*f.scale;
+     for(let i=0;i<3;i++){
+      soft.velocity[i]+=(-stiffness*soft.offset[i]-1.6*Math.sqrt(stiffness)*soft.velocity[i]-acceleration[i]*.10)*dt;
+      soft.offset[i]=clamp(soft.offset[i]+soft.velocity[i]*dt,-limit,limit);
+     }
+     if(model.groom||model.sway){
+      // The neutral groom already includes gravity. Rotation adds the difference
+      // between world gravity and that neutral direction, only at the loose ends.
+      const roll=rot*Math.PI/180,k=model.sway?model.sway.k:model.style==='mi_long'?76:205,gravity=420*f.scale;
+      const residual=[Math.sin(roll)*gravity,(1-Math.cos(roll))*gravity];
+      for(let i=0;i<2;i++){
+       soft.tipVelocity[i]+=(-k*soft.tipOffset[i]-1.8*Math.sqrt(k)*soft.tipVelocity[i]-acceleration[i]*.23+residual[i])*dt;
+       soft.tipOffset[i]=clamp(soft.tipOffset[i]+soft.tipVelocity[i]*dt,-12*f.scale,12*f.scale);
+      }
+      // Static gravity equilibrium of the loose ends (always shown, even at rest).
+      soft.tipEq=[clamp(residual[0]/k,-12*f.scale,12*f.scale),clamp(residual[1]/k,-12*f.scale,12*f.scale)];
+     }
+     soft.base=base;soft.baseVelocity=vel;
+     const calm=1-(h.activity||0);
+     const steps=Math.max(1,Math.ceil(dt/(1/120))),step=dt/steps,damping=Math.exp(-(4.8+34*calm)*step);
+     const targets=model.locks.map(lock=>{
+      if(lock.isStatic)return null;
+      const p=lock.points.map(p=>hairTransform(p,f));
+      return {p,lengths:p.slice(1).map((q,i)=>hLen(q,p[i])),bends:p.slice(2).map((q,i)=>hLen(q,p[i]))};
+     });
+     for(let sub=0;sub<steps;sub++)for(let k=0;k<model.locks.length;k++){
+      const lock=model.locks[k];
+      if(lock.isStatic)continue;
+      const chain=h.chains[k],target=targets[k].p,n=target.length,{lengths,bends}=targets[k];
+      for(let i=0;i<n;i++){
+       if(i<lock.anchor){chain.p[i]=target[i].slice();chain.old[i]=target[i].slice();continue;}
+       const p=chain.p[i],old=chain.old[i],t=(i-lock.anchor+1)/(n-lock.anchor);
+       // Groom stiffness falls toward the tip. Gravity remains vertical in world space.
+       const stiffness=lock.stiffness*(1.8-.8*t);
+       const next=p.map((v,d)=>v+(v-old[d])*damping*(chain.step?step/chain.step:1)+((target[i][d]-v)*stiffness+(d===1?760*f.scale:0))*step*step);
+       chain.old[i]=p.slice();chain.p[i]=next;
+      }
+      chain.step=step;
+      for(let pass=0;pass<8;pass++){
+       for(let i=1;i<n;i++){
+        const a=chain.p[i-1],b=chain.p[i],dist=hLen(a,b)||1,rest=lengths[i-1],diff=(dist-rest)/dist;
+        const wa=i-1<lock.anchor?0:.5,wb=i<lock.anchor?0:wa===0?1:.5;
+        for(let d=0;d<3;d++){const correction=(b[d]-a[d])*diff;a[d]+=correction*wa;b[d]-=correction*wb;}
+       }
+       // Second-neighbour distance preserves the groom's curl without fixing it in space.
+       for(let i=2;i<n;i++){
+        const a=chain.p[i-2],b=chain.p[i],dist=hLen(a,b)||1,rest=bends[i-2];
+        const diff=(dist-rest)/dist*.38,wa=i-2<lock.anchor?0:.5,wb=i<lock.anchor?0:wa===0?1:.5;
+        for(let d=0;d<3;d++){const correction=(b[d]-a[d])*diff;a[d]+=correction*wa;b[d]-=correction*wb;}
+       }
+       for(let i=lock.anchor;i<n;i++){
+        const p=chain.p[i],local=hairLocal(p,f),radius=185+lock.width*.20,dist=Math.hypot(...local);
+        if(dist<radius&&dist>0){const q=hairTransform(local.map(v=>v*radius/dist),f);chain.p[i]=q;}
+        // Dissipative floor contact. Preserve tangential movement instead of flattening the whole haircut.
+        const floor=1405-lock.width*.25*f.scale;
+        if(chain.p[i][1]>floor){
+         const p=chain.p[i],prev=chain.p[i-1],vertical=floor-prev[1],length=lengths[i-1];
+         p[1]=floor;
+         if(vertical>=0&&vertical<length){
+          const horizontal=Math.sqrt(Math.max(0,length*length-vertical*vertical));
+          let dx=p[0]-prev[0],dz=p[2]-prev[2],d=Math.hypot(dx,dz);
+          if(d<.1){dx=Math.sign(target[lock.anchor-1][0]-cx)||1;dz=.15;d=Math.hypot(dx,dz);}
+          p[0]=prev[0]+dx/d*horizontal;p[2]=prev[2]+dz/d*horizontal;
+         }
+         chain.old[i][1]=floor;chain.old[i][0]=p[0];chain.old[i][2]=p[2];
+        }
+       }
+      }
+     }
+    }
+    // Split a strand precisely at the head's depth plane: no whole-lock popping or ghost crossfade.
+    function hairDepthRuns(points,front,bias=0){
+     // bias > 0 keeps a strand in front a little past the contour (cornrows cover
+     // the head outline where they go over it).
+     const runs=[];let run=[];
+     for(let i=0;i<points.length;i++){
+      const p=points[i],inside=front?p[2]>=-bias:p[2]<-bias;
+      if(i){const prev=points[i-1],was=front?prev[2]>=-bias:prev[2]<-bias;if(inside!==was){const t=(prev[2]+bias)/(prev[2]-p[2]),edge=hMix(prev,p,t);run.push(edge);if(run.length>1)runs.push(run);run=inside?[edge]:[];}}
+      if(inside)run.push(p);
+     }
+     if(run.length>1)runs.push(run);return runs;
+    }
+    // Rounded closed polygon without duplicate or aligned points: the same shape (drift
+    // under 0.6 viewBox unit, ~0.15 px on screen) with far fewer points to re-parse
+    // every frame.
+    function hairPoly(ps){
+     const q=[];
+     for(const p of ps){
+      const x=Math.round(p[0]),y=Math.round(p[1]),l=q[q.length-1];
+      if(l&&l[0]===x&&l[1]===y)continue;
+      if(q.length>=2){
+       const a=q[q.length-2],cr=(l[0]-a[0])*(y-a[1])-(l[1]-a[1])*(x-a[0]);
+       if(Math.abs(cr)<=0.6*Math.hypot(x-a[0],y-a[1])){q[q.length-1]=[x,y];continue;}
+      }
+      q.push([x,y]);
+     }
+     return q.length<3?'':'M '+q.map(p=>p[0]+' '+p[1]).join(' L ')+' Z ';
+    }
+    function hairSmoothPath(points){
+     const n=points.length;
+     if(n<2)return '';
+     // Catmull-Rom → cubic Bézier without temporary arrays. Integer viewBox units:
+     // one unit is ~0.3 screen px at usual sizes, so rounding is invisible and the
+     // SVG the browser re-parses every frame is much smaller.
+     const r=Math.round;
+     let d='M'+r(points[0][0])+' '+r(points[0][1]);
+     for(let i=0;i<n-1;i++){
+      const p0=points[i>0?i-1:0],p1=points[i],p2=points[i+1],p3=points[i+2<n?i+2:n-1];
+      d+='C'+r(p1[0]+(p2[0]-p0[0])/6)+' '+r(p1[1]+(p2[1]-p0[1])/6)
+        +' '+r(p2[0]-(p3[0]-p1[0])/6)+' '+r(p2[1]-(p3[1]-p1[1])/6)
+        +' '+r(p2[0])+' '+r(p2[1]);
+     }
+     return d;
+    }
+    function drawnHairMarkup(model,f){
+     const g=model.groom,u=Math.abs(f.yaw),side=f.yaw<0?-1:1;
+     const angle=f.rot*Math.PI/180,c=Math.cos(angle),s=Math.sin(angle);
+     const live=HAIR_DYNAMICS.style===model.style&&HAIR_DYNAMICS.soft;
+     const project=(p,root=false)=>{
+      const weight=root?0:clamp((Math.hypot(p[0],p[1])-182)/86);
+      const q=[f.cx+(p[0]*c-p[1]*s)*f.scale,f.cy+(p[0]*s+p[1]*c)*f.scale];
+      if(live){
+       const act=HAIR_DYNAMICS.activity||0;
+       q[0]+=HAIR_DYNAMICS.soft.offset[0]*weight*act;q[1]+=HAIR_DYNAMICS.soft.offset[1]*weight*act;
+       const tipWeight=smooth5(clamp((p[1]+52)/145)),soft=HAIR_DYNAMICS.soft,eq=soft.tipEq||[0,0];
+       q[0]+=(eq[0]+act*(soft.tipOffset[0]-eq[0]))*tipWeight;q[1]+=(eq[1]+act*(soft.tipOffset[1]-eq[1]))*tipWeight;
+      }
+      return q;
+     };
+     const deform=(front,profile,reverse=false,root=false)=>front.map((a,i)=>{
+      const b=profile[reverse?profile.length-1-i:i];return project([lp(a[0],b[0]*side,u),lp(a[1],b[1],u)],root);
+     });
+     const outer=deform(g.outer,g.profileOuter,side<0);
+     const quarter=side<0?g.quarterInner.slice().reverse().map(p=>[-p[0],p[1]]):g.quarterInner;
+     const profile=side<0?g.profileInner.slice().reverse().map(p=>[-p[0],p[1]]):g.profileInner;
+     const inner=g.inner.map((a,i)=>{
+      const p=a.map((v,d)=>lp(v,profile[i][d],u)+4*u*(1-u)*(quarter[i][d]-(v+profile[i][d])*.5));
+      if(p[1]>-94&&p[1]<118){
+       const back=p[0]*screenFaceDirFromYaw(f.yaw)<0,rx=185*(back?1-.15*smooth5(u):1);
+       const inset=model.style==='mi_long'?14:7;
+       const edge=rx*Math.sqrt(Math.max(0,1-p[1]*p[1]/(185*185)))-inset;
+       if(Math.abs(p[0])>edge)p[0]=Math.sign(p[0])*edge;
+      }
+      return project(p,true);
+     });
+     const path=hairSmoothPath(outer)+' L '+inner[0].map(v=>v.toFixed(2)).join(' ')+hairSmoothPath(inner).replace(/^M-?[\d.]+ -?[\d.]+/,'')+' Z';
+     const id='groom-'+model.style+'-'+Math.round(f.yaw*10000)+'-'+Math.round(f.cx)+'-'+Math.round(f.cy);
+     let svg=`<defs><clipPath id="${id}"><path d="${path}"/></clipPath></defs><path d="${path}" class="hairFill"/>`;
+     svg+=`<g clip-path="url(#${id})">`;
+     for(const line of g.lines){
+      const points=deform(line.front,side<0?line.leftProfile:line.profile);
+      if(!HAIR_LOD)svg+=`<path d="${hairSmoothPath(points)}" class="hairDetail" style="stroke-width:${1.5*f.scale};opacity:.28"/>`;
+     }
+     return svg+'</g>';
+    }
+    const HAIR_FLOOR=1402;   // viewBox y of the ground line
+    // Face guard (head units, y up = negative): hair in front of the face never comes
+    // below the brow line (highest brows: -105 in Error), so it never touches the
+    // eyebrows or the eyes. The limit relaxes at the temples.
+    function faceGuard(p,margin=0){
+      if(p[2]<=12)return p;
+      const ax=Math.abs(p[0]);
+      if(ax>=128)return p;
+      const limit=-118-margin+64*smooth5(clamp((ax-86)/40));
+      return p[1]>limit?[p[0],limit,p[2]]:p;
+    }
+    function projectedHair(cx,cy,r,rot,yaw,layer='front'){
+     const ch=characterDef();if(ch)return ch.hair(cx,cy,r,rot,yaw,layer);
+     const model=hairModel(APPEARANCE.hairStyle),f={cx,cy,scale:r/185,rot,yaw},front=layer==='front';
+     if(model.style==='chauve')return '';
+     if(model.groom)return front?(HAIR_OUTLINE_FILTER?`<g filter="url(#${HAIR_OUTLINE_FILTER})">${drawnHairMarkup(model,f)}</g>`:drawnHairMarkup(model,f)):'';
+     const items=[],fmt=p=>`${Math.round(p[0])} ${Math.round(p[1])}`;
+     const softLive=HAIR_DYNAMICS.style===model.style&&HAIR_DYNAMICS.soft&&HAIR_DYNAMICS.frame&&Math.abs(HAIR_DYNAMICS.frame.cx-cx)<.01;
+     const projectVolume=(p,weight=null,margin=0)=>{
+      const q=hairTransform(model.noFaceGuard?p:faceGuard(p,margin),f);
+      if(softLive&&(model.soft||model.sway||['chignon','mi_long','classique'].includes(model.style))){
+       const act=HAIR_DYNAMICS.activity||0;
+       const w=(weight===null?clamp((Math.hypot(...p)-192)/55):weight)*act;
+       for(let i=0;i<3;i++)q[i]+=HAIR_DYNAMICS.soft.offset[i]*w;
+       // Long hair: the lower it hangs, the more it lags behind the head.
+       if(model.sway){const t=smooth5(clamp((p[1]+20)/280)),soft=HAIR_DYNAMICS.soft,eq=soft.tipEq||[0,0];q[0]+=(eq[0]+act*(soft.tipOffset[0]-eq[0]))*t;q[1]+=(eq[1]+act*(soft.tipOffset[1]-eq[1]))*t;}
+      }
+      // Long hair rests on the floor instead of passing through it (lying down).
+      if(q[1]>HAIR_FLOOR)q[1]=HAIR_FLOOR-(q[1]-HAIR_FLOOR)*.04;
+      return q;
+     };
+
+     const add=(z,svg)=>items.push({z,svg:HAIR_LOD?hairLod(svg):svg});
+     if(model.beard)model.cap=model.beard(yaw,BEARD_MOUTH);
+     const fill=model.style==='degrade'?`url(#hair-fade-${layer})`:'var(--hairColor)';
+     // The whole cap of a layer is ONE path: cells are cut exactly at the depth
+     // plane and wound the same way, so there are no seams, holes or stripes.
+     if(model.cap.length){
+      let mesh='';
+      for(const cell of model.cap){
+       const raw=cell.map(p=>projectVolume(p)),ps=[];
+       for(let i=0;i<raw.length;i++){
+        const a=raw[(i+raw.length-1)%raw.length],b=raw[i],inside=front?b[2]>=0:b[2]<0,was=front?a[2]>=0:a[2]<0;
+        if(inside!==was)ps.push(hMix(a,b,a[2]/(a[2]-b[2])));
+        if(inside)ps.push(b);
+       }
+       if(ps.length<3)continue;
+       let area=0;for(let i=0;i<ps.length;i++){const a=ps[i],b=ps[(i+1)%ps.length];area+=a[0]*b[1]-b[0]*a[1];}
+       if(Math.abs(area)<1e-3)continue;
+       if(area<0)ps.reverse();
+       mesh+=hairPoly(ps);
+      }
+      if(mesh)add(-1e9,`<path d="${mesh}" fill="${fill}"${model.style==='degrade'?'':` stroke="${fill}" stroke-width="${(f.scale*1.4).toFixed(2)}" stroke-linejoin="round"`}/>`);
+     }
+     if(model.tie){
+      const c=projectVolume(model.tie.p,1);
+      if((c[2]>=0)===front){const rad=model.tie.r*f.scale;add(c[2]+3,`<circle cx="${c[0]}" cy="${c[1]}" r="${rad}" class="hairFill"/><circle cx="${c[0]}" cy="${c[1]}" r="${rad*.62}" class="hairDetail" style="stroke-width:${3*f.scale};opacity:.55"/>`);}
+     }
+     if(model.afro){
+      // Small surface cells keep front/back occlusion attached to the turning head.
+      let mesh='';
+      for(const cell of model.afro.cells){
+       const raw=cell.map(p=>projectVolume(p)),ps=[];
+       for(let i=0;i<raw.length;i++){
+        const a=raw[(i+raw.length-1)%raw.length],b=raw[i],inside=front?b[2]>=0:b[2]<0,was=front?a[2]>=0:a[2]<0;
+        if(inside!==was)ps.push(hMix(a,b,a[2]/(a[2]-b[2])));
+        if(inside)ps.push(b);
+       }
+       if(ps.length<3)continue;
+       mesh+=hairPoly(ps);
+      }
+      add(0,`<path d="${mesh}" class="hairFill" stroke="var(--hairColor)" stroke-width="${1.1*f.scale}" stroke-linejoin="round"/>`);
+      for(const curl of model.afro.curls){
+       const p=projectVolume(curl.p,null,curl.r);if((p[2]>=0)!==front)continue;
+       const rad=curl.r*f.scale,r1=v=>Math.round(v*10)/10;
+       add(p[2]+2,`<circle cx="${r1(p[0])}" cy="${r1(p[1])}" r="${r1(rad)}" class="hairFill"/><path d="M ${r1(p[0]-rad*.32)} ${r1(p[1])} q ${r1(-rad*.1)} ${r1(-rad*.6)} ${r1(rad*.62)} ${r1(-rad*.45)}" class="hairDetail" style="stroke-width:${r1(1.2*f.scale)};opacity:.12"/>`);
+      }
+     }
+     for(const ink of model.ink)for(const run of hairDepthRuns(ink.points.map(p=>projectVolume(p)),front)){
+      add(207*f.scale,`<path d="${hairSmoothPath(run)}" class="hairDetail" style="stroke-width:${ink.width*f.scale};opacity:${ink.opacity}"/>`);
+     }
+     for(const curl of model.curls){
+      const p=projectVolume(curl.p,null,curl.r);if((p[2]>=0)!==front)continue;
+      const rad=curl.r*f.scale;
+      add(p[2],`<circle cx="${p[0]}" cy="${p[1]}" r="${rad}" class="hairFill"/><path d="M ${p[0]-rad*.35} ${p[1]} q ${-rad*.1} ${-rad*.65} ${rad*.65} ${-rad*.5}" class="hairDetail" style="stroke-width:${1.3*f.scale};opacity:.14"/>`);
+     }
+     if(model.bun){
+      const center=projectVolume(model.bun.center,1),[rx,ry]=model.bun.r;
+      if((center[2]>=0)===front){
+       let svg=`<ellipse cx="${center[0]}" cy="${center[1]}" rx="${rx*f.scale}" ry="${ry*f.scale}" class="hairFill" transform="rotate(${rot} ${center[0]} ${center[1]})"/>`;
+       for(let j=-2;j<=2;j++){const pts=Array.from({length:22},(_,i)=>{const t=i/21*Math.PI;return projectVolume([model.bun.center[0]+j*12+Math.sin(t)*12,model.bun.center[1]-Math.cos(t)*43,model.bun.center[2]+Math.sin(t)*48],1);});svg+=`<path d="${hairSmoothPath(pts)}" class="hairDetail" style="stroke-width:${1.6*f.scale};opacity:.25"/>`;}
+       add(center[2],svg);
+      }
+     }
+     for(const detail of model.details)for(const run of hairDepthRuns(detail.map(p=>hairTransform(p,f)),front))add(run[0][2],`<path d="${hairSmoothPath(run)}" class="hairDetail" style="stroke-width:${1.8*f.scale};opacity:.20"/>`);
+     const live=HAIR_DYNAMICS.style===model.style&&HAIR_DYNAMICS.frame&&Math.abs(HAIR_DYNAMICS.frame.cx-cx)<.01&&Math.abs(HAIR_DYNAMICS.frame.rot-rot)<.01&&Math.abs(HAIR_DYNAMICS.frame.yaw-yaw)<.001;
+     for(let k=0;k<model.locks.length;k++){
+      const lock=model.locks[k],points=live&&!lock.isStatic?HAIR_DYNAMICS.chains[k].p:lock.points.map(p=>hairTransform(p,f));
+      for(const run of hairDepthRuns(points,front,lock.texture==='cornrow'?30*f.scale:0)){
+       const z=run.reduce((n,p)=>n+p[2],0)/run.length,w=lock.width*f.scale;
+       // A single tapered ribbon avoids bead-like joints and blunt pasted-on ends.
+       const left=[],right=[];
+       for(let i=0;i<run.length;i++){
+        const idx=points.indexOf(run[i]),t=idx<0?.5:idx/(points.length-1),a=run[Math.max(0,i-1)],b=run[Math.min(run.length-1,i+1)];
+        const len=Math.hypot(b[0]-a[0],b[1]-a[1])||1,nx=-(b[1]-a[1])/len,ny=(b[0]-a[0])/len;
+        const taper=lock.texture==='loc'?1-.18*Math.pow(t,8):lock.texture==='braid'?1-.40*Math.pow(t,12):lock.texture==='cornrow'?(.62+.38*Math.min(1,t/.07))*(1-.55*Math.pow(Math.max(0,t-.82)/.18,1.4)):lock.texture==='tail'?(1-.72*Math.pow(t,1.7))*(1-.35*Math.exp(-t*9)):1-.94*Math.pow(t,3);
+        // Cornrow beads pinch every other point, fading out where the row is
+        // seen end-on (foreshortened points would bunch into spikes).
+        const wi=idx>=0?idx:i===0?Math.max(0,points.indexOf(run[1])-1):Math.min(points.length-1,points.indexOf(run[i-1])+1);
+        const fr=lock.texture==='cornrow'?clamp(len/(2*lock.lengths[Math.min(wi,lock.lengths.length-1)]*f.scale)/.55):0;
+        const bead=lock.texture==='cornrow'?(lock.widths?lock.widths[wi]/lock.width:1)*(wi%2?1-.2*fr:1):1;
+        const width=w*taper*bead*.5,p=run[i];left.push([p[0]+nx*width,p[1]+ny*width]);right.push([p[0]-nx*width,p[1]-ny*width]);
+       }
+       const outline=hairSmoothPath(left)+' L '+fmt(right[right.length-1])+hairSmoothPath(right.reverse()).replace(/^M-?[\d.]+ -?[\d.]+/,'')+' Z';
+       let svg=`<path d="${outline}" class="hairFill"/>`;
+       if(lock.texture==='cornrow'){
+        // Rounded front end, then one separator per bead (odd points are the pinches).
+        if(run[0]===points[0]){const p=run[0];svg+=`<circle cx="${p[0]}" cy="${p[1]}" r="${Math.hypot(left[0][0]-p[0],left[0][1]-p[1])}" class="hairFill"/>`;}
+        const n=left.length;
+        for(let i=1;i<n-1;i++){
+         if(points.indexOf(run[i])%2!==1)continue;
+         const L=left[i],Rt=right[n-1-i],a=run[i-1],p=run[i];
+         const k=points.indexOf(p);if(Math.hypot(run[i+1][0]-a[0],run[i+1][1]-a[1])<.3*(lock.lengths[k-1]+lock.lengths[k])*f.scale)continue;
+         svg+=`<path d="M ${L[0]} ${L[1]} Q ${p[0]+(a[0]-p[0])*.9} ${p[1]+(a[1]-p[1])*.9} ${Rt[0]} ${Rt[1]}" class="hairDetail" style="stroke-width:${1.4*f.scale};opacity:.34"/>`;
+        }
+       }
+       if(lock.texture==='loc'&&run.at(-1)===points.at(-1)){const p=run.at(-1);svg+=`<circle cx="${p[0]}" cy="${p[1]}" r="${w*.41}" class="hairFill"/>`;}
+       if(lock.texture==='flow'||lock.texture==='loc'||lock.texture==='tail')svg+=`<path d="${hairSmoothPath(run.slice(2,-1))}" class="hairDetail" style="stroke-width:${1.35*f.scale};opacity:.20"/>`;
+       if(lock.texture==='braid')for(let i=1;i<run.length-1;i++){
+        const a=run[i-1],b=run[i+1],len=Math.hypot(b[0]-a[0],b[1]-a[1])||1,nx=-(b[1]-a[1])/len,ny=(b[0]-a[0])/len,p=run[i];
+        svg+=`<path d="M ${p[0]-nx*w*.28} ${p[1]-ny*w*.28-2*f.scale} Q ${p[0]} ${p[1]+3*f.scale} ${p[0]+nx*w*.28} ${p[1]+ny*w*.28-2*f.scale}" class="hairDetail" style="stroke-width:${1.2*f.scale};opacity:.26"/>`;
+       }
+       add(z,svg);
+      }
+     }
+     items.sort((a,b)=>a.z-b.z);
+     let defs='';if(model.style==='degrade')defs=`<defs><linearGradient id="hair-fade-${layer}" gradientUnits="userSpaceOnUse" x1="${cx}" y1="${cy-110*f.scale}" x2="${cx}" y2="${cy+35*f.scale}"><stop stop-color="var(--hairColor)"/><stop offset="1" stop-color="var(--hairColor)" stop-opacity="0"/></linearGradient></defs>`;
+     return `<g data-hair-layer="${layer}"${HAIR_OUTLINE_FILTER?` filter="url(#${HAIR_OUTLINE_FILTER})"`:''}>${defs}${items.map(i=>i.svg).join('')}</g>`;
+    }
+
+    function headAppearanceMarkup(cx,cy,r,rot=0,yaw=0){return projectedHair(cx,cy,r,rot,yaw);}
+    // --- StagingOrientation ----------------------------------------------------
+    // Prototype layer only: validates Face -> 3/4 -> Profile before the geometry
+    // is reused inside Loading, Sleep and the landing-page Walk cycle.
+    const ORIENTATION={
+      value:0,from:0,target:0,start:motionNow(),duration:760,
+      demo:false,demoStart:0,demoDuration:4800,
+      lastSampleTime:0,lastSampleYaw:0,velocity:0,headYaw:0,
+      // Stable screen-side identity for the face during a turn. This prevents the
+      // head-lead offset from briefly flipping which eye is considered front/back.
+      faceSide:0
+    };
+    // Full validation cycle: face → profile R → face → profile L → face.
+    // The body yaw is the staging driver; the head gets a small velocity-based lead.
+    const ORIENTATION_KEYFRAMES=[
+      [0.00,0],[0.06,0],[0.18,.55],[0.30,1],[0.37,1],
+      [0.48,.55],[0.57,0],[0.63,0],[0.75,-.55],[0.87,-1],
+      [0.92,-1],[0.96,-.55],[1.00,0]
+    ];
+    function orientationLabel(yaw){
+      const a=Math.abs(yaw),side=yaw<-.02?'L':yaw>.02?'R':'';
+      if(a<.12)return 'Face';
+      if(a<.78)return `3/4 ${side}`;
+      return `Profile ${side}`;
+    }
+    function orientationAngle(yaw){return Math.round(yaw*90)}
+    function orientationEaseValue(now){
+      if(ORIENTATION.demo){
+        const u=clamp((now-ORIENTATION.demoStart)/ORIENTATION.demoDuration);
+        let value=0;
+        if(u<=0.26){
+          const p=u/0.26;
+          value=smooth5(p);
+        }else if(u<=0.74){
+          const p=(u-0.26)/(0.74-0.26);
+          value=Math.cos(p*Math.PI);
+        }else{
+          const p=(u-0.74)/(1.0-0.74);
+          value=-1+smooth5(p);
+        }
+        if(u>=1){ORIENTATION.demo=false;ORIENTATION.value=0;ORIENTATION.target=0;ORIENTATION.from=0;value=0;}
+        return value;
+      }
+      const u=clamp((now-ORIENTATION.start)/ORIENTATION.duration);
+      ORIENTATION.value=ORIENTATION.from+(ORIENTATION.target-ORIENTATION.from)*smooth5(u);
+      if(u>=1)ORIENTATION.value=ORIENTATION.target;
+      return ORIENTATION.value;
+    }
+    function orientationMotionFrame(now){
+      const bodyYaw=orientationEaseValue(now);
+      const prevT=ORIENTATION.lastSampleTime||now;
+      const dt=Math.max(8,Math.min(42,now-prevT||16.67));
+      const rawV=(bodyYaw-ORIENTATION.lastSampleYaw)/dt;
+      // Smooth velocity so head lead feels organic instead of jittery during slider input.
+      ORIENTATION.velocity=lp(ORIENTATION.velocity||0,rawV,.30);
+      const headLead=clamp(ORIENTATION.velocity*75,-.10,.10);
+      // Natural, continuous head lead across zero without freezing or snapping:
+      const centerBlend=smooth5(clamp(Math.abs(bodyYaw)/0.18));
+      const effectiveLead=headLead*(0.55+0.45*centerBlend);
+      const headYaw=clamp(bodyYaw+effectiveLead,-1,1);
+      const visualSide=Math.abs(headYaw)>.001?Math.sign(headYaw):Math.sign(bodyYaw);
+      ORIENTATION.faceSide=visualSide;
+
+      ORIENTATION.lastSampleTime=now;
+      ORIENTATION.lastSampleYaw=bodyYaw;
+      ORIENTATION.headYaw=headYaw;
+      return {bodyYaw,headYaw,velocity:ORIENTATION.velocity,faceSide:visualSide};
+    }
+    function ensureOrientationIdle(){
+      if(current==='idle'&&!smMode)return;
+      smMode=false;smInternal=null;smBridge=null;smExit=null;smFaceHold=null;smLogical='Idle';
+      smSetVisual('idle',motionNow());smLogLines=[];smLog.textContent='Direct preview.';smRefresh();
+    }
+    function setOrientationTarget(target,duration=720){
+      ensureOrientationIdle();
+      if(typeof WALK!=='undefined'&&WALK.active)stopWalk();
+      // Orientation previews must show a single live silhouette. The target ghost is a
+      // frontal debug reference and otherwise appears as a white/grey halo around the
+      // turning head, hair and feet. Keep the debug feature for ordinary state QA, but
+      // disable it whenever an orientation target is requested.
+      if(showG.checked){showG.checked=false;renderGhost();}
+      const now=motionNow();
+      const live=orientationEaseValue(now);
+      ORIENTATION.demo=false;ORIENTATION.from=live;ORIENTATION.value=live;
+      ORIENTATION.target=clamp(target,-1,1);
+      const dist=Math.abs(ORIENTATION.target-live);
+      const effectiveDuration=duration===720?Math.round(lp(380,680,clamp(dist/1.5))):duration;
+      ORIENTATION.start=now;ORIENTATION.duration=CLOCK.reduced?1:effectiveDuration;if(CLOCK.reduced)ORIENTATION.start=now-1;
+      ORIENTATION.lastSampleTime=now;ORIENTATION.lastSampleYaw=live;ORIENTATION.velocity=0;ORIENTATION.headYaw=live;
+      ORIENTATION.faceSide=Math.abs(live)>.02?Math.sign(live):(Math.abs(ORIENTATION.target)>.02?Math.sign(ORIENTATION.target):0);
+      resetAttentionTracking(true);
+    }
+    function playOrientationTurn(){
+      ensureOrientationIdle();
+      if(typeof WALK!=='undefined'&&WALK.active)stopWalk();
+      // A target ghost here is not a second head animation: it is the static frontal
+      // debug reference. Hide it so the Turn can be judged without double silhouettes.
+      if(showG.checked){showG.checked=false;renderGhost();}
+      const now=motionNow();
+      ORIENTATION.demo=true;ORIENTATION.demoStart=now;
+      ORIENTATION.value=0;ORIENTATION.from=0;ORIENTATION.target=0;
+      ORIENTATION.lastSampleTime=now;ORIENTATION.lastSampleYaw=0;ORIENTATION.velocity=0;ORIENTATION.headYaw=0;ORIENTATION.faceSide=0;
+      resetAttentionTracking(true);
+    }
+    // --- WalkLab --------------------------------------------------------------
+    // First gait pass: profile-only, in-place.  The walk layer is additive on top of
+    // the validated orientation pose so Face / 3/4 / Profile and Turn stay untouched.
+    const WALK={
+      active:false,
+      screenDir:1,          // -1 = screen-left, +1 = screen-right
+      start:motionNow(),
+      cycleMs:1080,
+      speed:1,
+      phase:0,
+      rot:0
+    };
+    function walkProfileYaw(){
+      // screenFaceDirFromYaw(yaw) = direction the face points on screen.
+      return WALK.screenDir>0?-1:1;
+    }
+    // Gait: a longer, higher step. Stance and swing join with matching foot
+    // velocity (no stop at toe-off, no scrape at landing); heel strike → flat foot
+    // → toe-off roll; the knee drives forward in the swing.
+    const WALK_GAIT={stride:100,stance:.58,lift:118,kneeDrive:72};
+    function walkLegSample(phase){
+      phase=((phase%1)+1)%1;
+      const S=WALK_GAIT.stance,X=WALK_GAIT.stride;
+      if(phase<S){
+        const q=phase/S;
+        const footAngle=q<.18?lp(-18,0,smooth3(q/.18)):q>.68?lp(0,24,smooth3((q-.68)/.32)):0;
+        return {x:lp(X,-X,q),lift:0,swing:0,knee:10*Math.sin(Math.PI*q),footAngle};
+      }
+      const q=(phase-S)/(1-S);
+      const v=-2*X/S*(1-S);                                    // stance speed, in swing units
+      const h00=2*q*q*q-3*q*q+1,h10=q*q*q-2*q*q+q,h01=-2*q*q*q+3*q*q,h11=q*q*q-q*q;
+      const x=h00*(-X)+h10*v+h01*X+h11*v;
+      const up=Math.sin(Math.PI*Math.pow(q,.85));             // lifts early, lands softly
+      const swing=Math.sin(Math.PI*q);
+      const footAngle=q<.3?lp(24,6,smooth3(q/.3)):lp(6,-18,smooth3((q-.3)/.7));
+      return {x,lift:WALK_GAIT.lift*up,swing,knee:WALK_GAIT.kneeDrive*swing,footAngle};
+    }
+    function stopWalk(){
+      WALK.active=false;WALK.rot=0;WALK.phase=0;
+      if(typeof walkPlay!=='undefined'&&walkPlay)walkPlay.textContent='Play Walk';
+    }
+    function startWalk(screenDir=WALK.screenDir){
+      ensureOrientationIdle();
+      if(showG.checked){showG.checked=false;renderGhost();}
+      stopWalk();
+      WALK.screenDir=screenDir<0?-1:1;
+      // Turn first; the gait fades in only near profile.
+      setOrientationTarget(walkProfileYaw(),380);
+      WALK.active=true;
+      WALK.start=motionNow()+420;
+      WALK.phase=0;WALK.rot=0;
+      resetMicroInteractions();
+      resetAttentionTracking(true);
+      if(typeof walkPlay!=='undefined'&&walkPlay)walkPlay.textContent='Pause Walk';
+    }
+    function applyWalkCycle(p,yaw,now){
+      if(!WALK.active||current!=='idle'){WALK.rot=0;return p;}
+      const profileBlend=smooth5(clamp((Math.abs(yaw)-.68)/.32));
+      if(profileBlend<=.001){WALK.rot=0;return p;}
+
+      const elapsed=Math.max(0,now-WALK.start);
+      const phase=((elapsed*WALK.speed/WALK.cycleMs)%1+1)%1;
+      WALK.phase=phase;
+      const screenDir=WALK.screenDir;
+      const bodyDir=yaw<0?-1:1;
+      const near=bodyDir>0?'L':'R',far=bodyDir>0?'R':'L';
+      const nearStep=walkLegSample(phase),farStep=walkLegSample(phase+.5);
+      const groundY=Math.max(p.foot_L_center?.[1]||1386,p.foot_R_center?.[1]||1386);
+      const axis=p.pelvis[0];
+
+      const strideWave=Math.sin(phase*Math.PI*2);
+      // Body is highest when a foot passes under it (mid-stance), lowest at contact.
+      const S=WALK_GAIT.stance,pulse=.5+.5*Math.cos(Math.PI*4*(phase-S/2));
+      const bob=-14*pulse*profileBlend;
+      const forwardLean=screenDir*(10+3*strideWave)*profileBlend;
+      ['head_center','neck','shoulder_L','shoulder_R','pelvis','hip_L','hip_R'].forEach(k=>addOffset(p,k,forwardLean*(k==='head_center'?1:k==='neck'?.65:.35),bob));
+
+      function placeLeg(side,sample,isNear){
+        const hip=p[`hip_${side}`];
+        const depth=(isNear?7:-7)*bodyDir;
+        const footX=axis+screenDir*sample.x*profileBlend+depth;
+        // Heel/toe roll pivots on the contact point: lift the foot so its lowest
+        // point (heel when toe is up, toe when heel is up) stays on the ground.
+        const fa=sample.footAngle*Math.PI/180;
+        const contact=(Math.max(-50*Math.sin(fa),69*Math.sin(fa))+17*(Math.cos(fa)-1))*profileBlend;
+        const footY=groundY-sample.lift*profileBlend-contact;
+        const ankleX=footX-screenDir*(12+9*sample.swing)*profileBlend;
+        const ankleY=footY-(24+8*sample.swing)*profileBlend;
+        const kneeBend=screenDir*(14+sample.knee)*profileBlend;
+        // Fixed-length leg: the knee comes from the soft 3D IK; the authored knee
+        // placement is only a hint for which way it bends on screen.
+        const hint=[lp(hip[0],ankleX,.51)+kneeBend,lp(hip[1],ankleY,.51)-17*sample.swing*profileBlend];
+        const leg=solveTwoBone(hip,[ankleX,ankleY],SKELETON.thigh[side],SKELETON.shin[side],hint);
+        p[`knee_${side}`]=leg.joint;
+        p[`ankle_${side}`]=leg.end;
+        p[`foot_${side}_center`]=[footX+leg.end[0]-ankleX,footY+leg.end[1]-ankleY];
+        p.walkFootAngle=p.walkFootAngle||{};
+        p.walkFootAngle[side]=screenDir*sample.footAngle*profileBlend;
+      }
+      placeLeg(near,nearStep,true);
+      placeLeg(far,farStep,false);
+
+      // Arms counter-swing against the actual foot position, so heel strike,
+      // toe-off and swing stay in phase instead of following an unrelated sine wave.
+      function swingArm(side,step,isNear){
+        const amp=(isNear?96:78)*profileBlend;
+        const k=step.x/WALK_GAIT.stride;                        // -1..1, opposite to the leg
+        const dx=-screenDir*k*amp;
+        const lift=(step.swing*.75+Math.abs(strideWave)*.22)*(isNear?14:11)*profileBlend;
+        // The elbow flexes as the arm swings forward (relaxed, not a pendulum stick).
+        const flex=smooth3(clamp(-k))*profileBlend;
+        addOffset(p,`elbow_${side}`,dx*.44,-lift*.25);
+        addOffset(p,`wrist_${side}`,dx+screenDir*22*flex,-lift-40*flex);
+        addOffset(p,`hand_${side}_center`,dx*1.06+screenDir*26*flex,-lift*1.04-46*flex);
+      }
+      swingArm(near,nearStep,true);
+      swingArm(far,farStep,false);
+
+      // Tiny head counter-motion keeps the walk alive without compromising the
+      // profile silhouette that was already validated.
+      const counter=Math.sin(phase*Math.PI*2);
+      // The head follows the bounce with a slight lag (secondary motion).
+      const lag=.5+.5*Math.cos(Math.PI*4*(phase-S/2-.06));
+      addOffset(p,'head_center',-screenDir*3.4*counter*profileBlend,-4*(lag-pulse)*profileBlend);
+      WALK.rot=screenDir*1.65*counter*profileBlend;
+      return p;
+    }
+
+    function applyOrientationPose(p,yaw){
+      const a=Math.abs(yaw);if(a<.001)return p;
+      const dir=yaw<0?-1:1,q=cpy(p),base=cpy(p);
+      // The turn is a depth collapse, not a lateral spread.  At profile the two
+      // shoulders/hips almost share one screen axis; only small fore/aft offsets
+      // remain so near/far limbs are readable.
+      const u=Math.pow(smooth5(a),.82);
+      const axis=(base.neck[0]+base.pelvis[0])*.5;
+      const topAxis=axis+dir*4*u;
+      const bottomAxis=axis-dir*3*u;
+      const near=dir>0?'L':'R',far=dir>0?'R':'L';
+      const mix=(key,x,yOff=0)=>{
+        if(!q[key])return;
+        q[key][0]=lp(base[key][0],x,u);
+        q[key][1]=base[key][1]+yOff*u;
+      };
+
+      // Head leads the body slightly in the viewing direction.  The neck stays
+      // behind the facial mass, which makes the side silhouette understandable
+      // even if all facial features are hidden.
+      mix('neck',topAxis,0);
+      mix('pelvis',bottomAxis,0);
+      q.head_center[0]=lp(base.head_center[0],base.head_center[0]+screenFaceDirFromYaw(yaw)*18,u);
+
+      // Near/far shoulders collapse into depth instead of remaining a frontal pair.
+      mix(`shoulder_${near}`,topAxis+dir*5,4);
+      mix(`shoulder_${far}`, topAxis-dir*4,-4);
+      mix(`elbow_${near}`,   topAxis+dir*15,5);
+      mix(`elbow_${far}`,    topAxis-dir*7,-5);
+      mix(`wrist_${near}`,   topAxis+dir*12,6);
+      mix(`wrist_${far}`,    topAxis-dir*5,-6);
+      mix(`hand_${near}_center`,topAxis+dir*14,7);
+      mix(`hand_${far}_center`, topAxis-dir*6,-7);
+
+      // Hips and legs also collapse.  The near foot sits a little in front of the
+      // far foot, rather than producing the frontal V seen in the previous pass.
+      mix(`hip_${near}`,bottomAxis+dir*3,2);
+      mix(`hip_${far}`, bottomAxis-dir*3,-2);
+      mix(`knee_${near}`,bottomAxis+dir*9,2);
+      mix(`knee_${far}`, bottomAxis-dir*6,-2);
+      mix(`ankle_${near}`,bottomAxis+dir*13,2);
+      mix(`ankle_${far}`, bottomAxis-dir*9,-2);
+      mix(`foot_${near}_center`,bottomAxis+dir*25,3);
+      mix(`foot_${far}_center`, bottomAxis-dir*13,-3);
+      return q;
+    }
+    function applyTurnDynamics(p,bodyYaw,velocity){
+      if(Math.abs(velocity)<.00001)return p;
+      const dir=velocity<0?-1:1;
+      // Progressive, smooth kinetic energy curve instead of an abrupt step function
+      const vMag=Math.abs(velocity);
+      const energy=smooth5(clamp(vMag/0.0032));
+      // Counter-balance: head/upper body enter the turn first, pelvis resists slightly.
+      addOffset(p,'head_center',dir*2.8*energy,-1.1*energy);
+      addOffset(p,'neck',dir*1.8*energy,-.6*energy);
+      addOffset(p,'shoulder_L',dir*1.3*energy,0);
+      addOffset(p,'shoulder_R',dir*1.3*energy,0);
+      addOffset(p,'pelvis',-dir*3.2*energy,1.1*energy);
+      addOffset(p,'hip_L',-dir*2.5*energy,1.0*energy);
+      addOffset(p,'hip_R',-dir*2.5*energy,1.0*energy);
+
+      // Tiny knee compression keeps the turn from reading as a rigid cardboard swivel.
+      addOffset(p,'knee_L',0,1.8*energy);
+      addOffset(p,'knee_R',0,1.8*energy);
+      return p;
+    }
+    function orientationLegRestPoints(yaw,basePose){
+      const a=Math.abs(yaw);
+      if(a<.001){
+        return {
+          foot_L:[basePose.foot_L_center[0],basePose.foot_L_center[1]],
+          foot_R:[basePose.foot_R_center[0],basePose.foot_R_center[1]],
+          ankle_L:[basePose.ankle_L[0],basePose.ankle_L[1]],
+          ankle_R:[basePose.ankle_R[0],basePose.ankle_R[1]],
+          knee_L:[basePose.knee_L[0],basePose.knee_L[1]],
+          knee_R:[basePose.knee_R[0],basePose.knee_R[1]],
+          hip_L:[basePose.hip_L[0],basePose.hip_L[1]],
+          hip_R:[basePose.hip_R[0],basePose.hip_R[1]]
+        };
+      }
+      const dir=yaw<0?-1:1;
+      const u=Math.pow(smooth5(a),.82);
+      const axis=(basePose.neck[0]+basePose.pelvis[0])*.5;
+      const bottomAxis=axis-dir*3*u;
+      const near=dir>0?'L':'R',far=dir>0?'R':'L';
+
+      const res={};
+      res[`hip_${near}`]=[lp(basePose[`hip_${near}`][0],bottomAxis+dir*3,u),basePose[`hip_${near}`][1]+2*u];
+      res[`hip_${far}`]=[lp(basePose[`hip_${far}`][0],bottomAxis-dir*3,u),basePose[`hip_${far}`][1]-2*u];
+      res[`knee_${near}`]=[lp(basePose[`knee_${near}`][0],bottomAxis+dir*9,u),basePose[`knee_${near}`][1]+2*u];
+      res[`knee_${far}`]=[lp(basePose[`knee_${far}`][0],bottomAxis-dir*6,u),basePose[`knee_${far}`][1]-2*u];
+      res[`ankle_${near}`]=[lp(basePose[`ankle_${near}`][0],bottomAxis+dir*13,u),basePose[`ankle_${near}`][1]+2*u];
+      res[`ankle_${far}`]=[lp(basePose[`ankle_${far}`][0],bottomAxis-dir*9,u),basePose[`ankle_${far}`][1]-2*u];
+      res[`foot_${near}`]=[lp(basePose[`foot_${near}_center`][0],bottomAxis+dir*25,u),basePose[`foot_${near}_center`][1]+3*u];
+      res[`foot_${far}`]=[lp(basePose[`foot_${far}_center`][0],bottomAxis-dir*13,u),basePose[`foot_${far}_center`][1]-3*u];
+      return res;
+    }
+    function applyTurnFootwork(p,now,basePose){
+      if(CLOCK.reduced)return;
+      if(typeof WALK!=='undefined'&&WALK.active&&Math.abs(ORIENTATION.value)>.68)return;
+
+      const demo=ORIENTATION.demo;
+      let stepDef=null;
+
+      if(demo){
+        const u=clamp((now-ORIENTATION.demoStart)/ORIENTATION.demoDuration);
+        if(u<1){
+          if(u<=0.26){
+            const s=u/0.26;
+            if(s>=0.08&&s<0.48){
+              stepDef={stepFoot:'R',stanceFoot:'L',tau:(s-0.08)/0.40,fromYaw:0,toYaw:1,dir:1,maxLift:28};
+            }else if(s>=0.48&&s<0.88){
+              stepDef={stepFoot:'L',stanceFoot:'R',tau:(s-0.48)/0.40,fromYaw:0,toYaw:1,dir:1,maxLift:24};
+            }
+          }else if(u<=0.74){
+            const s=(u-0.26)/0.48;
+            if(s>=0.04&&s<0.23){
+              stepDef={stepFoot:'L',stanceFoot:'R',tau:(s-0.04)/0.19,fromYaw:1,toYaw:0.5,dir:-1,maxLift:26};
+            }else if(s>=0.27&&s<0.46){
+              stepDef={stepFoot:'R',stanceFoot:'L',tau:(s-0.27)/0.19,fromYaw:0.5,toYaw:0,dir:-1,maxLift:26};
+            }else if(s>=0.50&&s<0.69){
+              stepDef={stepFoot:'L',stanceFoot:'R',tau:(s-0.50)/0.19,fromYaw:0,toYaw:-0.5,dir:-1,maxLift:26};
+            }else if(s>=0.73&&s<0.92){
+              stepDef={stepFoot:'R',stanceFoot:'L',tau:(s-0.73)/0.19,fromYaw:-0.5,toYaw:-1,dir:-1,maxLift:24};
+            }
+          }else{
+            const s=(u-0.74)/0.26;
+            if(s>=0.08&&s<0.48){
+              stepDef={stepFoot:'R',stanceFoot:'L',tau:(s-0.08)/0.40,fromYaw:-1,toYaw:0,dir:1,maxLift:28};
+            }else if(s>=0.48&&s<0.88){
+              stepDef={stepFoot:'L',stanceFoot:'R',tau:(s-0.48)/0.40,fromYaw:-1,toYaw:0,dir:1,maxLift:24};
+            }
+          }
+        }
+      }else{
+        const elapsed=now-ORIENTATION.start;
+        const dur=ORIENTATION.duration;
+        if(elapsed<dur){
+          const u=clamp(elapsed/dur);
+          const dy=ORIENTATION.target-ORIENTATION.from;
+          const mag=Math.abs(dy);
+          if(mag>=0.12){
+            const dir=dy>0?1:-1;
+            if(mag>1.2){
+              const step1Foot=dir>0?'R':'L', step2Foot=dir>0?'L':'R';
+              if(u>=0.04&&u<0.24){
+                stepDef={stepFoot:step1Foot,stanceFoot:step2Foot,tau:(u-0.04)/0.20,fromYaw:ORIENTATION.from,toYaw:ORIENTATION.from+dir*0.5,dir,maxLift:26};
+              }else if(u>=0.27&&u<0.47){
+                stepDef={stepFoot:step2Foot,stanceFoot:step1Foot,tau:(u-0.27)/0.20,fromYaw:ORIENTATION.from+dir*0.5,toYaw:ORIENTATION.from+dir*1.0,dir,maxLift:26};
+              }else if(u>=0.50&&u<0.70){
+                stepDef={stepFoot:step1Foot,stanceFoot:step2Foot,tau:(u-0.50)/0.20,fromYaw:ORIENTATION.from+dir*1.0,toYaw:ORIENTATION.from+dir*1.5,dir,maxLift:26};
+              }else if(u>=0.73&&u<0.93){
+                stepDef={stepFoot:step2Foot,stanceFoot:step1Foot,tau:(u-0.73)/0.20,fromYaw:ORIENTATION.from+dir*1.5,toYaw:ORIENTATION.target,dir,maxLift:24};
+              }
+            }else{
+              const step1Foot=dir>0?'R':'L';
+              const step2Foot=dir>0?'L':'R';
+              const scale=clamp(mag/0.7,0.4,1.0);
+              if(u>=0.06&&u<0.48){
+                stepDef={stepFoot:step1Foot,stanceFoot:step2Foot,tau:(u-0.06)/0.42,fromYaw:ORIENTATION.from,toYaw:ORIENTATION.target,dir,maxLift:34*scale};
+              }else if(u>=0.48&&u<0.92){
+                stepDef={stepFoot:step2Foot,stanceFoot:step1Foot,tau:(u-0.48)/0.44,fromYaw:ORIENTATION.from,toYaw:ORIENTATION.target,dir,maxLift:30*scale};
+              }
+            }
+          }
+        }
+      }
+
+      p.walkFootAngle=p.walkFootAngle||{};
+
+      if(!stepDef){
+        p.walkFootAngle.L=0;
+        p.walkFootAngle.R=0;
+        if(!demo&&(now-ORIENTATION.start)<ORIENTATION.duration&&Math.abs(ORIENTATION.target-ORIENTATION.from)>=0.12){
+          const uHold=clamp((now-ORIENTATION.start)/ORIENTATION.duration);
+          const holdPos=uHold<0.06?orientationLegRestPoints(ORIENTATION.from,basePose):orientationLegRestPoints(ORIENTATION.target,basePose);
+          p.foot_L_center=[...holdPos.foot_L];
+          p.foot_R_center=[...holdPos.foot_R];
+          p.ankle_L=[...holdPos.ankle_L];
+          p.ankle_R=[...holdPos.ankle_R];
+          p.knee_L=[...holdPos.knee_L];
+          p.knee_R=[...holdPos.knee_R];
+        }
+        return;
+      }
+
+      const {stepFoot,stanceFoot,tau,fromYaw,toYaw,dir,maxLift}=stepDef;
+      const tClamped=clamp(tau,0,1);
+      const startRest=orientationLegRestPoints(fromYaw,basePose);
+      const targetRest=orientationLegRestPoints(toYaw,basePose);
+
+      const stanceIsTarget=(stepFoot===(dir>0?'L':'R'));
+      const stancePos=stanceIsTarget?targetRest:startRest;
+      p[`foot_${stanceFoot}_center`]=[...stancePos[`foot_${stanceFoot}`]];
+      p[`ankle_${stanceFoot}`]=[...stancePos[`ankle_${stanceFoot}`]];
+      p[`knee_${stanceFoot}`]=[...stancePos[`knee_${stanceFoot}`]];
+      p.walkFootAngle[stanceFoot]=0;
+
+      const lift=Math.sin(Math.PI*tClamped)*maxLift;
+      const h=smooth3(tClamped);
+      const footStartX=startRest[`foot_${stepFoot}`][0];
+      const footTargetX=targetRest[`foot_${stepFoot}`][0];
+      const footStartY=startRest[`foot_${stepFoot}`][1];
+      const footTargetY=targetRest[`foot_${stepFoot}`][1];
+
+      p[`foot_${stepFoot}_center`]=[
+        lp(footStartX,footTargetX,h),
+        lp(footStartY,footTargetY,h)-lift
+      ];
+
+      const ankleStartX=startRest[`ankle_${stepFoot}`][0];
+      const ankleTargetX=targetRest[`ankle_${stepFoot}`][0];
+      const ankleStartY=startRest[`ankle_${stepFoot}`][1];
+      const ankleTargetY=targetRest[`ankle_${stepFoot}`][1];
+      const ankle=[
+        lp(ankleStartX,ankleTargetX,h),
+        lp(ankleStartY,ankleTargetY,h)-lift
+      ];
+      p[`ankle_${stepFoot}`]=ankle;
+
+      const hip=p[`hip_${stepFoot}`];
+      p[`knee_${stepFoot}`]=[
+        lp(hip[0],ankle[0],0.5)+dir*(10+lift*0.25),
+        lp(hip[1],ankle[1],0.5)-5-lift*0.14
+      ];
+
+      const pitch=Math.sin(Math.PI*tClamped)*(tClamped<0.4?-8:7)*dir;
+      p.walkFootAngle[stepFoot]=pitch;
+
+      const stanceX=stancePos[`foot_${stanceFoot}`][0];
+      const midX=(startRest.foot_L[0]+startRest.foot_R[0])*0.5;
+      const sway=(stanceX-midX)*0.04*Math.sin(Math.PI*tClamped);
+      p.pelvis[0]+=sway;
+      p.pelvis[1]+=Math.sin(Math.PI*tClamped)*1.5;
+    }
+    function orientedHeadMarkup(cx,cy,r,rot=0,yaw=0){
+      const ch=characterDef();if(ch&&ch.head)return ch.head(cx,cy,r,rot,yaw);
+      const u=smooth5(Math.abs(yaw)),dir=screenFaceDirFromYaw(yaw);
+      const f=r*(1-.015*u),b=r*(1-.15*u),k=.55228475;
+      const d=`M 0 ${-r} C ${f*k} ${-r} ${f} ${-r*k} ${f} 0 C ${f} ${r*k} ${f*k} ${r} 0 ${r} C ${-b*k} ${r} ${-b} ${r*k} ${-b} 0 C ${-b} ${-r*k} ${-b*k} ${-r} 0 ${-r} Z`;
+      return `<g transform="translate(${cx} ${cy}) rotate(${rot}) scale(${dir} 1)"><path class="headCircle" d="${d}"/></g>`;
+    }
+    function orientationIdleFaceMarkup(cx,cy,r,rot=0,blink=0,eyeOffset=[0,0],yaw=0){
+      // Continuous face projection for Face -> 3/4 -> Profile.
+      // IMPORTANT: only ONE face is rendered. No opacity crossfade between a 3/4 face
+      // and a second profile face, which previously created grey/ghosted duplicate eyes.
+      const a=Math.abs(yaw),dir=screenFaceDirFromYaw(yaw),u=smooth5(a),s=r/185;
+      const minRy=2.2*s,eyeRy=Math.max(minRy,28*s*(1-blink)+minRy*blink);
+
+      // Validated profile-eye mapping from v16.8.7; Walk Lab does not alter it.
+      // Keep head/mouth projection unchanged; ONLY swap which screen-side eye/brow
+      // behaves as the surviving near feature versus the receding far feature.
+      const eyeDir=dir;
+      const nearU=Math.pow(u,.78);
+      const nearX=cx+eyeDir*lp(-48,130,nearU)*s;
+      const nearY=cy-lp(10,22,nearU)*s;
+
+      const farMoveU=smooth5(clamp((a-.12)/.80));
+      const farX=cx+eyeDir*lp(48,170,farMoveU)*s;
+      const farY=cy-lp(10,18,farMoveU)*s;
+      const farVis=1-smooth5(clamp((a-.24)/.50));
+      const farRx=Math.max(0,13*farVis)*s;
+      const farRy=Math.max(minRy,eyeRy*lp(.88,1,farVis));
+
+      // Brows use the same near/far depth model. The far brow becomes shorter and
+      // slightly higher as it recedes, so it never touches the near brow mid-turn.
+      const browY=cy-lp(70,82,nearU)*s;
+      const browPeak=cy-lp(88,103,nearU)*s;
+      const nearBrow=`<path data-feature="near-brow" class="faceStroke" d="M ${nearX-eyeDir*24*s} ${browY} Q ${nearX-eyeDir*1*s} ${browPeak} ${nearX+eyeDir*27*s} ${browY+5*s}"/>`;
+      const farBrowHalf=19*s*Math.sqrt(Math.max(0,farVis));
+      const farBrowY=cy-lp(70,84,farMoveU)*s;
+      const farBrowPeak=cy-lp(84,101,farMoveU)*s;
+      const farBrow=farVis>.16
+        ? `<path class="faceStroke" d="M ${farX-eyeDir*farBrowHalf} ${farBrowY} Q ${farX} ${farBrowPeak} ${farX+eyeDir*farBrowHalf} ${farBrowY+1.5*s}"/>`
+        : '';
+
+      const trackScale=Math.max(0,1-a*1.08);
+      const nex=nearX+(eyeOffset[0]||0)*trackScale,ney=nearY+(eyeOffset[1]||0)*trackScale;
+      const nearEye=`<ellipse data-feature="near-eye" class="eye" cx="${nex}" cy="${ney}" rx="${13*s}" ry="${eyeRy}"/>`
+        +(eyeRy>15*s?`<circle class="eyeShine" cx="${nex-4.2*s}" cy="${ney-10*s}" r="${4.7*s}"/>`:'');
+      const farEye=farRx>.7
+        ? `<ellipse data-feature="far-eye" class="eye" cx="${farX+(eyeOffset[0]||0)*trackScale}" cy="${farY+(eyeOffset[1]||0)*trackScale}" rx="${farRx}" ry="${farRy}"/>`
+        : '';
+
+      // The mouth joins the turn earlier than in v16.8.1, while keeping the validated
+      // low profile endpoint. This keeps the whole face rotating as one unit.
+      const mouthU=Math.pow(u,.64);
+      const mouthStartX=cx+dir*lp(-50,88,mouthU)*s;
+      const mouthCtrlX =cx+dir*lp(0,127,mouthU)*s;
+      const mouthEndX  =cx+dir*lp(50,160,mouthU)*s;
+      const mouthStartY=cy+lp(55,76,mouthU)*s;
+      const mouthCtrlY =cy+lp(84,98,mouthU)*s;
+      const mouthEndY  =cy+lp(55,84,mouthU)*s;
+      const mouth=`<path class="faceStroke" d="M ${mouthStartX} ${mouthStartY} Q ${mouthCtrlX} ${mouthCtrlY} ${mouthEndX} ${mouthEndY}"/>`;
+
+      const cheeksOn=(typeof APPEARANCE==='undefined'||APPEARANCE.cheeks!==false)&&!wearsBeard();
+      const nearCheek=cheeksOn?`<ellipse class="blush" cx="${nearX+eyeDir*lp(-38,-10,nearU)*s}" cy="${cy+30*s}" rx="${lp(25,19,nearU)*s}" ry="${14*s}"/>`:'';
+      const farCheek=cheeksOn&&farVis>.2?`<ellipse class="blush" cx="${farX+eyeDir*36*s*farVis}" cy="${cy+30*s}" rx="${25*s*farVis}" ry="${14*s}" opacity="${farVis}"/>`:'';
+      return `<g transform="rotate(${rot} ${cx} ${cy})">${farCheek}${nearCheek}${farBrow}${nearBrow}${farEye}${nearEye}${beardMoustache(mouth,cx,cy,s)}${mouth}</g>`;
+    }
+    function profileFaceMarkup(mode,cx,cy,r,rot=0,blink=0,dir=1){
+      const s=r/185;
+      const P=d=>`<path class="faceStroke" d="${d}"/>`;
+      // Profile reference: eye and brow sit close to the leading contour; the mouth
+      // is lower and its front end nearly meets the cheek outline.
+      const eyeX=cx+dir*130*s,eyeRy=Math.max(2.2*s,27*s*(1-blink)+2.2*s*blink);
+      let brow=P(`M ${eyeX-dir*25*s} ${cy-82*s} Q ${eyeX-dir*2*s} ${cy-104*s} ${eyeX+dir*29*s} ${cy-77*s}`);
+      let eye=`<ellipse class="eye" cx="${eyeX}" cy="${cy-22*s}" rx="${12*s}" ry="${eyeRy}"/>`+(eyeRy>15*s?`<circle class="eyeShine" cx="${eyeX-dir*3.5*s}" cy="${cy-32*s}" r="${4.3*s}"/>`:'');
+      const cheek=(typeof APPEARANCE==='undefined'||APPEARANCE.cheeks!==false)&&!wearsBeard()?`<ellipse class="blush" cx="${eyeX-dir*14*s}" cy="${cy+26*s}" rx="${19*s}" ry="${13*s}"/>`:'';
+      let mouth=P(`M ${cx+dir*88*s} ${cy+76*s} Q ${cx+dir*127*s} ${cy+98*s} ${cx+dir*164*s} ${cy+84*s}`);
+      if(mode==='sleep'){
+        eye=P(`M ${eyeX-dir*13*s} ${cy-12*s} Q ${eyeX} ${cy+7*s} ${eyeX+dir*18*s} ${cy-12*s}`);brow='';
+        mouth=P(`M ${cx+dir*90*s} ${cy+75*s} Q ${cx+dir*128*s} ${cy+91*s} ${cx+dir*163*s} ${cy+82*s}`);
+      }else if(mode==='success'||mode==='welcome'){
+        eye=P(`M ${eyeX-dir*13*s} ${cy-20*s} Q ${eyeX} ${cy-40*s} ${eyeX+dir*19*s} ${cy-20*s}`);
+        mouth=P(`M ${cx+dir*87*s} ${cy+67*s} Q ${cx+dir*128*s} ${cy+101*s} ${cx+dir*166*s} ${cy+77*s}`);
+      }else if(mode==='error'){
+        brow=P(`M ${eyeX-dir*20*s} ${cy-76*s} L ${eyeX+dir*25*s} ${cy-99*s}`);
+        mouth=P(`M ${cx+dir*89*s} ${cy+89*s} Q ${cx+dir*128*s} ${cy+65*s} ${cx+dir*164*s} ${cy+88*s}`);
+      }else if(mode==='thinking'){
+        mouth=P(`M ${cx+dir*91*s} ${cy+80*s} Q ${cx+dir*128*s} ${cy+73*s} ${cx+dir*163*s} ${cy+80*s}`);
+      }
+      return `<g transform="rotate(${rot} ${cx} ${cy})">${cheek}${brow}${eye}${beardMoustache(mouth,cx,cy,s)}${mouth}</g>`;
+    }
+    function orientedFaceSpec(spec,cx,cy,r,rot=0,blink=0,eyeOffset=[0,0],yaw=0){
+      const ch=characterDef();
+      return ch&&ch.face?ch.face(spec,cx,cy,r,rot,blink,eyeOffset,yaw):ukoOrientedFaceSpec(spec,cx,cy,r,rot,blink,eyeOffset,yaw);
+    }
+    function ukoOrientedFaceSpec(spec,cx,cy,r,rot=0,blink=0,eyeOffset=[0,0],yaw=0){
+      const a=Math.abs(yaw);if(typeof spec==='string'&&spec==='idle')return orientationIdleFaceMarkup(cx,cy,r,rot,blink,eyeOffset,yaw);
+      if(a<.015)return renderFaceSpec(spec,cx,cy,r,rot,blink,eyeOffset);
+      const dir=screenFaceDirFromYaw(yaw);
+
+      if(typeof spec==='string'&&spec==='idle'){
+        // One continuous face through the entire turn. Never crossfade a second face.
+        return orientationIdleFaceMarkup(cx,cy,r,rot,blink,eyeOffset,yaw);
+      }
+
+      const shift=dir*44*a,scaleX=1-.25*a;
+      FACE_X.shift=shift;FACE_X.scaleX=scaleX;
+      const frontal=renderFaceSpec(spec,cx,cy,r,rot,blink,a>.55?[0,0]:eyeOffset);
+      FACE_X.shift=0;FACE_X.scaleX=1;
+      const frontalMouth=BEARD_MOUTH;
+      const transformed=`<g transform="translate(${shift} 0) translate(${cx} ${cy}) scale(${scaleX} 1) translate(${-cx} ${-cy})">${frontal}</g>`;
+      if(a<=.60)return transformed;
+      const u=smooth5(clamp((a-.60)/.40));
+      const mode=typeof spec==='string'?spec:(spec.u<.5?spec.from:spec.to);
+      const profile=profileFaceMarkup(mode,cx,cy,r,rot,blink,dir);
+      if(u<.5)BEARD_MOUTH=frontalMouth;
+      return `<g><g opacity="${(1-u).toFixed(3)}">${transformed}</g><g opacity="${u.toFixed(3)}">${profile}</g></g>`;
+    }
+
+    function loadingLaptopMarkup(raw=false){
+      // The laptop follows the body (life layer), not the typing hands.
+      const sh=raw||typeof LIFE==='undefined'?[0,0]:LIFE.laptopShift;
+      return `<g class="loadingLaptop" transform="translate(${sh[0].toFixed(2)} ${sh[1].toFixed(2)})">
+        <!-- Modern thin laptop: one shallow keyboard plane + one angled screen. -->
+        <path class="laptopSurface"
+          d="M 526 716
+             L 748 724
+             L 790 746
+             L 520 739
+             Z"/>
+
+        <!-- Broad rear screen, angled away from the mascot. -->
+        <path class="laptopSurface"
+          d="M 735 726
+             L 781 579
+             L 874 590
+             L 828 742
+             Z"/>
+
+        <!-- One subtle hinge cue only. -->
+        <line class="laptopDetail"
+          x1="724" y1="727"
+          x2="830" y2="742"/>
+
+        <!-- Very subtle keyboard-plane cue; kept below the hands. -->
+        <line class="laptopDetail"
+          x1="562" y1="728"
+          x2="692" y2="734"
+          opacity=".38"/>
+      </g>`;
+    }
+
+    function orientationHandMarkup(p,side,isNear,yaw){
+      const a=Math.abs(yaw),c=p[`hand_${side}_center`]||p[`wrist_${side}`],ang=angle(p[`elbow_${side}`],c);
+      const rx=lp(46,isNear?39:32,smooth5(a)),ry=lp(26,isNear?23:19,smooth5(a));
+      const opacity=1;
+      return `<ellipse class="hand" opacity="${opacity.toFixed(3)}" cx="${c[0]}" cy="${c[1]}" rx="${rx}" ry="${ry}" transform="rotate(${ang} ${c[0]} ${c[1]})"/>`;
+    }
+    function orientationFootMarkup(p,side,isNear,yaw){
+      const a=Math.abs(yaw),dir=yaw<0?-1:1,c=p[`foot_${side}_center`]||p[`ankle_${side}`];
+      const walkAngle=p.walkFootAngle?.[side]||0;
+      const rotAttr=Math.abs(walkAngle)>.1?` transform="rotate(${walkAngle.toFixed(2)} ${c[0]} ${c[1]})"`:'';
+      if(a<=.32)return `<ellipse class="foot" cx="${c[0]}" cy="${c[1]}" rx="58" ry="22"${rotAttr}/>`;
+      const u=smooth5(clamp((a-.32)/.68)),opacity=1,scale=isNear?1:lp(1,.86,u);
+      const frontal=`<ellipse class="foot" cx="${c[0]}" cy="${c[1]}" rx="58" ry="22"${rotAttr}/>`;
+      const d=`M -31 -15 C -45 -14 -52 -6 -50 4 C -48 13 -35 17 -18 17 L 38 17 C 55 17 68 10 69 1 C 69 -9 56 -15 39 -16 Z`;
+      const profile=`<g transform="translate(${c[0]} ${c[1]}) rotate(${walkAngle.toFixed(2)}) scale(${screenFaceDirFromYaw(yaw)*scale} ${scale})"><path class="foot" d="${d}"/></g>`;
+      return `<g opacity="${opacity.toFixed(3)}"><g opacity="${(1-u).toFixed(3)}">${frontal}</g><g opacity="${u.toFixed(3)}">${profile}</g></g>`;
+    }
+    function renderOrientationIdleRig(p,faceMode,rot,blink,eyeOffset,yaw,headYaw=yaw){
+      const dir=yaw<0?-1:1,a=Math.abs(yaw),near=dir>0?'L':'R',far=dir>0?'R':'L';
+      const farOpacity=1;
+      const [cx,cy]=p.head_center;
+      // Hair behind the head is also behind the body (long hair, ponytails, braids).
+      let out=projectedHair(cx,cy,p.head_radius,rot,headYaw,"back");
+      const chBody=characterDef();if(chBody)out+=chBody.body(p,yaw);
+
+      // Far limbs are painted first: they live behind the torso in depth.
+      out+=`<g opacity="${farOpacity.toFixed(3)}">`
+        +seg(p[`shoulder_${far}`],p[`elbow_${far}`])
+        +seg(p[`elbow_${far}`],p[`wrist_${far}`])
+        +seg(p[`hip_${far}`],p[`knee_${far}`])
+        +seg(p[`knee_${far}`],p[`ankle_${far}`])
+        +orientationHandMarkup(p,far,false,yaw)
+        +orientationFootMarkup(p,far,false,yaw)
+        +`</g>`;
+
+      // Torso becomes the depth separator.
+      out+=seg(p.neck,p.pelvis);
+
+      // Near limbs sit in front and remain full contrast.
+      out+=seg(p[`shoulder_${near}`],p[`elbow_${near}`])
+        +seg(p[`elbow_${near}`],p[`wrist_${near}`])
+        +seg(p[`hip_${near}`],p[`knee_${near}`])
+        +seg(p[`knee_${near}`],p[`ankle_${near}`])
+        +orientationHandMarkup(p,near,true,yaw)
+        +orientationFootMarkup(p,near,true,yaw);
+
+      out+=orientedHeadMarkup(cx,cy,p.head_radius,rot,headYaw);
+      // The face is built first: the beard opens around the mouth it draws.
+      const faceSvg=orientedFaceSpec(faceMode,cx,cy,p.head_radius,rot,blink,eyeOffset,headYaw);
+      out+=headAppearanceMarkup(cx,cy,p.head_radius,rot,headYaw);
+      out+=faceSvg;
+      return out;
+    }
+
+    function renderRig(p,faceMode,rot=0,blink=0,showLoadingLaptop=false,eyeOffset=[0,0],yaw=0,headYaw=yaw){
+      const hcL=p.hand_L_center||p.wrist_L,hcR=p.hand_R_center||p.wrist_R,fcL=p.foot_L_center||p.ankle_L,fcR=p.foot_R_center||p.ankle_R;
+      const hL=angle(p.elbow_L,hcL),hR=angle(p.elbow_R,hcR);
+
+      // Foreground ordering is a body-layer concern, not a face-expression concern.
+      // Keep the Thinking hand in front while the body is still leaving Thinking.
+      const thinkingFront=
+        faceSpecHasThinking(faceMode) ||
+        (current==='thinking' && (thinkExitStart || (smMode&&smInternal==='bridge'))) ||
+        HOLD_THINKING_FRONT;
+
+      // Orientation Lab gets a real depth-aware body renderer.  Face view and every
+      // production state keep the previous renderer byte-for-byte in behaviour.
+      const hasFootTilt=p.walkFootAngle&&(Math.abs(p.walkFootAngle.L||0)>.1||Math.abs(p.walkFootAngle.R||0)>.1);
+      if(current==='idle'&&(Math.abs(yaw)>.015||hasFootTilt)&&!showLoadingLaptop&&!thinkingFront){
+        return renderOrientationIdleRig(p,faceMode,rot,blink,eyeOffset,yaw,headYaw);
+      }
+
+      // A hand touching the head or the face (scratching, chin) is in front of it:
+      // the character faces the camera. Lying down, a hand near the head is a pillow
+      // and stays under it.
+      const [cx,cy]=p.head_center;
+      const touchesHead=h=>current!=='sleep'&&current!=='wake'&&Math.hypot(h[0]-cx,h[1]-cy)<p.head_radius+34;
+      // A raised hand inside a big hairstyle's silhouette (afro, curls…) stays readable:
+      // its forearm and hand are drawn over the hair, the upper arm stays behind.
+      const reachPx=hairReach()*p.head_radius/185;
+      const raisedInHair=h=>current!=='sleep'&&current!=='wake'&&h[1]<p.neck[1]-40&&(characterDef()?characterCovers(p,h,rot,40):Math.hypot(h[0]-cx,h[1]-cy)<reachPx+40);
+      // A scripted move (climb) draws both forearms in front: hands gripping above the head.
+      const front={L:MOVE_FRONT_ARMS||touchesHead(hcL)||raisedInHair(hcL),R:MOVE_FRONT_ARMS||thinkingFront||touchesHead(hcR)||raisedInHair(hcR)};
+      const hand=(c,a)=>`<ellipse class="hand" cx="${c[0]}" cy="${c[1]}" rx="46" ry="26" transform="rotate(${a} ${c[0]} ${c[1]})"/>`;
+
+      // Hair behind the head is also behind the body (long hair, ponytails, braids).
+      let out=projectedHair(cx,cy,p.head_radius,rot,headYaw,"back");
+      const chBody=characterDef();if(chBody)out+=chBody.body(p,yaw);
+
+      out+=seg(p.neck,p.pelvis);
+
+      // Loading uses mixed occlusion:
+      // upper arm stays behind the device, but the typing forearm is on top of the keyboard plane.
+      out+=seg(p.shoulder_L,p.elbow_L);
+      if(!showLoadingLaptop&&!front.L)out+=seg(p.elbow_L,p.wrist_L);
+
+      out+=seg(p.shoulder_R,p.elbow_R);
+      if(!front.R)out+=seg(p.elbow_R,p.wrist_R);
+
+      out+=seg(p.hip_L,p.knee_L)+seg(p.knee_L,p.ankle_L);
+      out+=seg(p.hip_R,p.knee_R)+seg(p.knee_R,p.ankle_R);
+
+      // Physical occlusion order for Loading:
+      // body + upper arms → opaque laptop → typing forearm → opaque hands.
+      if(showLoadingLaptop)out+=loadingLaptopMarkup();
+      if(showLoadingLaptop&&!front.L)out+=seg(p.elbow_L,p.wrist_L);
+
+      if(!front.L)out+=hand(hcL,hL);
+      if(!front.R)out+=hand(hcR,hR);
+
+      out+=`<ellipse class="foot" cx="${fcL[0]}" cy="${fcL[1]}" rx="58" ry="22"/>`
+          +`<ellipse class="foot" cx="${fcR[0]}" cy="${fcR[1]}" rx="58" ry="22"/>`;
+
+      out+=orientedHeadMarkup(cx,cy,p.head_radius,rot,headYaw);
+      // The face is built first: the beard opens around the mouth it draws.
+      const faceSvg=orientedFaceSpec(faceMode,cx,cy,p.head_radius,rot,blink,eyeOffset,headYaw);
+      out+=headAppearanceMarkup(cx,cy,p.head_radius,rot,headYaw);
+      out+=faceSvg;
+
+      if(front.L||front.R){
+        // Sticker outline: a halo in the page colour keeps the arm readable over the face
+        // and the hair. It is clipped to the head and hair so it never shows over the
+        // page itself (on a coloured page it would look like a sleeve).
+        // Clip shape: the head (a bit larger than its outline) plus the hair's filled shapes.
+        const clipId=`${INSTANCE_ID}-halo`;
+        const hairShapes=[...(projectedHair(cx,cy,p.head_radius,rot,headYaw,'front')+projectedHair(cx,cy,p.head_radius,rot,headYaw,'back')).matchAll(/<path\b[^>]*?\sd="([^"]+)"/g)].map(m=>`<path d="${m[1]}"/>`).join('');
+        const halo=(a,b)=>`<g clip-path="url(#${clipId})">${seg(a,b,'boneHalo')}</g>`;
+        out+=`<g class="thinkingForeground"><clipPath id="${clipId}"><circle cx="${cx}" cy="${cy}" r="${p.head_radius+12}"/>${hairShapes}</clipPath>`;
+        if(front.L)out+=halo(p.elbow_L,p.wrist_L)+seg(p.elbow_L,p.wrist_L)+hand(hcL,hL);
+        if(front.R)out+=halo(p.elbow_R,p.wrist_R)+seg(p.elbow_R,p.wrist_R)+hand(hcR,hR);
+        out+=`</g>`;
+      }
+
+      return out
+    }
+    function renderPivots(p){if(!showP.checked){piv.innerHTML='';return}const arr=POINTS.map(k=>`<circle class="pivot" cx="${p[k][0]}" cy="${p[k][1]}" r="6"/>`).join('');piv.innerHTML=arr}
+    function targetFxStrength(state,t,entered=false){
+      const fade=(x,a,b)=>x<=a?0:x>=b?1:(x-a)/(b-a);
+      const fadeOut=(x,a,b)=>x<=a?1:x>=b?0:1-(x-a)/(b-a);
+      if(state==='idle')return 0;
+      // Secondary visual effects are target-synchronous: no early anticipation FX.
+      if(state==='welcome'){
+        // Arm is fully raised at .32; wave happens until the lowering phase starts after .70.
+        if(t<.32||t>.70)return 0;
+        return Math.min(fade(t,.32,.35),fadeOut(t,.67,.70));
+      }
+      if(state==='loading'){
+        // The laptop/spinner become visible only once the Loading target has been reached.
+        return entered?1:0;
+      }
+      if(state==='success'){
+        // From take-off through the victory pumps (celebration jump, .22 → .66).
+        if(t<.22||t>.66)return 0;
+        return Math.min(fade(t,.22,.24),fadeOut(t,.62,.66));
+      }
+      if(state==='error'){
+        // Exact Error target hold: .46 → .64.
+        if(t<.46||t>.64)return 0;
+        return Math.min(fade(t,.46,.48),fadeOut(t,.62,.64));
+      }
+      if(state==='empty'){
+        // Exact Empty target hold: .34 → .58. FX disappear the instant return begins.
+        if(t<.34||t>.58)return 0;
+        return Math.min(fade(t,.34,.36),fadeOut(t,.56,.58));
+      }
+      if(state==='sleep'){
+        // Final Sleep target starts at .94 and remains visible through the breathing loop.
+        if(entered)return 1;
+        if(t<.94)return 0;
+        return fade(t,.94,.98);
+      }
+      return 0;
+    }
+    function faceBlendSpec(from,to,u){
+      return {from,to,u:clamp(u)};
+    }
+
+    function nativeFaceSpec(state,t,entered=false){
+      if(state==='idle'||state==='loading')return'idle';
+
+      if(state==='thinking'){
+        if(thinkExitStart){
+          if(t<.48)return faceBlendSpec('thinking','idle',t/.48);
+          return'idle';
+        }
+        if(entered)return'thinking';
+        if(t<.24)return'idle';
+        if(t<.58)return faceBlendSpec('idle','thinking',(t-.24)/.34);
+        return'thinking';
+      }
+
+      if(state==='sleep'){
+        if(entered)return'sleep';
+        if(t<.64)return'idle';
+        if(t<.82)return faceBlendSpec('idle','sleep',(t-.64)/.18);
+        return'sleep';
+      }
+
+      if(state==='wake'){
+        if(t<.08)return'sleep';
+        if(t<.34)return faceBlendSpec('sleep','idle',(t-.08)/.26);
+        return'idle';
+      }
+
+      const target=DATA.faceModes[state]||'idle';
+
+      // One-shot expressions ease in after anticipation, hold, then ease back to neutral
+      // during the physical settle. Endpoint face artwork remains unchanged.
+      if(t<.22)return'idle';
+      if(t<.34)return faceBlendSpec('idle',target,(t-.22)/.12);
+      if(t<.72)return target;
+      if(t<.84)return faceBlendSpec(target,'idle',(t-.72)/.12);
+      return'idle';
+    }
+
+    function faceSpecFor(state,t,entered,now){
+      // Direct persistent-state resolution owns the facial transition.
+      // This is the key fix for Thinking → Success/Error and Loading → Success/Error:
+      // never route through Idle unless Idle is actually the source expression.
+      if(smMode&&smInternal==='bridge'&&smBridge&&smBridge.faceFrom){
+        const u=clamp((now-smBridge.start)/smBridge.duration);
+        return faceBlendSpec(smBridge.faceFrom,smBridge.faceTo,u);
+      }
+
+      if(smFaceHold){
+        if(state===smFaceHold.state&&t<smFaceHold.until)return smFaceHold.mode;
+        if(state!==smFaceHold.state||t>=smFaceHold.until)smFaceHold=null;
+      }
+
+      return nativeFaceSpec(state,t,entered);
+    }
+    // How far the current hairstyle reaches above/around the head (head units),
+    // so effects never land on the hair.
+    function hairReach(){
+      const ch=characterDef();if(ch)return ch.reach;
+      const m=hairModel(APPEARANCE.hairStyle);
+      if(m.reach!==undefined)return m.reach;
+      let r=185;
+      const upd=(p,extra=0)=>{if(p[1]<60){const d=Math.hypot(p[0],p[1])+extra;if(d>r)r=d;}};
+      m.cap.forEach(c=>c.forEach(p=>upd(p)));
+      m.locks.forEach(l=>l.points.forEach(p=>upd(p,l.width*.5)));
+      m.curls.forEach(c=>upd(c.p,c.r));
+      if(m.bun)r=Math.max(r,Math.hypot(m.bun.center[0],m.bun.center[1])+60);
+      if(m.groom)m.groom.outer.forEach(p=>upd(p));
+      return (m.reach=r);
+    }
+    function fxMarkup(state,p,t,loop,entered=false){
+    // Thinking is intentionally artifact-free: pose + face + motion carry the state.
+    if(state==='thinking')return '';
+    const a=targetFxStrength(state,t,entered);
+    if(a<=.001)return '';
+
+    if(state==='welcome'){
+      // Three ripples travelling outwards, on the far side of the waving hand.
+      const h=p.hand_L_center||p.wrist_L,hc=p.head_center;
+      const dir=Math.atan2(h[1]-hc[1],h[0]-hc[0]),ms=t*DUR.welcome;
+      let arcs='';
+      for(let i=0;i<3;i++){
+        const ph=((ms/620)+i/3)%1,rad=66+ph*62,op=Math.sin(Math.PI*ph);
+        const a0=dir-.55,a1=dir+.55;
+        arcs+=`<path class="accessory" style="opacity:${(op*a).toFixed(3)}" d="M ${h[0]+Math.cos(a0)*rad} ${h[1]+Math.sin(a0)*rad} A ${rad} ${rad} 0 0 1 ${h[0]+Math.cos(a1)*rad} ${h[1]+Math.sin(a1)*rad}"/>`;
+      }
+      return `<g class="fxWelcome">${arcs}</g>`;
+    }
+
+    if(state==='loading'){
+      const spin=loop*360;
+      return `<g class="fxLoading" opacity="${a}">
+        <!-- The device itself is rendered inside the rig for correct hand occlusion. -->
+        <g class="loadingSpinner" transform="translate(${LIFE.laptopShift[0].toFixed(2)} ${LIFE.laptopShift[1].toFixed(2)}) rotate(${spin} 810 455)">
+          ${[0,45,90,135,180,225,270,315].map(d=>`<line x1="810" y1="410" x2="810" y2="383" transform="rotate(${d} 810 455)"/>`).join('')}
+        </g>
+      </g>`;
+    }
+
+    if(state==='success'){
+      // Sparkles pop around the raised hands and above the head (overshoot, then twinkle).
+      const hl=p.hand_L_center||p.wrist_L,hr=p.hand_R_center||p.wrist_R,hc=p.head_center,el=p.elbow_L||p.shoulder_L,er=p.elbow_R||p.shoulder_R;
+      const ms=t*DUR.success,pop=x=>{x=clamp(x);const c=1.9;return 1+(c+1)*Math.pow(x-1,3)+c*Math.pow(x-1,2);};
+      const spark=(x,y,size,delay)=>{
+        const since=ms-.3*DUR.success-delay*1000;                   // ms since the apex
+        const k=pop(since/320)*(t>.55?a:1)*(1+.08*Math.sin(ms/90+delay*20));
+        if(k<=.01)return '';
+        const r=size*k,q=r*.18;
+        return `<path class="fxSpark" d="M ${x} ${y-r} Q ${x+q} ${y-q} ${x+r} ${y} Q ${x+q} ${y+q} ${x} ${y+r} Q ${x-q} ${y+q} ${x-r} ${y} Q ${x-q} ${y-q} ${x} ${y-r} Z"/>`;
+      };
+      const around=(h,e,side)=>{
+        const ang=Math.atan2(h[1]-e[1],h[0]-e[0]);
+        return spark(h[0]+Math.cos(ang-.55*side)*92,h[1]+Math.sin(ang-.55*side)*92,26,0)
+          +spark(h[0]+Math.cos(ang+.35*side)*118,h[1]+Math.sin(ang+.35*side)*118,17,.08)
+          +spark(h[0]+Math.cos(ang-.05)*150,h[1]+Math.sin(ang-.05)*150,12,.15);
+      };
+      const reach=hairReach();
+      // Ground shadow while airborne: shrinks and fades as the mascot rises.
+      const lift=p.celebrationLift||0,k=clamp(lift/CELEBRATION.HEIGHT),sx=p.pelvis?p.pelvis[0]:512;
+      const shadow=lift>1?`<ellipse cx="${sx}" cy="1409" rx="${120*(1-.35*k)}" ry="${17*(1-.35*k)}" fill="var(--bodyStrokeColor, #0B0B0B)" opacity="${(.16*(1-.4*k)).toFixed(3)}"/>`:'';
+      return `<g class="fxSuccess">${shadow}${around(hl,el,1)}${around(hr,er,-1)}${spark(hc[0]-30,hc[1]-reach-46,20,.1)}${spark(hc[0]+48,hc[1]-reach-22,13,.18)}</g>`;
+    }
+
+    if(state==='error'){
+      // Anchored to the head, just outside the hairstyle's silhouette (top right).
+      const hc=p.head_center,reach=hairReach(),ang=-0.86+.42*clamp((reach-230)/140);   // big hair: move to the side
+      const bx=hc[0]+Math.cos(ang)*(reach+96),by=hc[1]+Math.sin(ang)*(reach+74);
+      const bob=Math.sin(t*DUR.error/260)*4,sc=.7+.3*a;
+      return `<g class="fxError fxThoughtBubble" opacity="${a}" transform="translate(${bx} ${by+bob}) scale(${sc}) translate(-832 -276)">
+        <!-- Thought bubble: the question mark belongs to one intentional artifact, not a loose symbol. -->
+        <path class="bubble"
+          d="M 766 301
+             C 751 295 745 281 750 268
+             C 752 253 764 243 779 243
+             C 786 230 800 224 814 229
+             C 825 218 842 218 853 228
+             C 868 223 884 231 889 245
+             C 903 247 912 259 909 273
+             C 918 284 914 299 904 307
+             C 899 321 883 326 870 321
+             C 859 332 842 333 830 324
+             C 817 333 800 329 792 318
+             C 781 319 770 312 766 301 Z"/>
+        <circle class="bubbleTail" cx="770" cy="338" r="10"/>
+        <circle class="bubbleTail" cx="742" cy="362" r="6"/>
+        <path class="question"
+          d="M 812 258
+             C 816 248 826 243 837 244
+             C 850 245 858 253 858 264
+             C 858 275 852 281 843 286
+             C 835 291 832 296 832 304"/>
+        <circle class="questionDot" cx="832" cy="314" r="5"/>
+      </g>`;
+    }
+
+    if(state==='empty'){
+      const hl=p.hand_L_center||p.wrist_L,hr=p.hand_R_center||p.wrist_R;
+      const lx=hl[0]-110,ly=hl[1]-22,rx=hr[0]+110,ry=hr[1]-22;
+      return `<g class="fxEmpty" opacity="${a}">
+        <line class="accessory" x1="${lx}" y1="${ly}" x2="${lx-32}" y2="${ly-38}"/>
+        <line class="accessory" x1="${lx-12}" y1="${ly+28}" x2="${lx-48}" y2="${ly+10}"/>
+        <line class="accessory" x1="${rx}" y1="${ry}" x2="${rx+32}" y2="${ry-38}"/>
+        <line class="accessory" x1="${rx+12}" y1="${ry+28}" x2="${rx+48}" y2="${ry+10}"/>
+      </g>`;
+    }
+
+    if(state==='sleep'){
+      // Z's are born near the head one after another, drift up and fade out.
+      const hc=p.head_center,reach=Math.min(hairReach(),260);
+      let zs='';
+      for(let i=0;i<3;i++){
+        const ph=((loop||0)+i/3)%1,size=30+ph*46,op=Math.sin(Math.PI*ph)*a;
+        const x=hc[0]+reach*.55+ph*120,y=hc[1]-reach*.55-ph*190;
+        zs+=`<path class="accessory" style="opacity:${op.toFixed(3)};stroke-width:${9+ph*4}" d="M ${x} ${y} L ${x+size} ${y} L ${x} ${y+size} L ${x+size} ${y+size}"/>`;
+      }
+      return `<g class="fxSleep">${zs}</g>`;
+    }
+    return ''
+    }
+    const MICRO={
+      blink:{next:0,active:false,start:0,double:false,secondStart:0},
+      tap:{
+        active:false,
+        start:0,
+        duration:760,
+        zone:'body',
+        variant:'bounce',
+        point:[505,760],
+        direction:1,
+        lastByFamily:{}
+      },
+      idleVariation:{active:false,start:0,duration:1800,next:0,direction:1},
+      eyeTracking:{
+        enabled:true,
+        eyeTarget:[0,0],
+        eyeCurrent:[0,0],
+        headTarget:[0,0,0],
+        headCurrent:[0,0,0],
+        pointer:[505,420],
+        pointerInside:false,
+        // true only while the pointer is over the mascot itself (pauses its idle gestures)
+        hovering:false,
+        // 'full' = eyes and head (idle), 'eyes' = eyes only (other states, lookAt)
+        reach:'full',
+        // lookAt(): the head turns towards the target in any awake state, not only idle
+        headToo:false,
+        // small mascots: gaze amplified like the life gestures (1 at 220 px and above)
+        gain:1,
+        lastTime:motionNow()
+      },
+      autoIdleEnabled:true
+    };
+
+    const TAP_REACTIONS={
+      head:[
+        {id:'boop',label:'Boop',duration:720,face:'tapSurprised'},
+        {id:'giggle',label:'Giggle',duration:900,face:'tapPlayful'},
+        {id:'squint',label:'Squint',duration:760,face:'tapSquint'}
+      ],
+      hand:[
+        {id:'wave',label:'Little wave',duration:920,face:'tapPlayful'},
+        {id:'highFive',label:'High five',duration:860,face:'success'},
+        {id:'recoil',label:'Hand recoil',duration:720,face:'tapSurprised'}
+      ],
+      foot:[
+        {id:'hop',label:'Tiny hop',duration:860,face:'tapSurprised'},
+        {id:'kick',label:'Tiny kick',duration:820,face:'tapPlayful'},
+        {id:'ouch',label:'Ouch',duration:760,face:'tapOuch'}
+      ],
+      body:[
+        {id:'bounce',label:'Bounce',duration:820,face:'tapPlayful'},
+        {id:'shimmy',label:'Shimmy',duration:940,face:'tapPlayful'},
+        {id:'surprise',label:'Surprise',duration:760,face:'tapSurprised'}
+      ]
+    };
+    const BLINK=MICRO.blink;
+    function rand(min,max){return min+Math.random()*(max-min)}
+
+    function microAllowed(){
+      return current==='idle' && !freeze.checked && !smInternal && !(typeof WALK!=='undefined'&&WALK.active);
+    }
+    function scheduleIdleVariation(now=motionNow()){
+      MICRO.idleVariation.next=now+rand(15000,30000);
+    }
+    function resetMicroInteractions(now=motionNow()){
+      MICRO.tap.active=false;
+      MICRO.tap.start=0;
+      MICRO.tap.zone='body';
+      MICRO.tap.variant='bounce';
+      MICRO.idleVariation.active=false;
+      MICRO.idleVariation.start=0;
+      scheduleIdleVariation(now);
+      updateMicroUI(now);
+    }
+    function tapFamily(zone){
+      if(zone==='head')return'head';
+      if(zone.startsWith('hand_'))return'hand';
+      if(zone.startsWith('foot_'))return'foot';
+      return'body';
+    }
+    function zoneLabel(zone){
+      return ({
+        head:'Face',
+        hand_L:'Left hand',
+        hand_R:'Right hand',
+        foot_L:'Left foot',
+        foot_R:'Right foot',
+        body:'Body'
+      })[zone]||'Body';
+    }
+    function chooseTapReaction(zone){
+      const family=tapFamily(zone);
+      const list=TAP_REACTIONS[family];
+      const previous=MICRO.tap.lastByFamily[family];
+      const options=list.filter(v=>v.id!==previous);
+      const pool=options.length?options:list;
+      const chosen=pool[Math.floor(Math.random()*pool.length)];
+      MICRO.tap.lastByFamily[family]=chosen.id;
+      return chosen;
+    }
+    function triggerTapReaction(zone='body',point=null,now=motionNow()){
+      if(!microAllowed())return false;
+
+      const reaction=chooseTapReaction(zone);
+      MICRO.idleVariation.active=false;
+      MICRO.tap.active=true;
+      MICRO.tap.start=now;
+      MICRO.tap.zone=zone;
+      MICRO.tap.variant=reaction.id;
+      MICRO.tap.duration=reaction.duration;
+      MICRO.tap.point=point||[lastPose?.head_center?.[0]||505,lastPose?.pelvis?.[1]||760];
+
+      if(zone.endsWith('_L'))MICRO.tap.direction=-1;
+      else if(zone.endsWith('_R'))MICRO.tap.direction=1;
+      else if(zone==='head'&&point&&lastPose?.head_center){
+        MICRO.tap.direction=point[0]<lastPose.head_center[0]?-1:1;
+      }else{
+        MICRO.tap.direction=Math.random()<.5?-1:1;
+      }
+
+      scheduleIdleVariation(now);
+      updateMicroUI(now,`${zoneLabel(zone)} · ${reaction.label}`);
+      return true;
+    }
+
+    function pointSegmentDistance(px,py,a,b){
+      const vx=b[0]-a[0],vy=b[1]-a[1];
+      const wx=px-a[0],wy=py-a[1];
+      const vv=vx*vx+vy*vy||1;
+      const t=clamp((wx*vx+wy*vy)/vv);
+      const dx=px-(a[0]+t*vx),dy=py-(a[1]+t*vy);
+      return Math.hypot(dx,dy);
+    }
+    function inEllipse(px,py,c,rx,ry){
+      const dx=(px-c[0])/rx,dy=(py-c[1])/ry;
+      return dx*dx+dy*dy<=1;
+    }
+    function hitTestMascot(px,py,p){
+      if(!p)return null;
+
+      // Head includes the small hair overhang so a "boop" on the hair still counts.
+      const hc=p.head_center,r=p.head_radius;
+      if(Math.hypot(px-hc[0],py-hc[1])<=r*1.18)return'head';
+
+      if(inEllipse(px,py,p.hand_L_center||p.wrist_L,72,48))return'hand_L';
+      if(inEllipse(px,py,p.hand_R_center||p.wrist_R,72,48))return'hand_R';
+      if(inEllipse(px,py,p.foot_L_center||p.ankle_L,84,46))return'foot_L';
+      if(inEllipse(px,py,p.foot_R_center||p.ankle_R,84,46))return'foot_R';
+
+      const segments=[
+        [p.neck,p.pelvis],
+        [p.shoulder_L,p.elbow_L],[p.elbow_L,p.wrist_L],
+        [p.shoulder_R,p.elbow_R],[p.elbow_R,p.wrist_R],
+        [p.hip_L,p.knee_L],[p.knee_L,p.ankle_L],
+        [p.hip_R,p.knee_R],[p.knee_R,p.ankle_R]
+      ];
+      if(segments.some(([a,b])=>pointSegmentDistance(px,py,a,b)<=34))return'body';
+
+      return null;
+    }
+    function pointerToSvg(e){
+      const svg=(e&&e.currentTarget&&e.currentTarget.closest?e.currentTarget.closest('svg'):null)||document.querySelector('.uko-mascot-svg');if(!svg||!svg.createSVGPoint)return null;
+      const pt=svg.createSVGPoint();
+      pt.x=e.clientX;pt.y=e.clientY;
+      const ctm=svg.getScreenCTM();
+      if(!ctm)return null;
+      const local=pt.matrixTransform(ctm.inverse());
+      return[local.x,local.y];
+    }
+    function triggerIdleVariation(now=motionNow(),manual=true){
+      if(!microAllowed()||MICRO.tap.active)return false;
+      MICRO.idleVariation.active=true;
+      MICRO.idleVariation.start=now;
+      MICRO.idleVariation.direction=Math.random()<.5?-1:1;
+      scheduleIdleVariation(now);
+      updateMicroUI(now,manual?'Idle variation':'Auto idle variation');
+      return true;
+    }
+
+    function applyIdleLife(p,phase){
+      if(current!=='idle'||freeze.checked)return 0;
+
+      // Keep the baseline alive without turning Idle into a visible dance.
+      // Tap / IdleVariation temporarily reduce this layer so larger reactions stay readable.
+      const scale=(MICRO.tap.active||MICRO.idleVariation.active)?.35:1;
+
+      const breath=Math.sin(phase*Math.PI*2);
+      const sway=Math.sin(phase*Math.PI*2+Math.PI/2);
+      const armSwing=Math.sin(phase*Math.PI*2+Math.PI/3);
+      const kneeWave=Math.sin(phase*Math.PI*2-Math.PI/4);
+      const second=Math.sin(phase*Math.PI*4+.35);
+
+      // Torso / weight shift.
+      addOffset(p,'head_center',1.2*sway*scale,3.2*breath*scale);
+      addOffset(p,'neck',1.7*sway*scale,2.4*breath*scale);
+      addOffset(p,'shoulder_L',2.0*sway*scale,1.5*breath*scale);
+      addOffset(p,'shoulder_R',2.0*sway*scale,1.5*breath*scale);
+      addOffset(p,'pelvis',2.4*sway*scale,.9*breath*scale);
+      addOffset(p,'hip_L',2.4*sway*scale,.9*breath*scale);
+      addOffset(p,'hip_R',2.4*sway*scale,.9*breath*scale);
+
+      // Arms: opposite pendulum motion, wrists and hands remain connected.
+      const lArmX=6.5*armSwing*scale;
+      const rArmX=-6.5*armSwing*scale;
+      const armY=1.8*second*scale;
+
+      addOffset(p,'elbow_L',lArmX*.45,armY*.55);
+      addOffset(p,'wrist_L',lArmX,armY);
+      addOffset(p,'hand_L_center',lArmX,armY);
+
+      addOffset(p,'elbow_R',rArmX*.45,-armY*.55);
+      addOffset(p,'wrist_R',rArmX,-armY);
+      addOffset(p,'hand_R_center',rArmX,-armY);
+
+      // Legs: tiny alternating knee flex / weight transfer.
+      // Feet move only fractionally so they still feel planted.
+      const kneeX=3.6*kneeWave*scale;
+      const kneeY=2.3*second*scale;
+
+      addOffset(p,'knee_L',kneeX,kneeY);
+      addOffset(p,'knee_R',-kneeX,-kneeY);
+
+      const footShift=.9*kneeWave*scale;
+      addOffset(p,'ankle_L',footShift,0);
+      addOffset(p,'foot_L_center',footShift,0);
+      addOffset(p,'ankle_R',-footShift,0);
+      addOffset(p,'foot_R_center',-footShift,0);
+
+      // A nearly imperceptible body lean ties the whole motion together.
+      return 1.15*sway*scale;
+    }
+
+    function applyMicroInteractions(p,now){
+      let rotOffset=0;
+
+      if(!microAllowed()){
+        MICRO.tap.active=false;
+        MICRO.idleVariation.active=false;
+        return rotOffset;
+      }
+
+      if(MICRO.autoIdleEnabled &&
+         !MICRO.tap.active &&
+         !MICRO.idleVariation.active &&
+         now>=MICRO.idleVariation.next){
+        triggerIdleVariation(now,false);
+      }
+
+      if(MICRO.tap.active){
+        const q=clamp((now-MICRO.tap.start)/MICRO.tap.duration);
+        if(q>=1){
+          MICRO.tap.active=false;
+          updateMicroUI(now);
+        }else{
+          // Amplified (core/touch.js) so that reactions read at app size.
+          const amp=typeof TAP_AMP!=='undefined'?TAP_AMP:1;
+          const env=Math.pow(Math.sin(Math.PI*q),.9)*amp;
+          const wave=Math.sin(Math.PI*2*q)*env;
+          const quick=Math.sin(Math.PI*3*q)*env;
+          const d=MICRO.tap.direction;
+          const zone=MICRO.tap.zone;
+          const v=MICRO.tap.variant;
+
+          const moveArm=(side,elbowDx,elbowDy,handDx,handDy)=>{
+            const suffix=side<0?'L':'R';
+            addOffset(p,'elbow_'+suffix,elbowDx,elbowDy);
+            addOffset(p,'wrist_'+suffix,handDx,handDy);
+            addOffset(p,'hand_'+suffix+'_center',handDx,handDy);
+          };
+          const moveLeg=(side,kneeDx,kneeDy,footDx,footDy)=>{
+            const suffix=side<0?'L':'R';
+            addOffset(p,'knee_'+suffix,kneeDx,kneeDy);
+            addOffset(p,'ankle_'+suffix,footDx,footDy);
+            addOffset(p,'foot_'+suffix+'_center',footDx,footDy);
+          };
+
+          if(typeof TAP_COMBOS!=='undefined'&&TAP_COMBOS[v]){
+            rotOffset+=comboPose(v,p,q,env,d,moveArm);
+          }
+          else if(zone==='head'){
+            if(v==='boop'){
+              addOffset(p,'head_center',d*9*env,-14*env);
+              addOffset(p,'neck',d*3*env,-4*env);
+              addOffset(p,'shoulder_L',d*1.3*env,-2*env);
+              addOffset(p,'shoulder_R',d*1.3*env,-2*env);
+              moveArm(-1,-d*1.5*env,-2*env,-d*4*env,-3*env);
+              moveArm(1,-d*1.5*env,-2*env,-d*4*env,-3*env);
+              rotOffset+=d*9*env-quick*1.5;
+            }else if(v==='giggle'){
+              addOffset(p,'head_center',wave*8,-5*env);
+              addOffset(p,'neck',wave*3,-2*env);
+              moveArm(-1,-7*env,-5*env,-11*env,-10*env);
+              moveArm(1,7*env,-5*env,11*env,-10*env);
+              rotOffset+=wave*7;
+            }else{
+              addOffset(p,'head_center',d*4*wave,4*env);
+              addOffset(p,'neck',d*2*wave,2*env);
+              addOffset(p,'shoulder_L',0,2*env);
+              addOffset(p,'shoulder_R',0,2*env);
+              rotOffset+=d*4*wave;
+            }
+          }
+          else if(zone.startsWith('hand_')){
+            const side=zone==='hand_L'?-1:1;
+            if(v==='wave'){
+              moveArm(side,side*15*env,-30*env,side*(28*env+8*wave),-62*env+5*wave);
+              addOffset(p,'head_center',-side*4*env,-3*env);
+              rotOffset+=-side*4*env;
+            }else if(v==='highFive'){
+              moveArm(side,side*10*env,-44*env,side*16*env,-92*env);
+              addOffset(p,'head_center',-side*3*env,-7*env);
+              addOffset(p,'neck',-side*1.5*env,-3*env);
+              rotOffset+=-side*3*env;
+            }else{
+              moveArm(side,-side*12*env,-16*env,-side*34*env,-28*env);
+              addOffset(p,'head_center',-side*7*env,-4*env);
+              rotOffset+=-side*7*env;
+            }
+          }
+          else if(zone.startsWith('foot_')){
+            const side=zone==='foot_L'?-1:1;
+            if(v==='hop'){
+              moveLeg(side,-side*5*env,-18*env,side*4*wave,-34*env);
+              addOffset(p,'pelvis',-side*3*env,-9*env);
+              addOffset(p,'neck',-side*2*env,-7*env);
+              addOffset(p,'head_center',-side*3*env,-8*env);
+              moveArm(-1,-5*env,-4*env,-8*env,-7*env);
+              moveArm(1,5*env,-4*env,8*env,-7*env);
+              rotOffset+=-side*3*env;
+            }else if(v==='kick'){
+              moveLeg(side,side*13*env,-10*env,side*(34*env+6*wave),-20*env);
+              addOffset(p,'pelvis',-side*4*env,-3*env);
+              addOffset(p,'head_center',-side*3*env,-2*env);
+              rotOffset+=-side*4*env;
+            }else{
+              moveLeg(side,-side*15*env,-22*env,-side*24*env,-29*env);
+              addOffset(p,'head_center',-side*6*env,-3*env);
+              addOffset(p,'neck',-side*3*env,-2*env);
+              rotOffset+=-side*7*env;
+            }
+          }
+          else{
+            if(v==='bounce'){
+              addOffset(p,'head_center',0,-15*env);
+              addOffset(p,'neck',0,-10*env);
+              addOffset(p,'pelvis',0,-7*env);
+              addOffset(p,'shoulder_L',-3*env,-8*env);
+              addOffset(p,'shoulder_R',3*env,-8*env);
+              moveArm(-1,-8*env,-10*env,-14*env,-15*env);
+              moveArm(1,8*env,-10*env,14*env,-15*env);
+            }else if(v==='shimmy'){
+              addOffset(p,'head_center',wave*10,-3*env);
+              addOffset(p,'neck',wave*7,-1*env);
+              addOffset(p,'pelvis',-wave*4,0);
+              addOffset(p,'shoulder_L',wave*5,-2*env);
+              addOffset(p,'shoulder_R',wave*5,-2*env);
+              moveArm(-1,-wave*5,-2*env,-wave*12,-4*env);
+              moveArm(1,-wave*5,-2*env,-wave*12,-4*env);
+              rotOffset+=wave*6;
+            }else{
+              addOffset(p,'head_center',d*5*env,-12*env);
+              addOffset(p,'neck',d*2*env,-5*env);
+              addOffset(p,'shoulder_L',-10*env,-5*env);
+              addOffset(p,'shoulder_R',10*env,-5*env);
+              moveArm(-1,-18*env,-12*env,-28*env,-20*env);
+              moveArm(1,18*env,-12*env,28*env,-20*env);
+              rotOffset+=d*4*env;
+            }
+          }
+        }
+      }
+
+      if(MICRO.idleVariation.active){
+        const q=clamp((now-MICRO.idleVariation.start)/MICRO.idleVariation.duration);
+        if(q>=1){
+          MICRO.idleVariation.active=false;
+          updateMicroUI(now);
+        }else{
+          const envelope=Math.pow(Math.sin(Math.PI*q),2);
+          const d=MICRO.idleVariation.direction;
+
+          // Rare curious lean. Keep it intentionally smaller than a real state.
+          addOffset(p,'head_center',d*7.0*envelope,-1.5*envelope);
+          addOffset(p,'neck',d*3.2*envelope,-.6*envelope);
+          addOffset(p,'shoulder_L',d*1.5*envelope,0);
+          addOffset(p,'shoulder_R',d*1.5*envelope,0);
+          rotOffset+=d*4.0*envelope;
+        }
+      }
+
+      return rotOffset;
+    }
+    function tapReactionDef(){
+      if(!MICRO.tap.active)return null;
+      const family=tapFamily(MICRO.tap.zone);
+      return TAP_REACTIONS[family].find(v=>v.id===MICRO.tap.variant)||(typeof TAP_COMBOS!=='undefined'&&TAP_COMBOS[MICRO.tap.variant])||null;
+    }
+    function applyMicroFace(baseFace,now){
+      if(!MICRO.tap.active)return baseFace;
+      const def=tapReactionDef();
+      if(!def)return baseFace;
+
+      const q=clamp((now-MICRO.tap.start)/MICRO.tap.duration);
+      const target=def.face||'tapPlayful';
+
+      if(q<.18)return faceBlendSpec('idle',target,q/.18);
+      if(q>.72)return faceBlendSpec(target,'idle',(q-.72)/.28);
+      return target;
+    }
+    function microFxMarkup(now){
+      const touch=typeof touchFxMarkup==='function'?touchFxMarkup(now):'';
+      return microRippleMarkup(now)+touch;
+    }
+    function microRippleMarkup(now){
+      if(!MICRO.tap.active||!MICRO.tap.point)return'';
+
+      const q=clamp((now-MICRO.tap.start)/MICRO.tap.duration);
+      if(q>.42)return'';
+
+      const u=q/.42;
+      const ease=1-Math.pow(1-u,3);
+      const alpha=1-u;
+      const r=18+34*ease;
+      const [x,y]=MICRO.tap.point;
+
+      return `<g class="microTapFx" opacity="${alpha.toFixed(3)}" pointer-events="none">
+        <circle cx="${x}" cy="${y}" r="${r.toFixed(1)}"
+          fill="none" stroke="var(--accentColor)" stroke-width="6"/>
+        <circle cx="${x}" cy="${y}" r="${(r*.38).toFixed(1)}"
+          fill="var(--accentColor)" opacity="${(.16*alpha).toFixed(3)}"/>
+      </g>`;
+    }
+
+    function attentionTrackingEligible(faceSpec){
+      if(!MICRO.eyeTracking.enabled)return false;
+      if(freeze.checked)return false;
+      if(typeof WALK!=='undefined'&&WALK.active)return false;
+      if(MICRO.tap.active||MICRO.idleVariation.active)return false;
+      if(typeof faceSpec!=='string')return false;
+      // Idle: eyes and head. Other awake states: the eyes only (lookAt, page follow).
+      if(current==='idle')return faceSpec==='idle';
+      if(MICRO.eyeTracking.reach!=='eyes')return false;
+      return !['sleep','wake','success','welcome'].includes(current)&&!['sleep','success','welcome'].includes(faceSpec);
+    }
+
+    function updateAttentionTracking(now,faceSpec,p){
+      const a=MICRO.eyeTracking;
+      const dt=Math.min(40,Math.max(0,now-a.lastTime||16));
+      a.lastTime=now;
+
+      let eyeTX=0,eyeTY=0;
+      let headTX=0,headTY=0,headTR=0;
+
+      if(attentionTrackingEligible(faceSpec) && a.pointerInside && p?.head_center){
+        const hx=p.head_center[0], hy=p.head_center[1];
+        const dx=a.pointer[0]-hx, dy=a.pointer[1]-hy;
+        const len=Math.hypot(dx,dy)||1;
+
+        const strength=clamp((len-24)/250);
+        const nx=(dx/len)*strength;
+        const ny=(dy/len)*strength;
+
+        // Eyes lead.
+        const g=a.gain||1;
+        eyeTX=nx*8.0*Math.min(g,1.4);
+        eyeTY=ny*5.5*Math.min(g,1.4);
+
+        // Head follows more slowly and more visibly (idle, or when asked to look at something).
+        if(current==='idle'||a.headToo){
+          headTX=nx*9.0*g;
+          headTY=ny*8.0*g;
+          headTR=nx*8.5*g;
+        }
+      }
+
+      a.eyeTarget[0]=eyeTX;a.eyeTarget[1]=eyeTY;
+      a.headTarget[0]=headTX;a.headTarget[1]=headTY;a.headTarget[2]=headTR;
+
+      const eyeAlpha=1-Math.exp(-dt/65);
+      const headAlpha=1-Math.exp(-dt/175);
+
+      a.eyeCurrent[0]+=(a.eyeTarget[0]-a.eyeCurrent[0])*eyeAlpha;
+      a.eyeCurrent[1]+=(a.eyeTarget[1]-a.eyeCurrent[1])*eyeAlpha;
+
+      for(let i=0;i<3;i++){
+        a.headCurrent[i]+=(a.headTarget[i]-a.headCurrent[i])*headAlpha;
+      }
+
+      for(let i=0;i<2;i++){
+        if(Math.abs(a.eyeCurrent[i])<.02)a.eyeCurrent[i]=0;
+        if(Math.abs(a.headCurrent[i])<.02)a.headCurrent[i]=0;
+      }
+      if(Math.abs(a.headCurrent[2])<.02)a.headCurrent[2]=0;
+
+      return {
+        eye:[a.eyeCurrent[0],a.eyeCurrent[1]],
+        head:[a.headCurrent[0],a.headCurrent[1],a.headCurrent[2]]
+      };
+    }
+
+    function applyAttentionPose(p,attention){
+      if(!attention)return 0;
+      const [hx,hy,rot]=attention.head;
+
+      addOffset(p,'head_center',hx,hy);
+      addOffset(p,'neck',hx*.48,hy*.46);
+      addOffset(p,'shoulder_L',hx*.16,hy*.13);
+      addOffset(p,'shoulder_R',hx*.16,hy*.13);
+
+      return rot;
+    }
+
+    function resetAttentionTracking(keepPointer=false){
+      const a=MICRO.eyeTracking;
+      a.eyeTarget=[0,0];
+      a.eyeCurrent=[0,0];
+      a.headTarget=[0,0,0];
+      a.headCurrent=[0,0,0];
+      if(!keepPointer)a.pointerInside=false;
+      a.lastTime=motionNow();
+    }
+
+    function updateMicroUI(now=motionNow(),message=''){
+      if(!microTapBtn)return;
+      const allowed=microAllowed();
+      microTapBtn.disabled=!allowed;
+      microVariationBtn.disabled=!allowed || MICRO.tap.active;
+
+      if(message){
+        microStatus.textContent=message;
+      }else if(typeof WALK!=='undefined'&&WALK.active){
+        microStatus.textContent='Paused · Walk Lab active';
+      }else if(current!=='idle'){
+        microStatus.textContent='Idle only · paused in '+stateName(current);
+      }else if(MICRO.tap.active){
+        const def=tapReactionDef();
+        microStatus.textContent=`${zoneLabel(MICRO.tap.zone)} · ${def?.label||MICRO.tap.variant}`;
+      }else if(MICRO.idleVariation.active){
+        microStatus.textContent='Idle variation';
+      }else{
+        microStatus.textContent=MICRO.autoIdleEnabled
+          ? 'Ready · proactive head + eyes + body life'
+          : 'Ready · body life + Blink · idle variation manual';
+      }
+    }
+    function resetBlink(now=motionNow()){BLINK.next=now+rand(2500,5000);BLINK.active=false;BLINK.start=0;BLINK.double=false;BLINK.secondStart=0}
+    function blinkCurve(dt){
+      const close=90,hold=45,open=110,total=close+hold+open;
+      if(dt<0||dt>total)return 0;
+      if(dt<close){const x=dt/close;return x*x*(3-2*x)}
+      if(dt<close+hold)return 1;
+      const x=(dt-close-hold)/open;const e=x*x*(3-2*x);return 1-e;
+    }
+    function blinkAmount(now,faceMode){
+      if(typeof faceMode!=='string')return 0;
+      const eligible=!freeze.checked && faceMode!=='sleep' && faceMode!=='success';
+      if(!eligible){
+        if(now>=BLINK.next) BLINK.next=now+1200;
+        return 0;
+      }
+      if(!BLINK.active && now>=BLINK.next){
+        BLINK.active=true;BLINK.start=now;BLINK.double=Math.random()<0.18;BLINK.secondStart=BLINK.start+330;
+      }
+      if(!BLINK.active)return 0;
+      let amount=blinkCurve(now-BLINK.start);
+      if(BLINK.double) amount=Math.max(amount,blinkCurve(now-BLINK.secondStart));
+      const end=BLINK.double?BLINK.secondStart+245:BLINK.start+245;
+      if(now>end){resetBlink(now);return 0}
+      return amount;
+    }
+    function renderGhost(){
+    if(!showG.checked){ghost.innerHTML='';return}
+    // The idle target ghost is always the frontal reference. During Orientation Lab
+    // it would overlap the live 3/4/profile silhouette and look like a rendering bug.
+    if(current==='idle' && (ORIENTATION.demo || Math.abs(ORIENTATION.value)>.015 || Math.abs(ORIENTATION.target)>.015)){ghost.innerHTML='';return}
+    if(current==='thinking'){ghost.innerHTML=`<g class="ghost">${renderRig(DATA.poses.thinking,'thinking',DATA.headRot.thinking||0,0)}</g>`;return}
+    if(current==='wake'){ghost.innerHTML=`<g class="ghost">${renderRig(DATA.poses.idle,'idle',0,0)}</g>`;return}
+    ghost.innerHTML=`<g class="ghost">${DATA.refs[current]}</g>`}
+    function phaseName(state,t,entered){
+    if(state==='idle')return'idle breathing loop';
+    if(state==='loading')return entered?'loading sustain loop':'entering loading';
+    if(state==='thinking'){
+    if(thinkExitStart)return'thinking exit → idle';
+    return entered?'thinking persistent loop':'thinking enter';
+    }
+    if(state==='wake'){
+    if(t<.18)return'head lifts from support';
+    if(t<.48)return'upper body recovery';
+    if(t<.75)return'pelvis / legs follow';
+    if(t<1)return'final upright settle';
+    return'idle reached';
+    }
+    if(state==='success'){
+      if(t<.10)return'anticipation';
+      if(t<.18)return'deep anticipation';
+      if(t<.36)return'launch / rise';
+      if(t<.45)return'apex → target';
+      if(t<.59)return'success target hold';
+      if(t<.75)return'descent / landing';
+      if(t<.89)return'rebound / settle';
+      return'idle pause';
+    }
+    if(state==='error'){
+      if(t<.46)return'raise arm · smooth acceleration';
+      if(t<.64)return'error target hold';
+      if(t<.94)return'lower arm · smooth deceleration';
+      return'idle settle';
+    }
+    if(state==='sleep'){
+      if(t<.10)return'drowsy';
+      if(t<.20)return'knees unlock';
+      if(t<.32)return'crouch / weight shift';
+      if(t<.45)return'lowering to support';
+      if(t<.58)return'pillow arm plants';
+      if(t<.70)return'torso lowers';
+      if(t<.82)return'head approaches floor';
+      if(t<.94)return'final settle';
+      return'sleep breathing loop';
+    }
+    if(t<.18)return'anticipation';
+    if(t<.68)return'action / target';
+    if(t<.88)return'return / landing';
+    return'idle pause'}
+    // MainMotion is the single owner of the mascot's primary body pose and state timeline.
+    // Secondary systems are deliberately applied later and never write state progression:
+    // FaceExpression, Blink, AttentionTracking, IdleLife/MicroInteractions and Artifacts.
+    const MAIN_MOTION_CONTRACT=Object.freeze({
+      name:'MainMotion',
+      owns:Object.freeze(['primary pose','entry/loop/exit timeline','state-machine visual progression','base head rotation']),
+      secondary:Object.freeze(['FaceExpression','Blink','AttentionTracking','IdleLife','MicroInteractions','Artifacts'])
+    });
+
+    function resolveMainMotionFrame(now,speed){
+      if(CLOCK.reduced)return {pose:cpy(DATA.poses[current==='wake'?'idle':current]),t:1,loop:0,entered:true,elapsed:0,marker:'REDUCED MOTION'};
+      let elapsed=(now-start)*speed;
+      let p,t=0,loop=0,frameEntered=false,marker='TARGET-SYNC FX';
+
+      if(smMode&&smInternal==='bridge'){
+        const e=(now-smBridge.start)*speed;
+        t=clamp(e/smBridge.duration);
+        const targetT=smBridge.targetStart*t;
+        const targetPose=timelinePose(smBridge.target,targetT);
+        p=lerpPose(smBridge.from,targetPose,smooth5(t));
+        frameEntered=false;
+        marker='TRANSITION BLEND';
+
+        if(t>=1){
+          const target=smBridge.target, targetStart=smBridge.targetStart, targetFace=smBridge.faceTo;
+          smInternal=null;
+          smBridge=null;
+          smLogical=target==='loading'?'LoadingLoop':(target==='thinking'?'ThinkingLoop':target[0].toUpperCase()+target.slice(1));
+          smSetVisual(target,now-targetStart*DUR[target]/speed);
+
+          // FaceExpression is a separate layer. Hold its resolved expression long enough
+          // for the destination clip's native face timing to catch up, avoiding a flash.
+          smFaceHold={state:target,mode:targetFace,until:.34};
+
+          elapsed=(now-start)*speed;
+          t=clamp(elapsed/DUR[target]);
+          p=timelinePose(target,t);
+          frameEntered=target==='loading'||target==='thinking';
+          if(frameEntered)entered=true;
+          smWrite(`blend complete → ${smLogical}`);
+          smRefresh();
+        }
+      }
+      else if(smMode&&smInternal==='loadingExit'){
+        const e=(now-smExit.start)*speed;
+        t=clamp(e/smExit.duration);
+        p=lerpPose(smExit.from,DATA.poses.idle,smooth5(t));
+        frameEntered=false;
+        marker='LOADING EXIT';
+        if(t>=1)smToIdle('LoadingExit complete');
+      }
+      else if(freeze.checked){
+        p=cpy(current==='wake'?DATA.poses.idle:DATA.poses[current]);
+        t=1;
+        frameEntered=true;
+        marker='FROZEN TARGET';
+      }
+      else if(current==='idle'){
+        loop=(elapsed%DUR.idle)/DUR.idle;
+        p=cpy(DATA.poses.idle);
+        t=loop;
+        marker='MAINMOTION · IDLE LOOP';
+      }
+      else if(current==='loading'){
+        const entry=1000;
+        if(elapsed<entry){
+          t=elapsed/entry;
+          p=lerpPose(DATA.poses.idle,DATA.poses.loading,ease(t));
+          frameEntered=false;
+        }else{
+          frameEntered=true;
+          loop=((elapsed-entry)%1250)/1250;
+          p=cpy(DATA.poses.loading);
+
+          // MainMotion owns the persistent typing/body motion. The laptop remains a prop.
+          const tap=Math.sin(loop*Math.PI*2);
+          const sway=Math.cos(loop*Math.PI*2);
+          const ldx=sway*1.2, ldy=tap*4.0;
+          p.wrist_L[0]+=ldx; p.wrist_L[1]+=ldy;
+          p.hand_L_center[0]+=ldx; p.hand_L_center[1]+=ldy;
+          p.head_center[1]+=tap*2;
+          t=1;
+        }
+        marker='MAINMOTION · LOADING';
+      }
+      else if(current==='thinking'){
+        if(thinkExitStart){
+          const exitElapsed=(now-thinkExitStart)*speed;
+          t=clamp(exitElapsed/900);
+          p=lerpPose(thinkExitPose||DATA.poses.thinking,DATA.poses.idle,smooth5(t));
+          frameEntered=false;
+          if(t>=1&&!smMode){
+            current='idle';start=now;thinkExitStart=0;thinkExitPose=null;
+            thinkingExit.classList.add('hidden');badge.textContent='Idle';desc.textContent=DESC.idle;
+            durationEl.textContent=DURATION_LABEL.idle;tabsRender();renderGhost();
+          }
+        }else if(elapsed<1000){
+          t=clamp(elapsed/1000);
+          p=lerpPose(DATA.poses.idle,DATA.poses.thinking,smooth5(t));
+          frameEntered=false;
+        }else{
+          frameEntered=true;t=1;loop=((elapsed-1000)%2400)/2400;p=cpy(DATA.poses.thinking);
+          const breath=Math.sin(loop*Math.PI*2);
+          p.head_center[1]+=breath*2.5;p.neck[1]+=breath*2.0;
+          p.shoulder_L[1]+=breath*1.5;p.shoulder_R[1]+=breath*1.5;
+          const micro=Math.sin(loop*Math.PI*2+.8)*2.0;
+          p.wrist_R[0]+=micro;p.hand_R_center[0]+=micro;
+        }
+        marker='MAINMOTION · THINKING';
+      }
+      else if(current==='sleep'){
+        const dur=DUR.sleep;
+        if(elapsed<dur){
+          t=Math.min(1,elapsed/dur);p=timelinePose('sleep',t);frameEntered=false;
+        }else{
+          frameEntered=true;t=1;loop=((elapsed-dur)%2600)/2600;p=cpy(DATA.poses.sleep);
+          const dy=Math.sin(loop*Math.PI*2)*3;
+          p.neck[1]+=dy*.8;
+          p.shoulder_L[1]+=dy*.6;p.shoulder_R[1]+=dy*.6;
+        }
+        marker='MAINMOTION · SLEEP';
+      }
+      else if(current==='wake'){
+        const dur=DUR.wake;
+        t=smMode?clamp(elapsed/dur):(elapsed%dur)/dur;
+        const q=smooth3(t), sleepT=.94*(1-q);
+        p=timelinePose('sleep',sleepT);
+        frameEntered=t>=1;
+        if(frameEntered&&smMode)p=cpy(DATA.poses.idle);
+        marker='MAINMOTION · WAKE';
+      }
+      else{
+        const dur=DUR[current];
+        t=(elapsed%dur)/dur;
+        p=timelinePose(current,t);
+        marker=`MAINMOTION · ${current.toUpperCase()}`;
+      }
+
+      return {pose:p,t,loop,entered:frameEntered,elapsed,marker};
+    }
+
+    function settleStateMachineFrame(frame,now,speed){
+      // Publish MainMotion's persistent-state phase for the QA state-machine UI.
+      entered=frame.entered;
+      smRefreshPersistentPhase();
+
+      let {pose:p,t,loop,elapsed}=frame;
+      if(smMode&&!smInternal){
+        if((current==='welcome'||current==='success'||current==='error'||current==='empty')&&elapsed>=DUR[current]){
+          const completed=stateName(current);
+          smToIdle(`${completed} complete`);
+          p=cpy(DATA.poses.idle);t=0;loop=0;entered=false;
+        }else if(current==='wake'&&elapsed>=DUR.wake){
+          smToIdle('Wake complete');
+          p=cpy(DATA.poses.idle);t=0;loop=0;entered=false;
+        }else if(current==='thinking'&&thinkExitStart&&((now-thinkExitStart)*speed)>=900){
+          smToIdle('ThinkingExit complete');
+          p=cpy(DATA.poses.idle);t=0;loop=0;entered=false;
+        }
+      }
+      return {pose:p,t,loop,elapsed,entered};
+    }
+
+
+
+    // Volume hairstyles built as 3D shells around the skull (head radius = 185 units,
+    // y up is negative, lon 0 = facing the camera, phi 0 = top of the head).
+    //
+    // A shell is a surface R(lon, phi) above the scalp. Above the equator it follows
+    // the skull (with its own width/height); below it, hair either keeps the sphere
+    // (afro) or falls vertically (long hair). Cells are split into back / front by
+    // depth like every other style, so the shell turns correctly at 3/4 and profile.
+    // Where the shell stops on the head (the face window), a ribbon closes the gap
+    // down to the scalp hairline: hair always grows *from* the scalp.
+
+    const EXTRA_HAIR = {};
+
+    // Characters of the Uko family: same skeleton, same animations, same face
+    // timing; only the head (and a few body accessories) change.
+    //   uko      round head, 3 hairstyles in the Starter (17 in the full pack)
+    //
+    // Each character describes its head silhouette (head-local units, radius 185,
+    // before head rotation). The pose code uses it so raised arms stay readable
+    // (elbow and forearm outside the head, as on Uko) and effects sit outside it.
+
+    const CHARACTER = { id: 'uko', accent: '#FFC93C' };
+    function normalizeCharacter(v) {
+      const id = String(v || '').trim().toLowerCase();
+      return CHARACTER_LIST.includes(id) ? id : 'uko';
+    }
+    function characterDef() { return CHARACTER.id === 'uko' ? null : CHARACTERS[CHARACTER.id]; }
+
+    // ---------------------------------------------------------------- geometry
+    // Signed distance to a rounded rectangle (centre c, half sizes h, corner radius r).
+    function sdRoundRect(x, y, c, h, r) {
+      const qx = Math.abs(x - c[0]) - (h[0] - r), qy = Math.abs(y - c[1]) - (h[1] - r);
+      return Math.hypot(Math.max(qx, 0), Math.max(qy, 0)) + Math.min(Math.max(qx, qy), 0) - r;
+    }
+    // Signed distance to a convex polygon (negative inside).
+    function sdPolygon(x, y, pts) {
+      let d = Infinity, inside = false;
+      for (let i = 0, j = pts.length - 1; i < pts.length; j = i++) {
+        const [ax, ay] = pts[j], [bx, by] = pts[i];
+        const ex = bx - ax, ey = by - ay, wx = x - ax, wy = y - ay;
+        const t = clamp((wx * ex + wy * ey) / (ex * ex + ey * ey));
+        d = Math.min(d, Math.hypot(wx - ex * t, wy - ey * t));
+        if ((ay > y) !== (by > y) && x < ax + (bx - ax) * (y - ay) / (by - ay)) inside = !inside;
+      }
+      return inside ? -d : d;
+    }
+
+    // ---------------------------------------------------------------- registry
+    const CHARACTERS = {
+    };
+
+    // Is a point (viewBox) within `margin` of the character's head silhouette?
+    function characterCovers(q, pt, rot, margin) {
+      const ch = characterDef();
+      if (!ch) return false;
+      const s = q.head_radius / 185, a = -(rot || 0) * Math.PI / 180;
+      const dx = (pt[0] - q.head_center[0]) / s, dy = (pt[1] - q.head_center[1]) / s;
+      const x = dx * Math.cos(a) - dy * Math.sin(a), y = dx * Math.sin(a) + dy * Math.cos(a);
+      return ch.distance(x, y) < margin / s;
+    }
+
+    // Raised arms around a character head: the steepest V where the elbow, the
+    // forearm and the hand all clear the silhouette, like Uko's reference pose.
+    function characterArmAngle(sh, hc, dir, L, radius) {
+      const ch = characterDef(), s = radius / 185;
+      const out = (pt, m) => ch.distance((pt[0] - hc[0]) / s, (pt[1] - hc[1]) / s) >= m / s;
+      let th = 62 * Math.PI / 180;
+      for (; th > 12 * Math.PI / 180; th -= Math.PI / 90) {
+        const w = [sh[0] + dir * L * Math.cos(th), sh[1] - L * Math.sin(th)];
+        const e = [sh[0] + dir * 170 * Math.cos(th - .45), sh[1] - 170 * Math.sin(th - .45)];
+        const h = [w[0] + dir * 10, w[1] - 32];
+        const along = [.33, .66].map(k => [lp(e[0], w[0], k), lp(e[1], w[1], k)]);
+        if (out(e, 24) && along.every(pt => out(pt, 24)) && out(w, 24) && out(h, 44)) break;
+      }
+      return th;
+    }
+
+    // Canonical skeleton: fixed bone lengths measured on the Idle pose.
+    // Every frame, whatever the animation layers produced, is re-solved onto this
+    // skeleton. Hands and feet keep their animated targets (contacts stay exact),
+    // elbows and knees come from a soft two-bone IK, so no limb can stretch.
+    // The same bone set (root, spine, head, upper/fore arms, thighs, shins) is the
+    // one exported to Rive.
+
+    const SKELETON = (function buildSkeleton(idle) {
+      const d = (a, b) => Math.hypot(b[0] - a[0], b[1] - a[1]);
+      const up = norm(sub(idle.neck, idle.pelvis));
+      const right = [-up[1], up[0]];
+      const local = (origin, p) => {
+        const v = sub(p, origin);
+        return [dot(v, right), dot(v, up)];
+      };
+      return {
+        spine: d(idle.pelvis, idle.neck),
+        neckToHead: d(idle.neck, idle.head_center),
+        headRadius: idle.head_radius,
+        shoulder: { L: local(idle.neck, idle.shoulder_L), R: local(idle.neck, idle.shoulder_R) },
+        hip: { L: local(idle.pelvis, idle.hip_L), R: local(idle.pelvis, idle.hip_R) },
+        upperArm: { L: d(idle.shoulder_L, idle.elbow_L), R: d(idle.shoulder_R, idle.elbow_R) },
+        foreArm: { L: d(idle.elbow_L, idle.wrist_L), R: d(idle.elbow_R, idle.wrist_R) },
+        hand: { L: d(idle.wrist_L, idle.hand_L_center), R: d(idle.wrist_R, idle.hand_R_center) },
+        thigh: { L: d(idle.hip_L, idle.knee_L), R: d(idle.hip_R, idle.knee_R) },
+        shin: { L: d(idle.knee_L, idle.ankle_L), R: d(idle.knee_R, idle.ankle_R) },
+        foot: { L: d(idle.ankle_L, idle.foot_L_center), R: d(idle.ankle_R, idle.foot_R_center) }
+      };
+    })(DATA.poses.idle);
+
+    function sub(a, b) { return [a[0] - b[0], a[1] - b[1]]; }
+    function dot(a, b) { return a[0] * b[0] + a[1] * b[1]; }
+    function cross(a, b) { return a[0] * b[1] - a[1] * b[0]; }
+    function norm(v, fallback = [0, -1]) {
+      const l = Math.hypot(v[0], v[1]);
+      return l > 1e-6 ? [v[0] / l, v[1] / l] : fallback.slice();
+    }
+    function along(origin, dir, len) { return [origin[0] + dir[0] * len, origin[1] + dir[1] * len]; }
+
+    // Soft two-bone IK solved in 3D, then projected orthographically.
+    // The joint (elbow/knee) lies on the circle allowed by the fixed bone lengths.
+    // Its screen-lateral offset follows the animation's hint (the authored drawing),
+    // clamped to what the lengths allow; the rest of the bend goes into depth
+    // (toward the camera). A limb can therefore look foreshortened, never stretched.
+    // Near full extension the reach is compressed exponentially (soft IK), which
+    // removes the classic snap when a limb straightens.
+    function solveTwoBone(root, target, l1, l2, hint, fallbackSide = 1) {
+      const total = l1 + l2, soft = total * 0.05, hard = total - soft;
+      const minReach = Math.abs(l1 - l2) + 1;
+      const toTarget = sub(target, root);
+      let dist = Math.hypot(toTarget[0], toTarget[1]);
+      const dir = norm(toTarget, [0, 1]);
+      if (dist > hard) dist = hard + soft * (1 - Math.exp(-(dist - hard) / soft));
+      dist = Math.max(minReach, dist);
+
+      const a = (l1 * l1 - l2 * l2 + dist * dist) / (2 * dist);
+      const h = Math.sqrt(Math.max(0, l1 * l1 - a * a));
+      const perp = [-dir[1], dir[0]];
+      let lateral = hint ? dot(sub(hint, root), perp) : h * fallbackSide;
+      lateral = Math.max(-h, Math.min(h, lateral));
+      const joint = [root[0] + dir[0] * a + perp[0] * lateral, root[1] + dir[1] * a + perp[1] * lateral];
+      const end = along(root, dir, dist);
+      return { joint, end, depth: Math.sqrt(Math.max(0, h * h - lateral * lateral)) };
+    }
+
+    // Re-solve a pose produced by the animation layers onto the canonical skeleton.
+    // The neck is the anchor: the head, the face and the hands keep the placement
+    // the animation gave them (so contacts with the head, the chin or a prop stay
+    // exact). The pelvis hangs from the spine at its fixed length and the legs reach
+    // their foot targets with the soft 3D IK: when the authored drawing had a shorter
+    // torso, the knees simply bend toward the camera instead of anything stretching.
+    function solveSkeleton(p) {
+      const S = SKELETON;
+      const q = Object.assign({}, p);
+      const up = norm(sub(p.neck, p.pelvis));
+      const right = [-up[1], up[0]];
+      const fromFrame = (origin, off) => [origin[0] + right[0] * off[0] + up[0] * off[1], origin[1] + right[1] * off[0] + up[1] * off[1]];
+      const neck = p.neck.slice();
+      const pelvis = along(neck, up, -S.spine);
+
+      q.pelvis = pelvis;
+      q.neck = neck;
+      q.head_center = along(neck, norm(sub(p.head_center, p.neck), up), S.neckToHead);
+      q.head_radius = S.headRadius;
+
+      for (const side of ['L', 'R']) {
+        const shoulder = fromFrame(neck, S.shoulder[side]);
+        // The drawing wins: upper arm along the drawn direction (length capped),
+        // forearm straight to the drawn hand (length capped). Same silhouettes and
+        // hand paths as the authored animation, without any stretching.
+        const arm = drawnChain(shoulder, sub(p[`elbow_${side}`], p[`shoulder_${side}`] || shoulder), p[`wrist_${side}`], S.upperArm[side], S.foreArm[side]);
+        q[`shoulder_${side}`] = shoulder;
+        q[`elbow_${side}`] = arm.joint;
+        q[`wrist_${side}`] = arm.end;
+        const handDir = norm(sub(p[`hand_${side}_center`] || p[`wrist_${side}`], p[`wrist_${side}`]), norm(sub(arm.end, arm.joint)));
+        q[`hand_${side}_center`] = along(arm.end, handDir, S.hand[side]);
+
+        const hip = fromFrame(pelvis, S.hip[side]);
+        const leg = solveTwoBone(hip, p[`ankle_${side}`], S.thigh[side], S.shin[side], p[`knee_${side}`]);
+        q[`hip_${side}`] = hip;
+        q[`knee_${side}`] = leg.joint;
+        q[`ankle_${side}`] = leg.end;
+        const footDir = norm(sub(p[`foot_${side}_center`] || p[`ankle_${side}`], p[`ankle_${side}`]), [0, 1]);
+        q[`foot_${side}_center`] = along(leg.end, footDir, S.foot[side]);
+      }
+      return q;
+    }
+
+    // Re-constrain arms and legs (shoulders/hips stay where late layers put them).
+    // Used after orientation, turn footwork and walk. Arms keep their direction and
+    // are only shortened back to their length (never re-bent); legs use IK so feet
+    // keep their targets.
+    function resolveLimbs(p) {
+      const S = SKELETON;
+      for (const side of ['L', 'R']) {
+        const arm = restoreChain(p[`shoulder_${side}`], p[`elbow_${side}`], p[`wrist_${side}`], S.upperArm[side], S.foreArm[side]);
+        const handOff = sub(p[`hand_${side}_center`], p[`wrist_${side}`]);
+        p[`elbow_${side}`] = arm.joint; p[`wrist_${side}`] = arm.end;
+        p[`hand_${side}_center`] = [arm.end[0] + handOff[0], arm.end[1] + handOff[1]];
+        const leg = solveTwoBone(p[`hip_${side}`], p[`ankle_${side}`], S.thigh[side], S.shin[side], p[`knee_${side}`]);
+        const footOff = sub(p[`foot_${side}_center`], p[`ankle_${side}`]);
+        p[`knee_${side}`] = leg.joint; p[`ankle_${side}`] = leg.end;
+        p[`foot_${side}_center`] = [leg.end[0] + footOff[0], leg.end[1] + footOff[1]];
+      }
+      return p;
+    }
+
+    // Drawing-preserving two-bone chain: first bone along the drawn direction (length
+    // capped), second bone straight to the drawn end point (length capped).
+    function drawnChain(root, firstDir, end, maxA, maxB) {
+      const la = Math.hypot(firstDir[0], firstDir[1]);
+      const joint = along(root, norm(firstDir, [0, 1]), Math.min(la, maxA));
+      const db = sub(end, joint), lb = Math.hypot(db[0], db[1]);
+      return { joint, end: along(joint, norm(db, [0, 1]), Math.min(lb, maxB)) };
+    }
+
+    // Direction-preserving length restore for a two-bone chain: each bone keeps its
+    // current direction, its on-screen length is capped at maxA/maxB.
+    function restoreChain(root, joint, end, maxA, maxB) {
+      const da = sub(joint, root), la = Math.hypot(da[0], da[1]);
+      const j = along(root, norm(da, [0, 1]), Math.min(la, maxA));
+      const db = sub(end, joint), lb = Math.hypot(db[0], db[1]);
+      return { joint: j, end: along(j, norm(db, [0, 1]), Math.min(lb, maxB)) };
+    }
+
+    // Keep the head attached at the fixed neck distance after late layers
+    // (attention tracking, walk counter-motion) nudged it.
+    function reattachHead(p) {
+      const dir = norm(sub(p.head_center, p.neck));
+      p.head_center = along(p.neck, dir, SKELETON.neckToHead);
+      p.head_radius = SKELETON.headRadius;
+      return p;
+    }
+
+    // Transition blend between two displayed poses (after orientation / walk).
+    // Joints blend in position, like the authored animation, then the constraints
+    // are re-applied: fixed spine and neck, arms capped along their directions,
+    // legs by IK toward the blended foot targets (planted feet stay planted).
+    // `w` is a number, or a function of the joint name (per-joint weights, used for
+    // overlapping action in transitions).
+    function mixPoses(a, b, w) {
+      const S = SKELETON;
+      const W = typeof w === 'function' ? w : () => w;
+      const L = (x, y, k) => { const ww = W(k); return [x[0] + (y[0] - x[0]) * ww, x[1] + (y[1] - x[1]) * ww]; };
+      const r = Object.assign({}, b);
+      for (const k of POINTS) if (a[k] && b[k]) r[k] = L(a[k], b[k], k);
+      const up = norm(sub(r.neck, r.pelvis));
+      r.pelvis = along(r.neck, up, -S.spine);
+      const offsetFrom = (origin, key, base) => { const o = L(sub(a[key], a[base]), sub(b[key], b[base]), key); return [origin[0] + o[0], origin[1] + o[1]]; };
+      for (const side of ['L', 'R']) {
+        const sh = `shoulder_${side}`, hp = `hip_${side}`;
+        r[sh] = offsetFrom(r.neck, sh, 'neck');
+        r[hp] = offsetFrom(r.pelvis, hp, 'pelvis');
+      }
+      resolveLimbs(r);
+      return reattachHead(r);
+    }
+
+    // Foot planting for turns (replaces the prototype's scripted turn footwork).
+    //
+    // Each foot is either planted (fixed on the floor, never slides) or stepping.
+    // The orientation layer says where each foot *should* be for the current yaw;
+    // when a planted foot drifts too far from that, it steps there on a lifted arc,
+    // one foot at a time. When the body stops turning, a small settle step removes
+    // any leftover offset. Knees are then solved by leg IK (resolveLimbs).
+
+    const FOOTWORK = { active: false, L: null, R: null, stepping: null, lastSide: 'R', still: 0, lastYaw: 0 };
+    const STEP_TRIGGER = 16, STEP_SETTLE = 3, STEP_MS = 240, STEP_SETTLE_MS = 180;
+
+    function resetFootwork() { FOOTWORK.active = false; FOOTWORK.stepping = null; }
+
+    function applyFootPlanting(p, now, prevShown, yaw) {
+      const desired = side => ({ foot: p[`foot_${side}_center`].slice(), ankleOff: sub(p[`ankle_${side}`], p[`foot_${side}_center`]) });
+      if (!FOOTWORK.active) {
+        const src = prevShown || p;
+        FOOTWORK.L = src.foot_L_center.slice();
+        FOOTWORK.R = src.foot_R_center.slice();
+        FOOTWORK.stepping = null;
+        FOOTWORK.active = true;
+        FOOTWORK.lastYaw = yaw;
+        FOOTWORK.still = now;
+      }
+      if (Math.abs(yaw - FOOTWORK.lastYaw) > 1e-4) FOOTWORK.still = now;
+      FOOTWORK.lastYaw = yaw;
+      const settled = now - FOOTWORK.still > 120;
+
+      const want = { L: desired('L'), R: desired('R') };
+      const err = s => Math.hypot(want[s].foot[0] - FOOTWORK[s][0], want[s].foot[1] - FOOTWORK[s][1]);
+
+      if (!FOOTWORK.stepping) {
+        const eL = err('L'), eR = err('R');
+        const limit = settled ? STEP_SETTLE : STEP_TRIGGER;
+        let side = null;
+        if (eL > limit || eR > limit) {
+          side = eL === eR ? (FOOTWORK.lastSide === 'L' ? 'R' : 'L') : (eL > eR ? 'L' : 'R');
+          // Alternate feet while turning, as a person does.
+          if (!settled && side === FOOTWORK.lastSide && Math.max(eL, eR) - Math.min(eL, eR) < 10) side = side === 'L' ? 'R' : 'L';
+        }
+        if (side) {
+          const dist = err(side);
+          FOOTWORK.stepping = { side, from: FOOTWORK[side].slice(), start: now, dur: settled ? STEP_SETTLE_MS : STEP_MS, lift: Math.min(26, 6 + dist * 0.35) };
+        }
+      }
+
+      p.walkFootAngle = p.walkFootAngle || {};
+      for (const s of ['L', 'R']) {
+        let pos = FOOTWORK[s], lift = 0, pitch = 0;
+        const st = FOOTWORK.stepping;
+        if (st && st.side === s) {
+          const tau = clamp((now - st.start) / st.dur);
+          const h = smooth3(tau);
+          pos = [lp(st.from[0], want[s].foot[0], h), lp(st.from[1], want[s].foot[1], h)];
+          lift = Math.sin(Math.PI * tau) * st.lift;
+          pitch = Math.sin(Math.PI * tau) * (tau < 0.4 ? -8 : 7) * Math.sign(want[s].foot[0] - st.from[0] || 1);
+          if (tau >= 1) { FOOTWORK[s] = want[s].foot.slice(); FOOTWORK.stepping = null; FOOTWORK.lastSide = s; pos = FOOTWORK[s]; lift = 0; pitch = 0; }
+        }
+        const foot = [pos[0], pos[1] - lift];
+        p[`foot_${s}_center`] = foot;
+        p[`ankle_${s}`] = [foot[0] + want[s].ankleOff[0], foot[1] + want[s].ankleOff[1]];
+        p.walkFootAngle[s] = pitch;
+      }
+      return p;
+    }
+
+    // Success: a real celebration jump, generated from the Idle pose.
+    //
+    // Beats (t = 0..1 over DUR.success = 3.6 s):
+    //   .06–.18  anticipation   crouch, knees out, arms swing down and out (from .05)
+    //   .18–.23  take-off       legs extend, arms swing up (.15–.29, leading the jump)
+    //   .23–.42  flight         ballistic arc (parabola), knees tucked, arms in a V
+    //   .42–.52  landing        knees absorb the impact, arms stay up
+    //   .50–.64  victory        two small fist pumps
+    //   .60–.88  settle         arms come down, tiny rebound, back to Idle
+    // Feet are planted whenever the mascot is on the ground; knees come from IK.
+
+    // Heights are in viewBox units; the whole jump stays inside the 1024×1536 frame.
+    const CELEBRATION = { HEIGHT: 115, CROUCH: 72, LAND: 58, T_OFF: 0.23, T_LAND: 0.42 };
+
+    function celebrationLift(t) {
+      const { T_OFF, T_LAND, HEIGHT } = CELEBRATION;
+      if (t <= T_OFF || t >= T_LAND) return 0;
+      const u = (t - T_OFF) / (T_LAND - T_OFF);
+      return 4 * HEIGHT * u * (1 - u);                     // constant gravity
+    }
+
+    function celebrationDrop(t) {
+      // Pelvis lowering while on the ground (positive = down).
+      const { CROUCH, LAND, T_OFF, T_LAND } = CELEBRATION;
+      if (t < .06) return 0;
+      if (t < .18) return CROUCH * smooth5((t - .06) / .12);
+      if (t < T_OFF) return CROUCH * (1 - smooth3((t - .18) / (T_OFF - .18)));
+      if (t < T_LAND) return 0;
+      if (t < .5) return LAND * Math.sin(Math.PI / 2 * (t - T_LAND) / (.5 - T_LAND));      // absorb
+      if (t < .62) return LAND * (1 - smooth5((t - .5) / .12)) - 10 * Math.sin(Math.PI * clamp((t - .56) / .12));
+      if (t < .76) return 8 * Math.sin(Math.PI * (t - .62) / .14) * (1 - smooth5((t - .62) / .14));   // tiny rebound
+      return 0;
+    }
+
+    function celebrationArms(t) {
+      // -1 = swung down/out (anticipation), 0 = rest, 1 = raised V.
+      if (t < .04) return 0;
+      if (t < .13) return -smooth5((t - .04) / .09);
+      if (t < .31) return lp(-1, 1, smooth3((t - .13) / .18));
+      if (t < .62) return 1;
+      if (t < .88) return 1 - smooth5((t - .62) / .26);
+      return 0;
+    }
+
+    function celebrationPose(t) {
+      const base = DATA.poses.idle, p = cpy(base);
+      const lift = celebrationLift(t), drop = celebrationDrop(t);
+      const air = clamp(lift / 40);
+      const crouch = clamp(drop / CELEBRATION.CROUCH);
+      const dy = drop - lift;                              // body vertical offset (down +)
+
+      // Upper body rides on the pelvis; slight forward curl in the crouch.
+      for (const k of ['head_center', 'neck', 'shoulder_L', 'shoulder_R', 'pelvis', 'hip_L', 'hip_R']) p[k] = [base[k][0], base[k][1] + dy];
+      p.head_center[1] += 10 * crouch;
+
+      // Legs: feet planted on the ground, tucked up in the air. Knees splay outwards
+      // so the bend reads clearly from the front.
+      const tuck = 150 * Math.sin(Math.PI * clamp((t - CELEBRATION.T_OFF) / (CELEBRATION.T_LAND - CELEBRATION.T_OFF))) * (lift > 0 ? 1 : 0);
+      for (const [side, dir] of [['L', -1], ['R', 1]]) {
+        const ay = base[`ankle_${side}`][1] - lift - tuck * .55;
+        const ax = base[`ankle_${side}`][0] + dir * 12 * air;
+        p[`ankle_${side}`] = [ax, ay];
+        p[`foot_${side}_center`] = [base[`foot_${side}_center`][0] + dir * 12 * air, base[`foot_${side}_center`][1] - lift - tuck * .55];
+        const bend = Math.max(crouch, air * .8, clamp(drop / CELEBRATION.LAND) * .8);
+        p[`knee_${side}`] = [base[`knee_${side}`][0] + dir * 85 * bend, base[`knee_${side}`][1] + dy * .5 - 45 * bend];
+      }
+
+      // Arms: rest → swung down/out → raised V, with two fist pumps at the top.
+      const a = celebrationArms(t);
+      const pump = t > .5 && t < .64 ? Math.sin(Math.PI * 2 * (t - .5) / .07) * Math.sin(Math.PI * (t - .5) / .14) : 0;
+      for (const [side, dir] of [['L', -1], ['R', 1]]) {
+        const sh = p[`shoulder_${side}`];
+        const restE = [base[`elbow_${side}`][0], base[`elbow_${side}`][1] + dy];
+        const restW = [base[`wrist_${side}`][0], base[`wrist_${side}`][1] + dy];
+        const restH = [base[`hand_${side}_center`][0], base[`hand_${side}_center`][1] + dy];
+        let e, w, h;
+        if (a >= 0) {
+          // V angle adapts to the hairstyle: as steep as possible while the hand
+          // still clears the hair silhouette (a wider Y for big volumes).
+          // Other characters: the V clears their head silhouette (robot box, cat ears)
+          // so the elbow and the forearm read as clearly as on Uko.
+          const hc = p.head_center, reach = hairReach() + 40, L = 395;
+          let th = 62 * Math.PI / 180;
+          if (characterDef()) th = characterArmAngle(sh, hc, dir, L, p.head_radius || 185);
+          else {
+            for (; th > 22 * Math.PI / 180; th -= Math.PI / 90) {
+              const hx = sh[0] + dir * L * Math.cos(th), hy = sh[1] - L * Math.sin(th);
+              if (Math.hypot(hx - hc[0], hy - hc[1]) >= reach) break;
+            }
+            // The elbow stays outside the head too (bald and short hair): otherwise the
+            // arm hides behind the head and only the hands show. Decided on the upright
+            // pose, so hairstyles whose V already shows the elbow keep their V untouched.
+            const R = (p.head_radius || 185) + 12, hu = [base.head_center[0], base.head_center[1] + dy];
+            const elbowIn = a => Math.hypot(sh[0] + dir * 170 * Math.cos(a - .45) - hu[0], sh[1] - 170 * Math.sin(a - .45) - hu[1]) < R;
+            let tu = 62 * Math.PI / 180;
+            for (; tu > 22 * Math.PI / 180; tu -= Math.PI / 90) if (Math.hypot(sh[0] + dir * L * Math.cos(tu) - hu[0], sh[1] - L * Math.sin(tu) - hu[1]) >= reach) break;
+            if (elbowIn(tu)) while (th > 22 * Math.PI / 180 && elbowIn(th)) th -= Math.PI / 90;
+          }
+          const upW = [sh[0] + dir * L * Math.cos(th), sh[1] - L * Math.sin(th) + 40 * pump];
+          const upE = [sh[0] + dir * 170 * Math.cos(th - .45), sh[1] - 170 * Math.sin(th - .45) + 18 * pump];
+          const upH = [upW[0] + dir * 10, upW[1] - 32];
+          const k = a;
+          // Arc through the side so the hand never cuts through the body.
+          const swing = Math.sin(Math.PI * k) * 40 * dir;
+          e = [lp(restE[0], upE[0], k) + swing * .6, lp(restE[1], upE[1], k)];
+          w = [lp(restW[0], upW[0], k) + swing, lp(restW[1], upW[1], k)];
+          h = [lp(restH[0], upH[0], k) + swing, lp(restH[1], upH[1], k)];
+        } else {
+          const k = -a;
+          e = [restE[0] + dir * 30 * k, restE[1] - 6 * k];
+          w = [restW[0] + dir * 70 * k, restW[1] - 18 * k];
+          h = [restH[0] + dir * 76 * k, restH[1] - 18 * k];
+        }
+        p[`elbow_${side}`] = e; p[`wrist_${side}`] = w; p[`hand_${side}_center`] = h;
+      }
+      p.celebrationLift = lift;
+      return p;
+    }
+
+    // Touch and gaze reactions (web engine).
+    //
+    // Touch: a tap on the mascot is hit-tested on the pose on screen (head, hand, foot,
+    // body) and plays a reaction of that zone (legacy TAP_REACTIONS, amplified), with a
+    // small effect drawn at the right place: stars on a boop, hearts on a giggle, a clap
+    // burst on a high five, dust on a hop… Taps in a row escalate: three on the head make
+    // it dizzy, three on the body make it laugh, five anywhere make it jump for joy.
+    // Asleep, a tap wakes it up. In the other states the tap only draws its effect.
+    //
+    // Gaze with the body: when what it looks at (lookAt() target, or the pointer with
+    // follow="page") is far to one side, the mascot turns its body towards it (¾), and
+    // turns round when it was facing the other way. A lookAt() target within reach makes
+    // the nearer hand reach out towards it. Idle only; walks, moves and turns win.
+
+    // Legacy reactions: longer and larger, so that they read at app size.
+    const TAP_AMP = 2.1;
+    for (const list of Object.values(TAP_REACTIONS)) for (const r of list) r.duration = Math.round(r.duration * 1.3);
+    // Escalations (taps in a row).
+    const TAP_COMBOS = {
+      dizzy: { id: 'dizzy', label: 'Dizzy', duration: 1900, face: 'tapSquint' },
+      laugh: { id: 'laugh', label: 'Laugh', duration: 2000, face: 'tapPlayful' },
+      joy: { id: 'joy', label: 'Jump for joy', duration: 1500, face: 'success' }
+    };
+    const TOUCH = { fx: [], taps: [] };
+
+    // Hit test on the pose on screen; returns the reaction played (or null on a miss).
+    // poke(): the zone (and optionally the reaction) is given instead of hit-tested.
+    function touchTap(pt, pose, state, now, forcedZone, forcedReaction) {
+      // A tap just off a limb that is moving still counts (as the body) inside the outline.
+      const zone = forcedZone || hitTestMascot(pt[0], pt[1], pose) || (nearMascot(pt, pose) ? 'body' : null);
+      if (!zone) return null;
+      TOUCH.taps = TOUCH.taps.filter(t => now - t.at < 2600);
+      TOUCH.taps.push({ at: now, zone });
+      const family = tapFamily(zone);
+      const hc = pose.head_center, hr = pose.head_radius || 95;
+      if (state === 'sleep') { touchFx('exclaim', hc[0] + hr * 1.9, hc[1] - hr * 1.1, now, 900); return { zone, reaction: 'wake', wake: true }; }
+      if (state !== 'idle' || !microAllowed()) { touchFx('stars', pt[0], pt[1], now, 650); return { zone, reaction: 'fx' }; }
+      const inRow = f => TOUCH.taps.filter(t => now - t.at < 1500 && (!f || tapFamily(t.zone) === f)).length;
+      let reaction = forcedReaction && TAP_COMBOS[forcedReaction] ? TAP_COMBOS[forcedReaction] : null;
+      if (reaction) TOUCH.taps = [];
+      else if (forcedReaction && TAP_REACTIONS[family].some(r => r.id === forcedReaction)) {
+        if (!triggerTapReaction(zone, pt, now)) return null;
+        const def = TAP_REACTIONS[family].find(r => r.id === forcedReaction);
+        MICRO.tap.variant = def.id; MICRO.tap.duration = def.duration;
+        spawnTapFx(def.id, zone, pt, pose, now);
+        return { zone, reaction: def.id };
+      }
+      else if (TOUCH.taps.length >= 5) { reaction = TAP_COMBOS.joy; TOUCH.taps = []; }
+      else if (family === 'head' && inRow('head') >= 3) { reaction = TAP_COMBOS.dizzy; TOUCH.taps = []; }
+      else if (family === 'body' && inRow('body') >= 3) { reaction = TAP_COMBOS.laugh; TOUCH.taps = []; }
+      if (reaction) {
+        if (!triggerTapReaction(zone, pt, now)) return null;
+        MICRO.tap.variant = reaction.id; MICRO.tap.duration = reaction.duration;
+      } else {
+        if (!triggerTapReaction(zone, pt, now)) return null;
+        reaction = tapReactionDef();
+      }
+      spawnTapFx(reaction.id, zone, pt, pose, now);
+      return { zone, reaction: reaction.id };
+    }
+
+    // Where a poke lands on each zone.
+    function zonePoint(zone, pose) {
+      if (zone === 'head') return pose.head_center.slice();
+      if (zone.startsWith('hand_')) return (pose[`${zone}_center`] || pose[`wrist_${zone.slice(-1)}`]).slice();
+      if (zone.startsWith('foot_')) return (pose[`${zone}_center`] || pose[`ankle_${zone.slice(-1)}`]).slice();
+      return [(pose.neck[0] + pose.pelvis[0]) / 2, (pose.neck[1] + pose.pelvis[1]) / 2];
+    }
+    function nearMascot(pt, pose) {
+      let x0 = Infinity, x1 = -Infinity, y0 = Infinity, y1 = -Infinity;
+      for (const v of Object.values(pose)) if (Array.isArray(v) && v.length === 2) { x0 = Math.min(x0, v[0]); x1 = Math.max(x1, v[0]); y0 = Math.min(y0, v[1]); y1 = Math.max(y1, v[1]); }
+      const r = pose.head_radius || 95;
+      return pt[0] > x0 - 60 && pt[0] < x1 + 60 && pt[1] > y0 - r - 40 && pt[1] < y1 + 50;
+    }
+    function spawnTapFx(id, zone, pt, pose, now) {
+      const hc = pose.head_center, hr = pose.head_radius || 95, d = MICRO.tap.direction || 1;
+      const side = zone.endsWith('_L') ? 'L' : 'R';
+      const hand = pose[`hand_${side}_center`] || pt, foot = pose[`foot_${side}_center`] || pt;
+      const top = [hc[0] + d * hr * 1.9, hc[1] - hr * 1.1];   // beside the head, clear of the hair
+      switch (id) {
+        case 'boop': touchFx('stars', pt[0], pt[1], now, 700); break;
+        case 'giggle': touchFx('hearts', hc[0] + d * hr * 1.9, hc[1] - hr * .5, now, 1300); break;
+        case 'squint': touchFx('bonk', pt[0], pt[1], now, 520); break;
+        case 'wave': touchFx('arcs', hand[0], hand[1] - 90, now, 950, { dir: side === 'L' ? -1 : 1 }); break;
+        case 'highFive': touchFx('clap', hand[0], hand[1] - 150, now, 620); touchFx('stars', hand[0], hand[1] - 150, now + 60, 700); break;
+        case 'recoil': touchFx('exclaim', top[0], top[1], now, 900); break;
+        case 'hop': touchFx('dust', foot[0], LEDGE_FLOOR, now, 760); break;
+        case 'kick': touchFx('dust', foot[0] + (side === 'L' ? -40 : 40), LEDGE_FLOOR, now, 620); touchFx('stars', foot[0] + (side === 'L' ? -90 : 90), foot[1] - 60, now + 120, 600); break;
+        case 'ouch': touchFx('bonk', pt[0], pt[1], now, 520); touchFx('exclaim', top[0], top[1], now + 80, 800); break;
+        case 'bounce': touchFx('ring', hc[0], LEDGE_FLOOR, now, 700); break;
+        case 'shimmy': touchFx('notes', hc[0] + d * hr * 1.9, hc[1] - hr * .3, now, 1300); break;
+        case 'surprise': touchFx('exclaim', top[0], top[1], now, 900); break;
+        case 'dizzy': touchFx('orbit', 0, 0, now, 1900); break;
+        case 'laugh': touchFx('notes', hc[0] + hr * 1.9, hc[1] - hr * .3, now, 1500); touchFx('hearts', hc[0] - hr * 1.9, hc[1] - hr * .4, now + 350, 1400); break;
+        case 'joy': touchFx('confetti', hc[0], hc[1] - hr * 1.7, now + 380, 1500); touchFx('ring', hc[0], LEDGE_FLOOR, now + 1100, 650); break;
+        default: touchFx('stars', pt[0], pt[1], now, 650);
+      }
+    }
+    const LEDGE_FLOOR = 1408;
+    function touchFx(kind, x, y, now, dur, extra) {
+      TOUCH.fx.push(Object.assign({ kind, x, y, start: now, dur, seed: Math.random() * 1000 }, extra || {}));
+      if (TOUCH.fx.length > 16) TOUCH.fx.shift();
+    }
+
+    // Poses of the escalations (offsets before the skeleton solve, like the other reactions).
+    function comboPose(v, p, q, env, d, moveArm) {
+      let rot = 0;
+      if (v === 'dizzy') {
+        // The head circles, the body wobbles, the arms float.
+        const a = q * Math.PI * 5, s = Math.sin(Math.PI * q);
+        addOffset(p, 'head_center', Math.cos(a) * 18 * s, Math.sin(a) * 9 * s - 6 * s);
+        addOffset(p, 'neck', Math.cos(a) * 8 * s, Math.sin(a) * 3 * s);
+        addOffset(p, 'pelvis', -Math.cos(a) * 7 * s, 0);
+        moveArm(-1, -20 * s, -6 * s + Math.sin(a) * 8 * s, -34 * s, -14 * s);
+        moveArm(1, 20 * s, -6 * s - Math.sin(a) * 8 * s, 34 * s, -14 * s);
+        rot += Math.sin(a) * 10 * s;
+      } else if (v === 'laugh') {
+        // Holds its belly and shakes with laughter.
+        const s = Math.pow(Math.sin(Math.PI * q), .6), shake = Math.sin(q * Math.PI * 22) * s;
+        const bx = (p.pelvis[0] + p.neck[0]) / 2, by = p.pelvis[1] - 60;
+        for (const [side, sx] of [['L', -1], ['R', 1]]) {
+          const h = p[`hand_${side}_center`], tx = bx + sx * 70, ty = by;
+          const dx = (tx - h[0]) * s, dy = (ty - h[1]) * s;
+          addOffset(p, `wrist_${side}`, dx, dy); addOffset(p, `hand_${side}_center`, dx, dy);
+          addOffset(p, `elbow_${side}`, dx * .45 + sx * 26 * s, dy * .45);
+        }
+        addOffset(p, 'head_center', shake * 7, -10 * s + Math.abs(shake) * 6);
+        addOffset(p, 'neck', shake * 4, -4 * s);
+        addOffset(p, 'shoulder_L', shake * 3, Math.abs(shake) * 4); addOffset(p, 'shoulder_R', shake * 3, Math.abs(shake) * 4);
+        rot += shake * 6 - 5 * s * d;
+      } else if (v === 'joy') {
+        // Crouch, jump with both arms up in the celebration's V, land with a small squash.
+        const crouch = q < .22 ? Math.sin(Math.PI * q / .22 * .5) : q < .3 ? Math.cos(Math.PI * (q - .22) / .08 * .5) : 0;
+        const air = q >= .26 && q <= .74 ? Math.sin(Math.PI * (q - .26) / .48) : 0;
+        const land = q > .74 ? Math.sin(Math.PI * clamp((q - .74) / .26)) : 0;
+        const lift = -190 * air + 34 * crouch + 22 * land;
+        const up = smooth5(clamp(q < .26 ? q / .26 : q > .86 ? 1 - (q - .86) / .14 : 1));
+        for (const k of Object.keys(p)) if (Array.isArray(p[k]) && p[k].length === 2) addOffset(p, k, 0, lift);
+        for (const k of ['knee_L', 'knee_R']) addOffset(p, k, (k.endsWith('L') ? -1 : 1) * 26 * (crouch + land), 0);
+        joyArms(p, up);
+        rot += Math.sin(q * Math.PI * 2) * 3;
+      }
+      return rot;
+    }
+    // The celebration's raised V (core/celebration.js): as steep as the hair / head allows,
+    // elbow outside the head, so arms and forearms stay visible. up: 0 = rest → 1 = raised.
+    function joyArms(p, up) {
+      const hc = p.head_center, reach = hairReach() + 40, L = 395, R = (p.head_radius || 185) + 12;
+      for (const [side, dir] of [['L', -1], ['R', 1]]) {
+        const sh = p[`shoulder_${side}`];
+        let th = 62 * Math.PI / 180;
+        if (characterDef()) th = characterArmAngle(sh, hc, dir, L, p.head_radius || 185);
+        else {
+          for (; th > 22 * Math.PI / 180; th -= Math.PI / 90) if (Math.hypot(sh[0] + dir * L * Math.cos(th) - hc[0], sh[1] - L * Math.sin(th) - hc[1]) >= reach) break;
+          const elbowIn = a => Math.hypot(sh[0] + dir * 170 * Math.cos(a - .45) - hc[0], sh[1] - 170 * Math.sin(a - .45) - hc[1]) < R;
+          while (th > 22 * Math.PI / 180 && elbowIn(th)) th -= Math.PI / 90;
+        }
+        const upW = [sh[0] + dir * L * Math.cos(th), sh[1] - L * Math.sin(th)];
+        const upE = [sh[0] + dir * 170 * Math.cos(th - .45), sh[1] - 170 * Math.sin(th - .45)];
+        const upH = [upW[0] + dir * 10, upW[1] - 32];
+        const swing = Math.sin(Math.PI * up) * 40 * dir;
+        for (const [key, to, sw] of [[`elbow_${side}`, upE, .6], [`wrist_${side}`, upW, 1], [`hand_${side}_center`, upH, 1]]) {
+          const v = p[key]; p[key] = [lp(v[0], to[0], up) + swing * sw, lp(v[1], to[1], up)];
+        }
+      }
+    }
+
+    function touchFxMarkup(now) {
+      TOUCH.fx = TOUCH.fx.filter(f => now - f.start < f.dur);
+      if (!TOUCH.fx.length) return '';
+      let out = '';
+      // Effects are drawn large (they must read on a 100 px mascot), around their origin.
+      const k = 1.9 * Math.sqrt(LIFE.gain || 1);
+      for (const f of TOUCH.fx) {
+        const u = (now - f.start) / f.dur;
+        if (u < 0 || !FX_DRAW[f.kind]) continue;
+        const g = FX_DRAW[f.kind](f, u);
+        out += f.kind === 'orbit' || f.kind === 'confetti' || f.kind === 'ring' ? g : `<g transform="translate(${n1(f.x)} ${n1(f.y)}) scale(${n1(k)}) translate(${n1(-f.x)} ${n1(-f.y)})">${g}</g>`;
+      }
+      return out ? `<g class="touchFx" pointer-events="none">${out}</g>` : '';
+    }
+    const easeOutBack = x => { const c = 1.9; return 1 + (c + 1) * Math.pow(x - 1, 3) + c * Math.pow(x - 1, 2); };
+    const popIn = u => (u < .22 ? easeOutBack(u / .22) : 1);
+    const fadeOut = (u, from = .55) => (u < from ? 1 : Math.max(0, 1 - (u - from) / (1 - from)));
+    const n1 = v => v.toFixed(1);
+    function star4(x, y, r, cls = 'touchStar') {
+      const q = r * .28;
+      return `<path class="${cls}" d="M ${n1(x)} ${n1(y - r)} Q ${n1(x + q)} ${n1(y - q)} ${n1(x + r)} ${n1(y)} Q ${n1(x + q)} ${n1(y + q)} ${n1(x)} ${n1(y + r)} Q ${n1(x - q)} ${n1(y + q)} ${n1(x - r)} ${n1(y)} Q ${n1(x - q)} ${n1(y - q)} ${n1(x)} ${n1(y - r)} Z"/>`;
+    }
+    function heart(x, y, s) {
+      return `<path class="touchHeart" d="M ${n1(x)} ${n1(y + s * .95)} C ${n1(x - s * 1.5)} ${n1(y + s * .05)} ${n1(x - s * .95)} ${n1(y - s * 1.05)} ${n1(x)} ${n1(y - s * .3)} C ${n1(x + s * .95)} ${n1(y - s * 1.05)} ${n1(x + s * 1.5)} ${n1(y + s * .05)} ${n1(x)} ${n1(y + s * .95)} Z"/>`;
+    }
+    const FX_DRAW = {
+      stars(f, u) {
+        let s = ''; const k = popIn(u), a = fadeOut(u, .45);
+        for (let i = 0; i < 5; i++) {
+          const ang = -Math.PI / 2 + (i - 2) * .62 + Math.sin(f.seed + i) * .15, rad = 40 + 95 * (1 - Math.pow(1 - u, 2));
+          s += star4(f.x + Math.cos(ang) * rad, f.y + Math.sin(ang) * rad, (i % 2 ? 15 : 22) * k);
+        }
+        return `<g opacity="${n1(a)}">${s}</g>`;
+      },
+      hearts(f, u) {
+        let s = '';
+        for (let i = 0; i < 3; i++) {
+          const v = clamp((u - i * .12) / .88); if (v <= 0) continue;
+          s += `<g opacity="${n1(fadeOut(v, .5))}">${heart(f.x + Math.sin(v * 7 + i * 2) * 18 + (i - 1) * 34, f.y - 200 * v - i * 20, (18 + i * 5) * popIn(v))}</g>`;
+        }
+        return s;
+      },
+      bonk(f, u) {
+        let s = ''; const a = fadeOut(u, .3);
+        for (let i = 0; i < 7; i++) {
+          const ang = i / 7 * Math.PI * 2 + f.seed, r0 = 34 + 40 * u, r1 = r0 + 26 * (1 - u) + 8;
+          s += `<line class="touchInk" x1="${n1(f.x + Math.cos(ang) * r0)}" y1="${n1(f.y + Math.sin(ang) * r0)}" x2="${n1(f.x + Math.cos(ang) * r1)}" y2="${n1(f.y + Math.sin(ang) * r1)}"/>`;
+        }
+        return `<g opacity="${n1(a)}">${s}</g>`;
+      },
+      clap(f, u) {
+        let s = ''; const a = fadeOut(u, .35);
+        for (let i = 0; i < 8; i++) {
+          const ang = i / 8 * Math.PI * 2, r0 = 36 + 60 * u, r1 = r0 + 34 * (1 - u) + 6;
+          s += `<line class="touchInk" x1="${n1(f.x + Math.cos(ang) * r0)}" y1="${n1(f.y + Math.sin(ang) * r0)}" x2="${n1(f.x + Math.cos(ang) * r1)}" y2="${n1(f.y + Math.sin(ang) * r1)}"/>`;
+        }
+        return `<g opacity="${n1(a)}">${s}${star4(f.x, f.y, 26 * popIn(u))}</g>`;
+      },
+      arcs(f, u) {
+        let s = '';
+        for (let i = 0; i < 2; i++) {
+          const v = clamp(u * 1.3 - i * .25); if (v <= 0 || v >= 1) continue;
+          const r = 60 + 70 * v, a0 = (f.dir > 0 ? 0 : Math.PI) - .6, a1 = a0 + 1.2;
+          s += `<path class="touchInk" opacity="${n1(Math.sin(Math.PI * v))}" d="M ${n1(f.x + Math.cos(a0) * r)} ${n1(f.y + Math.sin(a0) * r)} A ${n1(r)} ${n1(r)} 0 0 1 ${n1(f.x + Math.cos(a1) * r)} ${n1(f.y + Math.sin(a1) * r)}"/>`;
+        }
+        return s;
+      },
+      exclaim(f, u) {
+        const k = popIn(u), a = fadeOut(u, .6), y = f.y - 20 * u;
+        return `<g opacity="${n1(a)}" transform="translate(${n1(f.x)} ${n1(y)}) scale(${n1(k)})"><line class="touchInk touchBold" x1="0" y1="-70" x2="0" y2="-12"/><circle class="touchDot" cx="0" cy="18" r="11"/></g>`;
+      },
+      dust(f, u) {
+        let s = ''; const a = fadeOut(u, .35);
+        for (const [dx, sz] of [[-1, 1], [1, .85], [-.35, .7], [.4, .6]]) {
+          const x = f.x + dx * (40 + 120 * (1 - Math.pow(1 - u, 2))), y = f.y - 10 - 40 * u * sz, r = (16 + 22 * u) * sz;
+          s += `<circle class="touchPuff" cx="${n1(x)}" cy="${n1(y)}" r="${n1(r)}"/>`;
+        }
+        return `<g opacity="${n1(a)}">${s}</g>`;
+      },
+      ring(f, u) {
+        const e = 1 - Math.pow(1 - u, 3);
+        return `<ellipse class="touchInk" cx="${n1(f.x)}" cy="${n1(f.y)}" rx="${n1(70 + 170 * e)}" ry="${n1(12 + 26 * e)}" opacity="${n1(1 - u)}"/>`;
+      },
+      notes(f, u) {
+        let s = '';
+        for (let i = 0; i < 3; i++) {
+          const v = clamp((u - i * .18) / .82); if (v <= 0) continue;
+          const x = f.x + (i - 1) * 40 + Math.sin(v * 8 + i) * 16, y = f.y - 190 * v - i * 16, k = popIn(v);
+          s += `<g opacity="${n1(fadeOut(v, .5))}" transform="translate(${n1(x)} ${n1(y)}) scale(${n1(k)}) rotate(${n1(Math.sin(v * 6 + i) * 12)})"><ellipse class="touchNote" cx="-10" cy="22" rx="14" ry="10" transform="rotate(-20 -10 22)"/><path class="touchInk" d="M 2 20 L 2 -30 Q 18 -24 22 -8"/></g>`;
+        }
+        return s;
+      },
+      orbit(f, u) {
+        const p = shown; if (!p) return '';
+        const hc = p.head_center, hr = p.head_radius || 95, a = Math.min(1, u * 6, (1 - u) * 5);
+        let s = '';
+        for (let i = 0; i < 3; i++) {
+          const ang = u * Math.PI * 6 + i * Math.PI * 2 / 3;
+          const k = Math.sqrt(LIFE.gain || 1);
+          s += star4(hc[0] + Math.cos(ang) * hr * 1.9, hc[1] - hr * 1.15 + Math.sin(ang) * hr * .45, (44 + 12 * Math.sin(ang)) * k);
+        }
+        // The orbit itself, faint, so it reads as "seeing stars".
+        const ring = `<ellipse class="touchInk" cx="${n1(hc[0])}" cy="${n1(hc[1] - hr * 1.15)}" rx="${n1(hr * 1.9)}" ry="${n1(hr * .45)}" opacity=".35" stroke-dasharray="18 22"/>`;
+        return `<g opacity="${n1(a)}">${ring}${s}</g>`;
+      },
+      confetti(f, u) {
+        let s = ''; const t = u * f.dur / 1000, a = fadeOut(u, .6);
+        for (let i = 0; i < 26; i++) {
+          const r = Math.sin(f.seed + i * 12.9898) * 43758.5453, rnd = r - Math.floor(r), rnd2 = (r * 7.1) - Math.floor(r * 7.1);
+          const ang = -Math.PI / 2 + (rnd - .5) * 2.4, sp = 700 + 700 * rnd2;
+          const x = f.x + Math.cos(ang) * sp * t, y = f.y + Math.sin(ang) * sp * t + 1400 * t * t;
+          s += `<rect class="touchConfetti touchC${i % 4}" x="-9" y="-15" width="18" height="30" rx="4" transform="translate(${n1(x)} ${n1(y)}) rotate(${n1(rnd * 360 + t * 540 * (i % 2 ? 1 : -1))})"/>`;
+        }
+        return `<g opacity="${n1(a)}">${s}</g>`;
+      }
+    };
+
+    // ---------------------------------------------------------------- gaze with the body
+    const GAZE_BODY = { base: 0, lastAt: -1e9, awayAt: 0, reach: 0 };
+    // Turn without resetting the gaze (setOrientationTarget restarts the eyes).
+    function gazeTurnTo(target, dur) {
+      const now = motionNow(), live = orientationEaseValue(now);
+      ORIENTATION.demo = false; ORIENTATION.from = live; ORIENTATION.value = live;
+      ORIENTATION.target = clamp(target, -1, 1); ORIENTATION.start = now; ORIENTATION.duration = CLOCK.reduced ? 1 : dur;
+      ORIENTATION.faceSide = Math.abs(live) > .02 ? Math.sign(live) : (Math.abs(target) > .02 ? Math.sign(target) : 0);
+      GAZE_BODY.lastAt = now;
+    }
+    // Called each idle frame with the point looked at (viewBox) or null.
+    function gazeBodyTurn(now, point, pose, object) {
+      if (ORIENTATION.demo || !pose) return;
+      const base = GAZE_BODY.base;
+      if (!point) {
+        if (now - GAZE_BODY.awayAt > 900 && Math.abs(ORIENTATION.target - base) > .05 && now - GAZE_BODY.lastAt > 400) gazeTurnTo(base, 620);
+        return;
+      }
+      GAZE_BODY.awayAt = now;
+      const dx = point[0] - pose.head_center[0], side = dx >= 0 ? 1 : -1;   // screen side of the target
+      let want = ORIENTATION.target;
+      if (Math.abs(base) > .05) {
+        // Already turned (setOrientation): face the target's side, same angle.
+        if (Math.abs(dx) > 150) want = -side * Math.abs(base);
+      } else {
+        // Facing front: turn ¾ towards a target far to the side (an object more readily than the mouse).
+        const far = smooth5(clamp((Math.abs(dx) - (object ? 200 : 320)) / 520));
+        want = -side * .55 * far;
+      }
+      if (Math.abs(want - ORIENTATION.target) > .15 && now - GAZE_BODY.lastAt > 450) gazeTurnTo(want, 560);
+    }
+    // A lookAt() target within reach: the nearer hand reaches out towards it.
+    function gazeReach(p, point, dt) {
+      let want = 0, side = 'R', tip = null;
+      if (point) {
+        const sl = p.shoulder_L, sr = p.shoulder_R;
+        const dl = Math.hypot(point[0] - sl[0], point[1] - sl[1]), dr = Math.hypot(point[0] - sr[0], point[1] - sr[1]);
+        side = dl < dr ? 'L' : 'R';
+        const sh = side === 'L' ? sl : sr, dist = Math.min(dl, dr);
+        const arm = (SKELETON.upperArm[side] + SKELETON.foreArm[side]);
+        if (dist < arm * 1.25 && point[1] < p.pelvis[1]) {
+          want = 1;
+          const k = Math.min(dist - 40, arm * .92) / (dist || 1);
+          tip = [sh[0] + (point[0] - sh[0]) * k, sh[1] + (point[1] - sh[1]) * k];
+        }
+      }
+      GAZE_BODY.reach += (want - GAZE_BODY.reach) * (1 - Math.exp(-dt / 180));
+      // Letting go: the hand comes back from where it last reached.
+      if (want) { GAZE_BODY.tip = tip; GAZE_BODY.side = side; } else { tip = GAZE_BODY.tip; side = GAZE_BODY.side || side; }
+      if (GAZE_BODY.reach < .01 || !tip) return;
+      const s = GAZE_BODY.reach, h = p[`hand_${side}_center`], sh = p[`shoulder_${side}`];
+      const dx = (tip[0] - h[0]) * s, dy = (tip[1] - h[1]) * s;
+      addOffset(p, `wrist_${side}`, dx, dy); addOffset(p, `hand_${side}_center`, dx, dy);
+      const mid = [(sh[0] + tip[0]) / 2, (sh[1] + tip[1]) / 2], e = p[`elbow_${side}`];
+      addOffset(p, `elbow_${side}`, (mid[0] + (side === 'L' ? -30 : 30) - e[0]) * s, (mid[1] + 40 - e[1]) * s);
+    }
+
+    const MOVES = { climb: { dur: 1 }, climbOnto: { dur: 1 } };
+    let MOVE_FRONT_ARMS = false;
+    function climbPose() { return cpy(DATA.poses.idle); }
+    function climbFace() { return 'idle'; }
+    function climbRot() { return 0; }
+    function climbOntoPose() { return cpy(DATA.poses.idle); }
+    function climbOntoFace() { return 'idle'; }
+    function climbOntoRot() { return 0; }
+    // Life layer: keeps the persistent states (idle, thinking, loading, sleep) alive.
+    //
+    // What people read as "alive" in a character, and how it is built here:
+    //   1. A continuous base: breathing and weight drift on periods that never line up
+    //      (3.6 s, 5.3 s, 7.7 s), so the loop never visibly repeats.
+    //   2. Small gestures ("beats") every few seconds, drawn at random from a pool per
+    //      state, never the same twice in a row, each with anticipation → action → settle.
+    //      Duolingo builds its idle motion the same way: separate head and body
+    //      animations recombined at runtime so neutral loops never feel canned.
+    //   3. A story over time for waits. Loading types in bursts; after 10 s (the limit
+    //      of attention, Nielsen) it adds patience gestures. An occupied wait feels
+    //      shorter than an empty one (Maister).
+    //   4. Thinking looks away and up, like people do under cognitive load (gaze aversion).
+    // Everything is additive on top of the authored poses. Arm motion is expressed as
+    // targets or rotations that are re-solved on the fixed skeleton: bones never stretch.
+
+    const LIFE = {
+      state: null, since: 0, beat: null, next: 0, last: null, side: 1,
+      stanceFrom: 0, stanceTo: 0, stanceAt: -1e9,
+      typing: { on: true, until: 0 },
+      laptopShift: [0, 0],
+      gain: 1, gainAt: -1e9,
+      // Rive baking (debug builds): no random beats, loop-friendly periods, fixed typing rhythm.
+      auto: true, bake: null
+    };
+    const LIFE_RATES = { breath: 3.6, sway: 7.7, drift: 5.3, type: 5.2, nod: 2.6, typeRot: 1.3, chinBurst: 2.6, chinTap: 3.1 };
+    const lifeRate = k => (LIFE.bake && LIFE.bake[k]) || LIFE_RATES[k];
+
+    // Starts a named beat now (Rive baking, tests).
+    function lifeForce(name, side, now) {
+      LIFE.side = side || 1;
+      LIFE.beat = { name, start: now, dur: BEAT_DUR[name], side: LIFE.side };
+      LIFE.last = name;
+    }
+
+    // Readability at small sizes: a mascot drawn 90 px wide needs bigger gestures than
+    // one drawn 300 px wide (same principle as thumbnails in animation). Width in CSS px.
+    function lifeGainFor(width) { return 1 + 0.8 * clamp((220 - width) / 140); }
+
+    const LIFE_POOLS = {
+      idle: { every: [4200, 8200], first: [1800, 3000], pool: ['glance', 'shift', 'tap', 'shrug', 'lookUp'] },
+      thinking: { every: [2300, 4200], first: [700, 1200], pool: ['ponder', 'scratch', 'ponder', 'shift', 'nod'] },
+      loading: { every: [2400, 4200], first: [1200, 2000], pool: ['check', 'lean', 'peek', 'shift'], patient: ['tap', 'sigh', 'check', 'peek', 'lean', 'shift'] },
+      sleep: { every: [6500, 11000], first: [2600, 4000], pool: ['snuggle', 'twitch'] }
+    };
+    const BEAT_DUR = {
+      glance: 1700, shift: 1300, tap: 1500, shrug: 1200, lookUp: 1900,
+      ponder: 2300, scratch: 2200, nod: 1300,
+      check: 1400, lean: 1800, sigh: 1700, peek: 1600,
+      snuggle: 2400, twitch: 900
+    };
+    const lifeRand = (a, b) => a + Math.random() * (b - a);
+    // Anticipation → hold → settle, with zero velocity at both ends.
+    const lifeEnv = u => smooth5(clamp(u / 0.26)) * (1 - smooth5(clamp((u - 0.7) / 0.3)));
+
+    function lifeReset(state, now) {
+      const cfg = LIFE_POOLS[state];
+      LIFE.state = state; LIFE.since = now; LIFE.beat = null; LIFE.last = null;
+      LIFE.stanceFrom = LIFE.stanceTo = 0; LIFE.stanceAt = -1e9;
+      LIFE.typing = { on: true, until: now + lifeRand(1600, 2600) };
+      LIFE.laptopShift = [0, 0];
+      LIFE.next = cfg ? now + lifeRand(cfg.first[0], cfg.first[1]) : Infinity;
+    }
+
+    function lifeStance(now) {
+      const u = smooth5(clamp((now - LIFE.stanceAt) / BEAT_DUR.shift));
+      return LIFE.stanceFrom + (LIFE.stanceTo - LIFE.stanceFrom) * u;
+    }
+
+    // Picks and advances the current beat. `busy` pauses new beats (tap reactions,
+    // idle variation, pointer tracking) without cutting a beat that already started.
+    function lifeTick(state, now, busy) {
+      if (LIFE.state !== state) lifeReset(state, now);
+      const cfg = LIFE_POOLS[state];
+      if (!cfg) return null;
+      if (LIFE.beat && now - LIFE.beat.start >= LIFE.beat.dur) {
+        LIFE.beat = null;
+        LIFE.next = now + lifeRand(cfg.every[0], cfg.every[1]);
+      }
+      if (!LIFE.beat && now >= LIFE.next && LIFE.auto) {
+        if (busy) { LIFE.next = now + 600; return null; }
+        const pool = (state === 'loading' && now - LIFE.since > 10000) ? cfg.patient : cfg.pool;
+        const choices = pool.filter(n => n !== LIFE.last);
+        const name = choices[Math.floor(Math.random() * choices.length)] || pool[0];
+        LIFE.side = name === 'ponder' ? -LIFE.side : (Math.random() < 0.5 ? -1 : 1);
+        LIFE.beat = { name, start: now, dur: BEAT_DUR[name], side: LIFE.side };
+        LIFE.last = name;
+        if (name === 'shift') {
+          const s = lifeStance(now);
+          LIFE.stanceFrom = s;
+          LIFE.stanceTo = Math.abs(s) > 0.5 ? (Math.random() < 0.4 ? 0 : -Math.sign(s)) : (Math.random() < 0.5 ? -1 : 1);
+          LIFE.stanceAt = now;
+        }
+      }
+      if (!LIFE.beat) return null;
+      const u = clamp((now - LIFE.beat.start) / LIFE.beat.dur);
+      return { name: LIFE.beat.name, u, e: lifeEnv(u), side: LIFE.beat.side };
+    }
+
+    function lifeMove(p, keys, dx, dy) { for (const k of keys) addOffset(p, k, dx, dy); }
+    const TORSO_KEYS = ['neck', 'shoulder_L', 'shoulder_R', 'elbow_L', 'elbow_R', 'wrist_L', 'wrist_R', 'hand_L_center', 'hand_R_center'];
+
+    // Pre-skeleton layer: body offsets, head rotation and gaze. Returns { rot, eye }.
+    function applyLife(p, state, now, entered, busy) {
+      const out = { rot: 0, eye: [0, 0] };
+      LIFE.laptopShift = [0, 0];
+      if (!LIFE_POOLS[state] || !entered) { if (LIFE.state !== state) lifeReset(state, now); return out; }
+      const beat = lifeTick(state, now, busy);
+      // Thinking: the hand rests on the chin, so it must follow the head (offsets and tilt).
+      const chin = state === 'thinking' ? { hc: p.head_center.slice(), hand: p.hand_R_center.slice(), wrist: p.wrist_R.slice(), elbow: p.elbow_R.slice() } : null;
+      const s = now / 1000, TAU = Math.PI * 2, g = LIFE.gain;
+      const breath = Math.sin(TAU * s / lifeRate('breath')), sway = Math.sin(TAU * s / lifeRate('sway') + 1.3), drift = Math.sin(TAU * s / lifeRate('drift') + 0.4);
+
+      if (state === 'sleep') {
+        // Lying on the back: the chest rises toward the ceiling, the head follows a little.
+        lifeMove(p, ['neck', 'shoulder_L', 'shoulder_R'], 0, -5.5 * breath);
+        addOffset(p, 'head_center', 0, -2.5 * breath);
+        addOffset(p, 'elbow_R', 0, -3 * breath);
+        out.rot += 1.2 * drift;
+      } else {
+        // Standing: breathing lifts the chest and the head, the weight drifts slowly.
+        const bA = state === 'idle' ? 0 : 3.5, wA = state === 'loading' ? 3 : state === 'idle' ? 4 : 6;
+        addOffset(p, 'head_center', 0, -bA * breath);
+        lifeMove(p, ['neck', 'shoulder_L', 'shoulder_R'], 0, -bA * 0.7 * breath);
+        lifeMove(p, ['head_center', ...TORSO_KEYS], wA * sway, 0);
+        addOffset(p, 'pelvis', wA * 0.6 * sway, 0);
+        out.rot += (state === 'idle' ? 1.6 : 2.4) * drift;
+        // Weight shift held between beats (idle, thinking): hips over one foot.
+        if (state === 'idle' || state === 'thinking' || state === 'loading') {
+          const st = lifeStance(now);
+          lifeMove(p, ['head_center', ...TORSO_KEYS], 9 * st, 0);
+          addOffset(p, 'pelvis', 12 * st, 2 * Math.abs(st));
+          out.rot += -1.5 * st;
+        }
+      }
+
+      if (state === 'loading') {
+        // Typing in bursts: fingers lift and strike, the head nods with the rhythm.
+        if (LIFE.bake && LIFE.bake.typing) {
+          const [on, off] = LIFE.bake.typing;
+          LIFE.typing.on = (now - LIFE.since) % (on + off) < on;
+        } else if (now >= LIFE.typing.until) {
+          LIFE.typing.on = !LIFE.typing.on;
+          LIFE.typing.until = now + (LIFE.typing.on ? lifeRand(1500, 2800) : lifeRand(420, 900));
+        }
+        const k = LIFE.typing.on ? 1 : 0;
+        const tf = lifeRate('type'), tl = Math.max(0, Math.sin(TAU * tf * s)), tr = Math.max(0, Math.sin(TAU * tf * s + 2.6));
+        lifeMove(p, ['wrist_L', 'hand_L_center'], 0, -17 * g * tl * k);
+        lifeMove(p, ['wrist_R', 'hand_R_center'], 0, -17 * g * tr * k);
+        addOffset(p, 'head_center', 0, 4 * g * Math.sin(TAU * lifeRate('nod') * s) * k);
+        out.rot += 1.5 * g * Math.sin(TAU * lifeRate('typeRot') * s) * k;
+        out.eye[1] += 4;   // eyes on the screen
+      }
+
+      if (beat) {
+        // E = envelope × size gain (bigger gestures when Uko is drawn small). Gaze is not scaled.
+        const { name, e, u, side } = beat, E = e * g;
+        if (name === 'glance') { out.rot += side * 9 * E; out.eye[0] += side * 7 * e; out.eye[1] -= 1 * e; addOffset(p, 'head_center', side * 5 * E, 0); }
+        else if (name === 'lookUp') { out.rot -= side * 3 * E; out.eye[0] += side * 3 * e; out.eye[1] -= 6 * e; addOffset(p, 'head_center', 0, -4 * E); }
+        else if (name === 'shrug') {
+          const up = Math.sin(Math.PI * clamp(u / 0.7)) * (u < 0.7 ? 1 : 0) * g;
+          lifeMove(p, ['shoulder_L', 'shoulder_R', 'elbow_L', 'elbow_R', 'wrist_L', 'wrist_R', 'hand_L_center', 'hand_R_center'], 0, -16 * up);
+          addOffset(p, 'head_center', 0, -5 * up); addOffset(p, 'neck', 0, -7 * up);
+        }
+        else if (name === 'tap') addOffset(p, 'pelvis', 0, 2 * Math.abs(Math.sin(Math.PI * 6 * u)) * E);
+        else if (name === 'ponder') {
+          // Head tilts, eyes look up and away, the chin hand stays put.
+          out.rot += side * 10 * E; out.eye[0] += side * 6 * e; out.eye[1] -= 7 * e;
+          addOffset(p, 'head_center', side * 5 * E, -3 * E);
+        }
+        else if (name === 'nod') { out.rot += 5 * Math.sin(TAU * 2 * u) * E; addOffset(p, 'head_center', 0, 5 * Math.abs(Math.sin(TAU * u)) * E); }
+        else if (name === 'scratch') {
+          // Free hand up to the head, a few rubs, back down (targets on the fixed skeleton).
+          // Same geometry as the authored head scratch of Error, mirrored: the forearm
+          // rises along the side of the head, the hand lands on the upper side of the skull.
+          const hc = p.head_center;
+          const tgt = { hand_L_center: [hc[0] - 167, hc[1] - 69], wrist_L: [hc[0] - 187, hc[1] - 41], elbow_L: [hc[0] - 286, hc[1] + 103] };
+          for (const k of Object.keys(tgt)) p[k] = [p[k][0] + (tgt[k][0] - p[k][0]) * e, p[k][1] + (tgt[k][1] - p[k][1]) * e];
+          out.rot += 4 * E; out.eye[1] -= 5 * e;
+        }
+        else if (name === 'check') { out.rot += 11 * E; out.eye[0] += 8 * e; out.eye[1] -= 11 * e; addOffset(p, 'head_center', 7 * E, -6 * E); addOffset(p, 'neck', 3 * E, -2 * E); }
+        else if (name === 'peek') {
+          // Peeks over the laptop screen toward the viewer, then back to work.
+          out.rot += 13 * E; out.eye[0] -= 6 * e; out.eye[1] -= 2 * e;
+          addOffset(p, 'head_center', 26 * E, -10 * E); addOffset(p, 'neck', 10 * E, -3 * E);
+          lifeMove(p, ['shoulder_L', 'shoulder_R'], 5 * E, 0);
+        }
+        else if (name === 'lean') {
+          lifeMove(p, ['head_center'], 12 * E, 20 * E); lifeMove(p, ['neck'], 8 * E, 13 * E);
+          lifeMove(p, ['shoulder_L', 'shoulder_R'], 6 * E, 9 * E); out.eye[1] += 3 * e; out.rot += 4 * E;
+          lifeMove(p, ['wrist_L', 'hand_L_center', 'wrist_R', 'hand_R_center'], 6 * E, 7 * E);
+        }
+        else if (name === 'sigh') {
+          const up = u < 0.45 ? Math.sin(Math.PI / 2 * u / 0.45) : Math.cos(Math.PI / 2 * clamp((u - 0.45) / 0.55)) * 1.35 - 0.35;
+          const k = up * E;
+          lifeMove(p, ['neck', 'shoulder_L', 'shoulder_R'], 0, -12 * k); addOffset(p, 'head_center', 0, -8 * k);
+          out.eye[1] -= 6 * Math.max(0, up * e);
+        }
+        else if (name === 'snuggle') { out.rot += side * 6 * E; lifeMove(p, ['head_center', 'neck'], 0, 4 * E); lifeMove(p, ['shoulder_L', 'shoulder_R'], 3 * side * E, 2 * E); }
+        // tap (feet), twitch and the scratch rubs are rotations: see applyLifeGestures.
+      }
+
+      if (chin) {
+        // Hand and wrist keep their place on the face: head offset + extra tilt around its centre.
+        const hc = p.head_center, a = out.rot * Math.PI / 180, c = Math.cos(a), sn = Math.sin(a);
+        const pin = (from) => { const v = [from[0] - chin.hc[0], from[1] - chin.hc[1]]; return [hc[0] + v[0] * c - v[1] * sn, hc[1] + v[0] * sn + v[1] * c]; };
+        const nh = pin(chin.hand), nw = pin(chin.wrist);
+        const d = [nh[0] - chin.hand[0], nh[1] - chin.hand[1]];
+        p.hand_R_center = nh; p.wrist_R = nw;
+        p.elbow_R = [chin.elbow[0] + d[0] * 0.5 + (p.elbow_R[0] - chin.elbow[0]), chin.elbow[1] + d[1] * 0.5 + (p.elbow_R[1] - chin.elbow[1])];
+      }
+
+      // The laptop (loading) follows the body, not the typing hands.
+      if (state === 'loading') {
+        const lean = beat && beat.name === 'lean' ? beat.e * g : 0;
+        LIFE.laptopShift = [3 * sway + 9 * lifeStance(now) + 6 * lean, 7 * lean];
+      }
+      return out;
+    }
+
+    // Post-skeleton layer: rotations around joints (lengths are preserved).
+    function applyLifeGestures(q, state, now) {
+      const b = LIFE.beat;
+      if (state === 'thinking' && LIFE.state === 'thinking') {
+        // Index taps on the chin, in short bursts.
+        const s = now / 1000, burst = Math.max(0, Math.sin(Math.PI * 2 * s / lifeRate('chinBurst')));
+        const onScratch = b && b.name === 'scratch';
+        if (!onScratch) rotateAround(q, q.elbow_R, ['wrist_R', 'hand_R_center'], 3.5 * Math.sin(Math.PI * 2 * lifeRate('chinTap') * s) * smooth5(clamp(burst * 2 - 0.6)));
+      }
+      if (!b || LIFE.state !== state) return;
+      const u = clamp((now - b.start) / b.dur), e = lifeEnv(u);
+      if (b.name === 'tap') {
+        // Toes lift and tap three times, heel planted.
+        const side = b.side > 0 ? 'R' : 'L', dir = side === 'R' ? -1 : 1;
+        const lift = Math.pow(Math.abs(Math.sin(Math.PI * 3 * u)), 0.7) * e;
+        rotateAround(q, q[`ankle_${side}`], [`foot_${side}_center`], dir * 16 * lift);
+      } else if (b.name === 'twitch') {
+        rotateAround(q, q.ankle_R, ['foot_R_center'], 14 * Math.sin(Math.PI * 2 * u) * Math.sin(Math.PI * u));
+      } else if (b.name === 'scratch' && u > 0.3 && u < 0.72) {
+        const env = Math.sin(Math.PI * (u - 0.3) / 0.42);
+        rotateAround(q, q.elbow_L, ['wrist_L', 'hand_L_center'], 7 * env * Math.sin(Math.PI * 2 * (u * b.dur) / 190));
+      }
+    }
+
+    // Theme & contrast math (OKLab/OKLCH, WCAG ratios).
+      const THEME_DEFAULTS={"bodyStrokeColor":"#0B0B0B","detailColor":"#0B0B0B","headFillColor":"#FFFFFF","handFillColor":"#FFFFFF","footFillColor":"#FFFFFF","hairColor":"#0B0B0B","accessoryColor":"#0B0B0B","artifactNeutralColor":"#0B0B0B","accentColor":"#0B0B0B","loadingColor":"#0B0B0B","successColor":"#0B0B0B","errorColor":"#0B0B0B","sleepColor":"#0B0B0B"};
+    const THEME_PRESET_SEEDS={"original":{"label":"Original","brand":"#0B0B0B"},"ocean":{"label":"Ocean","brand":"#0284C7"},"mint":{"label":"Mint","brand":"#059669"},"sunset":{"label":"Sunset","brand":"#EA580C"},"lavender":{"label":"Lavender","brand":"#7C3AED"},"graphite":{"label":"Graphite","brand":"#475569"}};
+    const SEMANTIC_SEEDS={success:'#16A34A',error:'#DC2626',sleep:'#2563EB'};
+    const ARTIFACT_KEYS=["artifactNeutralColor", "accentColor", "loadingColor", "successColor", "errorColor", "sleepColor"];
+    const HAIR_DEFAULT_SEED='#0B0B0B';
+    let themeMode='light', currentPreset='original', artifactMode='auto', hairMode='auto', contrastMode='direct';
+    let hairSeed=HAIR_DEFAULT_SEED, hairCustomColor=HAIR_DEFAULT_SEED;
+    const systemDark=window.matchMedia('(prefers-color-scheme: dark)');
+
+    function validHex(v){return /^#[0-9A-Fa-f]{6}$/.test(v)}
+    function clamp01(v){return Math.max(0,Math.min(1,v))}
+    function clampN(v,a,b){return Math.max(a,Math.min(b,v))}
+
+    function hexToRgb(hex){
+      const n=parseInt(hex.slice(1),16);
+      return [((n>>16)&255)/255,((n>>8)&255)/255,(n&255)/255];
+    }
+    function rgbToHex(rgb){
+      return '#'+rgb.map(v=>Math.round(clamp01(v)*255).toString(16).padStart(2,'0')).join('').toUpperCase();
+    }
+    function s2l(c){return c<=.04045?c/12.92:Math.pow((c+.055)/1.055,2.4)}
+    function l2s(c){return c<=.0031308?12.92*c:1.055*Math.pow(Math.max(0,c),1/2.4)-.055}
+
+    function hexToOklab(hex){
+      let [r,g,b]=hexToRgb(hex).map(s2l);
+      const l=0.4122214708*r+0.5363325363*g+0.0514459929*b;
+      const m=0.2119034982*r+0.6806995451*g+0.1073969566*b;
+      const s=0.0883024619*r+0.2817188376*g+0.6299787005*b;
+      const l_=Math.cbrt(l),m_=Math.cbrt(m),s_=Math.cbrt(s);
+      return [
+        0.2104542553*l_+0.793617785*m_-0.0040720468*s_,
+        1.9779984951*l_-2.428592205*m_+0.4505937099*s_,
+        0.0259040371*l_+0.7827717662*m_-0.808675766*s_
+      ];
+    }
+    function oklabToHex(L,a,b){
+      const l_=L+0.3963377774*a+0.2158037573*b;
+      const m_=L-0.1055613458*a-0.0638541728*b;
+      const s_=L-0.0894841775*a-1.291485548*b;
+      const l=l_*l_*l_,m=m_*m_*m_,s=s_*s_*s_;
+      const r= 4.0767416621*l-3.3077115913*m+0.2309699292*s;
+      const g=-1.2684380046*l+2.6097574011*m-0.3413193965*s;
+      const bb=-0.0041960863*l-0.7034186147*m+1.707614701*s;
+      return rgbToHex([l2s(r),l2s(g),l2s(bb)]);
+    }
+    function hexToOklch(hex){
+      const [L,a,b]=hexToOklab(hex),C=Math.hypot(a,b);
+      let h=Math.atan2(b,a)*180/Math.PI;if(h<0)h+=360;
+      return [L,C,h];
+    }
+    function oklchToHex(L,C,h){
+      const rad=h*Math.PI/180;
+      return oklabToHex(clamp01(L),Math.cos(rad)*C,Math.sin(rad)*C);
+    }
+    function relLum(hex){
+      const [r,g,b]=hexToRgb(hex).map(s2l);
+      return .2126*r+.7152*g+.0722*b;
+    }
+    function contrast(a,b){
+      const x=relLum(a),y=relLum(b),hi=Math.max(x,y),lo=Math.min(x,y);
+      return (hi+.05)/(lo+.05);
+    }
+    function ensureContrast(hex,bg,target,prefer='auto'){
+      if(contrast(hex,bg)>=target)return hex.toUpperCase();
+      let [L,C,h]=hexToOklch(hex);
+      let dir;
+      if(prefer==='lighter')dir=1;
+      else if(prefer==='darker')dir=-1;
+      else dir=relLum(bg)>.35?-1:1;
+      for(let i=0;i<45;i++){
+        L=clampN(L+dir*.018,.06,.97);
+        const candidate=oklchToHex(L,C,h);
+        if(contrast(candidate,bg)>=target)return candidate;
+      }
+      return dir<0?'#111827':'#F8FAFC';
+    }
+    function toneFromSeed(seed,L,cScale=.7,cMin=.035,cMax=.12){
+      const [,C,h]=hexToOklch(seed);
+      const chroma=C<.018?0:clampN(Math.max(C*cScale,cMin),0,cMax);
+      return oklchToHex(L,chroma,h);
+    }
+
+    /*
+     Hair crosses two surfaces: the head fill and the host background.
+     It therefore gets its own semantic color instead of inheriting
+     face details or body stroke blindly.
+    */
+    function adaptiveHairColor(seed,bg,headFill,mode){
+      if(mode==='light'&&seed.toUpperCase()==='#0B0B0B')return '#0B0B0B';
+      if(mode==='dark'&&seed.toUpperCase()==='#0B0B0B')return '#E2E8F0';
+
+      const cBg = contrast(seed, bg);
+      const cHead = contrast(seed, headFill);
+      if(cBg >= 3.0 && cHead >= 3.0){
+        return seed.toUpperCase();
+      }
+
+      const [,baseC,h]=hexToOklch(seed);
+      const C=baseC<.018?0:clampN(baseC*.55,.02,.09);
+      const desired=mode==='dark'?.56:.20;
+
+      let best=null;
+      let bestPass=null;
+
+      for(let i=6;i<=94;i++){
+        const L=i/100;
+        const candidate=oklchToHex(L,C,h);
+        const cb=contrast(candidate,bg);
+        const ch=contrast(candidate,headFill);
+        const minC=Math.min(cb,ch);
+        const row={candidate,L,cb,ch,minC,distance:Math.abs(L-desired)};
+
+        if(!best || row.minC>best.minC || (Math.abs(row.minC-best.minC)<.001 && row.distance<best.distance)){
+          best=row;
+        }
+        if(cb>=3 && ch>=3){
+          if(!bestPass || row.distance<bestPass.distance)bestPass=row;
+        }
+      }
+      return (bestPass||best).candidate.toUpperCase();
+    }
+
+    function resolvedMode(){
+      return themeMode==='auto'?(systemDark.matches?'dark':'light'):themeMode;
+    }
+
+    function resolvedHairColor(bg,headFill,mode){
+      if(contrastMode==='auto'){
+        const base = (hairMode==='custom' && hairCustomColor) ? hairCustomColor : (hairSeed && hairSeed.toUpperCase()!=='#0B0B0B' ? hairSeed : (mode==='dark'?'#E2E8F0':'#0B0B0B'));
+        return adaptiveHairColor(base, bg, headFill, mode);
+      }
+      if(hairMode==='custom')return hairCustomColor.toUpperCase();
+      if(hairSeed && hairSeed.toUpperCase()!=='#0B0B0B')return hairSeed.toUpperCase();
+      if(mode==='dark')return '#E2E8F0';
+      return '#0B0B0B';
+    }
+
+    function adaptiveHairDetailColor(hair,headFill){
+      // Hair detail must remain readable against the actual hair fill.
+      // Prefer the head fill for visual harmony, otherwise fall back to
+      // a light/dark neutral with the strongest contrast.
+      const candidates=[headFill.toUpperCase(),'#F8FAFC','#111827'];
+      let best=candidates[0],bestC=contrast(best,hair);
+      for(const candidate of candidates.slice(1)){
+        const c=contrast(candidate,hair);
+        if(c>bestC){best=candidate;bestC=c}
+      }
+      return best.toUpperCase();
+    }
+
+
+    function artifactPalette(seed,bg,mode,bodyStroke){
+      const stroke = bodyStroke || (mode==='dark'?'#E5E7EB':'#0B0B0B');
+      return {
+        artifactNeutralColor:stroke,
+        accentColor:stroke,
+        loadingColor:stroke,
+        successColor:stroke,
+        errorColor:stroke,
+        sleepColor:stroke
+      };
+    }
+
+    function paletteFromBrand(seed){
+      const mode=resolvedMode();
+      const bg=mode==='dark'?'#0F172A':'#FFFFFF';
+      const isDefault = !seed || seed.toUpperCase()==='#0B0B0B';
+      let stroke = isDefault ? (mode==='dark'?'#ECECEC':'#0B0B0B') : seed.toUpperCase();
+
+      if(contrastMode==='auto'){
+        stroke = ensureContrast(stroke, bg, 4.5, mode==='dark'?'lighter':'darker');
+      }
+
+      const headFill = '#FFFFFF', handFill = '#FFFFFF', footFill = '#FFFFFF';
+      let detail = stroke;
+      if(contrastMode==='auto'){
+        detail = ensureContrast(detail, headFill, 4.5, 'darker');
+      }
+
+      const hair = resolvedHairColor(bg, headFill, mode);
+      const hairDetail = adaptiveHairDetailColor(hair, headFill);
+
+      return {
+        stageBackground: bg,
+        bodyStrokeColor: stroke,
+        detailColor: detail,
+        headFillColor: headFill,
+        handFillColor: handFill,
+        footFillColor: footFill,
+        hairColor: hair,
+        hairDetailColor: hairDetail,
+        accessoryColor: stroke,
+        ...artifactPalette(seed, bg, mode, stroke)
+      };
+    }
+
+
+
+    // Instance runtime: state machine, transitions, layer order and rendering.
+    //
+    // Frame pipeline (one owner per concern):
+    //   clip sample (authored MainMotion) → idle life / micro-interactions → attention
+    //   → solveSkeleton (fixed lengths) → orientation / walk / foot planting
+    //   → transition blend → face, blink, hair physics → SVG.
+    //
+    // Every state change blends from the pose that is on screen, so no joint can
+    // jump between two frames, whatever the order of calls from the host app.
+
+    const options = Object.assign({
+      state: 'idle',
+      // Brand colour = fill of the face, hands and feet (lightened / darkened for contrast).
+      brandColor: '#FFFFFF',
+      hairColor: '#0B0B0B',
+      // Line colour follows the theme: 'auto' = site theme (html.dark / [data-theme=dark]),
+      // 'system' = OS preference, or force 'light' / 'dark'.
+      theme: 'auto',
+      lineColor: 'auto',
+      hairStyle: EDITION === 'starter' ? 'original' : 'dreadlocks',
+      // 'uko' (the Starter's only character).
+      character: 'uko',
+      accentColor: '#FFC93C',
+      // 'auto' (default) enforces WCAG contrast; 'direct' uses colours as given.
+      brandContrast: 'auto',
+      hairContrast: 'auto',
+      contrastMode: 'auto',
+      interactive: true,
+      // 'return': one-shot states (welcome, success, error, empty, wake) play once and
+      // settle back to idle. 'loop': they repeat (useful for galleries and demos).
+      oneShotMode: 'return',
+      // Eyes follow the pointer: 'hover' (over the mascot), 'page' (anywhere on the page,
+      // and the finger on touch screens) or 'none'.
+      follow: 'hover',
+      // Kawaii pink cheeks (false to hide them).
+      cheeks: true,
+      // Cap the drawing rate (e.g. 30 for galleries with many mascots). Time stays exact.
+      maxFps: 60,
+      onStateChange: null,
+      onComplete: null,
+      onTap: null
+    }, userOptions);
+
+    const ONE_SHOTS = new Set(['welcome', 'success', 'error', 'empty', 'wake']);
+    const PERSISTENT_ENTRY = { loading: 1000, thinking: 1000 };
+    const TRIGGER_MAP = {
+      welcome: 'welcome', startThinking: 'thinking', stopThinking: 'idle', startLoading: 'loading',
+      stopLoading: 'idle', success: 'success', error: 'error', empty: 'empty', sleep: 'sleep', wake: 'wake'
+    };
+
+    let brandColor = options.brandColor;
+    let hairColorVal = options.hairColor;
+    let brandContrastMode = options.brandContrast || options.contrastMode || 'auto';
+    let hairContrastMode = options.hairContrast || options.contrastMode || 'auto';
+    let themeOpt = options.theme || 'auto', lineColorOpt = options.lineColor || 'auto';
+    const systemDarkQuery = typeof window !== 'undefined' && window.matchMedia ? window.matchMedia('(prefers-color-scheme: dark)') : null;
+    let interactive = options.interactive;
+    let oneShotMode = options.oneShotMode === 'loop' ? 'loop' : 'return';
+    // Capped frame rate: each instance starts at a random phase, so that several mascots on
+    // a page (30 fps each) don't all redraw on the same display frame.
+    let minFrameMs = 1000 / Math.max(1, Math.min(120, Number(options.maxFps) || 60)), sinceDraw = Math.random() * minFrameMs;
+    let destroyed = false, rafId = null, flowTimer = null;
+
+    let cur = ORDER.includes(options.state) ? options.state : 'idle';
+    let curStart = 0;
+    let curEntered = false;
+    let blend = null;            // { from, fromFace, fromRot, start, dur, fromThinking }
+    let shown = null;            // last pose drawn (after orientation / walk)
+    let lastGazeFrame = 0;
+    let shownFace = 'idle';
+    let shownRot = 0;
+    let wasGaitLive = false;
+    APPEARANCE.hairStyle = normalizeHairStyle(options.hairStyle);
+    APPEARANCE.cheeks = options.cheeks !== false;
+    CHARACTER.id = normalizeCharacter(options.character);
+    CHARACTER.accent = options.accentColor || CHARACTER.accent;
+
+    el.innerHTML = `
+      <div class="uko-mascot-wrapper" style="position:relative;width:100%;height:100%;display:flex;align-items:center;justify-content:center;">
+        <svg viewBox="0 0 1024 1536" class="uko-mascot-svg" style="width:100%;height:100%;max-height:100%;display:block;overflow:visible;-webkit-tap-highlight-color:transparent;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Uko mascot">
+          <defs><style>${MASCOT_SVG_STYLES}</style>
+            <filter id="${INSTANCE_ID}-hair-outline" x="-10%" y="-10%" width="120%" height="120%">
+              <feMorphology in="SourceAlpha" operator="dilate" radius="7" result="grown"/>
+              <feFlood style="flood-color: var(--bodyStrokeColor, #F4F4F8)" result="ink"/>
+              <feComposite in="ink" in2="grown" operator="in" result="outline"/>
+              <feMerge><feMergeNode in="outline"/><feMergeNode in="SourceGraphic"/></feMerge>
+            </filter>
+          </defs>
+          <g class="uko-rig"></g>
+          <g class="uko-fx"></g>
+        </svg>
+      </div>`;
+    const svgEl = el.querySelector('.uko-mascot-svg');
+    const rigEl = el.querySelector('.uko-rig');
+    const fxEl = el.querySelector('.uko-fx');
+
+    function currentThemeMode() {
+      if (themeOpt === 'light' || themeOpt === 'dark') return themeOpt;
+      if (themeOpt === 'system') return systemDarkQuery && systemDarkQuery.matches ? 'dark' : 'light';
+      const html = document.documentElement;
+      return html.classList.contains('dark') || html.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
+    }
+
+    // Colour model
+    //  - Lines (body, face features, effects): one neutral colour per theme.
+    //  - Fill (face, hands, feet): the brand colour, adjusted in OKLCH so the lines
+    //    and facial features drawn on it reach 4.5:1 (WCAG AA): lighter in the light
+    //    theme, darker in the dark theme.
+    //  - Hair: at least 3:1 against the face (WCAG 1.4.11, graphical objects).
+    function updateColors() {
+      const mode = currentThemeMode();
+      const surface = mode === 'dark' ? '#15161E' : '#FFFFFF';
+      const line = lineColorOpt !== 'auto' ? lineColorOpt : (mode === 'dark' ? '#F4F4F8' : '#16161D');
+      const fill = brandContrastMode === 'direct' ? brandColor : ensureContrast(brandColor, line, 4.5, mode === 'dark' ? 'darker' : 'lighter');
+      // Hair keeps its chosen colour. Light theme: at least 3:1 against the face.
+      // Dark theme: a contour in the line colour separates it (like face, hands, feet).
+      let hair = hairColorVal;
+      if (hairContrastMode !== 'direct' && mode === 'light') hair = ensureContrast(hair, fill, 3, 'darker');
+      HAIR_OUTLINE_FILTER = mode === 'dark' ? `${INSTANCE_ID}-hair-outline` : null;
+      const vars = {
+        '--bodyStrokeColor': line, '--detailColor': line, '--accessoryColor': line, '--accentColor': line, '--artifactNeutralColor': line,
+        '--headFillColor': fill, '--handFillColor': fill, '--footFillColor': fill,
+        '--stageBackground': surface, '--surfaceColor': surface,
+        '--hairColor': hair, '--hairDetailColor': adaptiveHairDetailColor(hair, fill),
+        '--characterAccent': CHARACTER.accent
+      };
+      for (const k in vars) svgEl.style.setProperty(k, vars[k]);
+      svgEl.dataset.theme = mode;
+    }
+    updateColors();
+
+    // Gaze. Priority: lookAt() target > pointer (hover or page) > nothing.
+    let followMode = ['hover', 'page', 'none'].includes(options.follow) ? options.follow : 'hover';
+    // Full pack only: movements (walk, turn, climb) and the extended gaze (page, lookAt).
+    // The Starter keeps the mascot where it is and says where to get them.
+    const paidOnly = (name) => { if (EDITION !== 'starter') return false; fullPackNotice(name); return true; };
+    if (followMode === 'page' && paidOnly('follow="page"')) followMode = 'hover';
+    const GAZE = { target: null, releaseAt: 0 };
+    // null while the mascot is not laid out (hidden tab, closed dialog, display:none).
+    const toSvg = (x, y) => { const r = svgEl.getBoundingClientRect(); return r.width > 0 && r.height > 0 ? [(x - r.left) * 1024 / r.width, (y - r.top) * 1536 / r.height] : null; };
+    function onPointerMove(e) {
+      if (!interactive) return;
+      const pt = toSvg(e.clientX, e.clientY); if (!pt) return;
+      // A hand cursor over the drawing says "touch me".
+      const over = !!(shown && hitTestMascot(pt[0], pt[1], shown));
+      if (over !== pointerOver) { pointerOver = over; svgEl.style.cursor = over ? 'pointer' : ''; }
+      if (CLOCK.reduced || followMode === 'none') return;
+      MICRO.eyeTracking.pointer = pt;
+      MICRO.eyeTracking.pointerInside = true;
+      MICRO.eyeTracking.hovering = true;
+    }
+    // Touch: the zone under the finger reacts (core/touch.js).
+    let pointerOver = false;
+    // Touchable: no blue tap flash, no text selection or callout on a long press (mobile).
+    el.style.webkitTapHighlightColor = 'transparent';
+    function onTapDown(e) {
+      if (!interactive || CLOCK.reduced || destroyed || (e.button !== undefined && e.button > 0)) return;
+      const pt = toSvg(e.clientX, e.clientY); if (!pt || !shown) return;
+      const r = touchTap(pt, shown, cur, motionNow());
+      if (!r) return;
+      if (r.wake) go('wake', 'tap');
+      if (options.onTap) options.onTap(r);
+    }
+    function onPointerLeave() { MICRO.eyeTracking.hovering = false; if (followMode !== 'page') MICRO.eyeTracking.pointerInside = false; }
+    // Page follow: the mouse anywhere on the page; on touch screens the finger, then a
+    // short moment after it lifts. After a few seconds without movement the mascot
+    // looks away and goes back to its own life.
+    function onPagePointer(e) {
+      if (followMode !== 'page' || !interactive || CLOCK.reduced || GAZE.target) return;
+      const pt = toSvg(e.clientX, e.clientY); if (!pt) return;
+      MICRO.eyeTracking.pointer = pt;
+      MICRO.eyeTracking.pointerInside = true;
+      GAZE.releaseAt = performance.now() + (e.pointerType === 'touch' ? 2500 : 5000);
+    }
+    function onPageLeave() { if (followMode === 'page' && !GAZE.target) GAZE.releaseAt = performance.now() + 600; }
+    function updateGaze() {
+      const a = MICRO.eyeTracking;
+      if (GAZE.target) {
+        const t = GAZE.target;
+        let pt;
+        if (t.getBoundingClientRect) { const r = t.getBoundingClientRect(); pt = toSvg(r.left + r.width / 2, r.top + r.height / 2); }
+        else pt = t.viewBox ? [t.x, t.y] : toSvg(t.x, t.y);
+        if (!pt || !Number.isFinite(pt[0]) || !Number.isFinite(pt[1])) { a.pointerInside = false; return; }
+        a.pointer = pt;
+        a.pointerInside = true; a.reach = 'eyes'; a.headToo = true; a.gain = LIFE.gain || 1;
+        return;
+      }
+      a.headToo = false; a.gain = LIFE.gain || 1;
+      a.reach = followMode === 'page' ? 'eyes' : 'full';
+      if (followMode === 'page' && a.pointerInside && !a.hovering && performance.now() > GAZE.releaseAt) a.pointerInside = false;
+    }
+    function onVisibility() { CLOCK.lastWall = null; }
+    el.addEventListener('pointermove', onPointerMove, { passive: true });
+    el.addEventListener('pointerleave', onPointerLeave, { passive: true });
+    el.addEventListener('pointerdown', onTapDown, { passive: true });
+    window.addEventListener('pointermove', onPagePointer, { passive: true });
+    window.addEventListener('pointerdown', onPagePointer, { passive: true });
+    document.addEventListener('pointerleave', onPageLeave, { passive: true });
+    document.addEventListener('visibilitychange', onVisibility);
+
+    function dominantFace(spec) {
+      if (!spec || typeof spec === 'string') return spec || 'idle';
+      return spec.u < 0.5 ? spec.from : spec.to;
+    }
+
+    function emit(name) { if (options.onStateChange) options.onStateChange(name); }
+    function fullPackNotice(state) {
+      const seen = fullPackNotice.seen || (fullPackNotice.seen = new Set());
+      if (seen.has(state)) return;
+      seen.add(state);
+      console.info(`[UkoMascot] "${state}" fait partie du pack complet (9 états, mouvements, regard) : ${FULL_PACK_URL}`);
+    }
+
+    // Core state change. Always blends from what is on screen.
+    function go(next, reason) {
+      // Any state change interrupts a scripted move (e.g. the form closes mid-climb).
+      if (MOVE.name) { MOVE.name = null; MOVE.done = null; }
+      if (!ORDER.includes(next)) {
+        // Starter edition: a full-pack state keeps Uko where he is instead of breaking the app.
+        if (FULL_ORDER.includes(next)) { fullPackNotice(next); return; }
+        throw new Error(`[UkoMascot] Unknown state "${next}". Expected one of: ${ORDER.join(', ')}`);
+      }
+      const now = motionNow();
+      const prev = cur;
+      if (next === 'wake' && prev !== 'sleep') next = 'idle';
+      if (next === prev && !ONE_SHOTS.has(next)) return;
+
+      const settledIdle = prev === 'idle' && !blend && !(WALK.active);
+      let offset = 0, dur;
+      if (next === 'idle') {
+        dur = prev === 'thinking' ? 900 : prev === 'loading' ? 600 : prev === 'sleep' ? 800 : 420;
+      } else if (PERSISTENT_ENTRY[next]) {
+        // From Idle the authored entry plays; from anything else go straight to the loop.
+        if (settledIdle) dur = 220; else { offset = PERSISTENT_ENTRY[next]; dur = 480; }
+      } else if (next === 'wake') {
+        // Wake replays Sleep backwards (sleepT = .94·(1 − smooth3(t))). If Sleep was
+        // interrupted before lying down, start Wake from that same point.
+        const sleepT = curEntered ? 0.94 : Math.min(0.94, (now - curStart) / DUR.sleep);
+        const q0 = 1 - sleepT / 0.94;
+        let lo = 0, hi = 1;
+        for (let i = 0; i < 30; i++) { const mid = (lo + hi) / 2; if (smooth3(mid) < q0) lo = mid; else hi = mid; }
+        offset = lo * DUR.wake;
+        dur = 200;
+      } else if (next === 'sleep') {
+        dur = settledIdle ? 220 : 420;
+      } else {
+        // One-shots: skip the idle-based anticipation when coming from another pose.
+        if (settledIdle) dur = 220; else { offset = 0.12 * DUR[next]; dur = 380; }
+      }
+
+      if (WALK.active) stopWalk();
+      GAZE_BODY.base = 0;
+      if (Math.abs(ORIENTATION.value) > 0.001 || Math.abs(ORIENTATION.target) > 0.001) setOrientationTarget(0, Math.max(360, dur));
+
+      // Physically plausible transition speed: stretch the blend so no joint's peak
+      // speed exceeds MAX_BLEND_SPEED (smooth5 peaks at 1.875× the mean speed).
+      if (shown && !CLOCK.reduced) {
+        // Measure the path each joint will actually sweep (angle blends travel on arcs).
+        const target = previewPose(next, now - offset);
+        const walked = {};
+        let prevP = shown, far = 0;
+        for (let i = 1; i <= 16; i++) {
+          const m = mixPoses(shown, target, i / 16);
+          for (const k of POINTS) if (m[k] && prevP[k]) {
+            walked[k] = (walked[k] || 0) + Math.hypot(m[k][0] - prevP[k][0], m[k][1] - prevP[k][1]);
+            far = Math.max(far, walked[k]);
+          }
+          prevP = m;
+        }
+        dur = Math.max(dur, 1.875 * far / MAX_BLEND_SPEED * 1000);
+      }
+
+      // Leaving Loading: the laptop does not just vanish (pop on success, drop on error).
+      LAPTOP_EXIT = prev === 'loading' && curEntered && !CLOCK.reduced
+        ? { start: now, kind: next === 'success' ? 'pop' : next === 'error' ? 'drop' : 'fade', shift: LIFE.laptopShift.slice() }
+        : null;
+
+      if (shown && !CLOCK.reduced) {
+        blend = { from: cpy(shown), fromFace: shownFace, fromRot: shownRot, start: now, dur, fromThinking: prev === 'thinking' };
+      } else {
+        blend = null;
+      }
+      cur = next;
+      curStart = now - offset;
+      curEntered = offset > 0 && Boolean(PERSISTENT_ENTRY[next]);
+      resetBlink();
+      resetMicroInteractions();
+      emit(cur);
+    }
+
+    const MAX_BLEND_SPEED = 2600; // viewBox px per second (~3 m/s at Uko's scale)
+
+    // Per-joint weights of a transition at progress u (0 → 1).
+    function blendWeights(u) {
+      const head = smooth5(clamp(u / 0.82)), legs = smooth5(clamp((u - 0.06) / 0.94)), arms = smooth5(clamp((u - 0.14) / 0.86));
+      return k => (k === 'head_center' || k === 'neck' || k.startsWith('shoulder')) ? head
+        : (k.startsWith('elbow') || k.startsWith('wrist') || k.startsWith('hand')) ? arms : legs;
+    }
+
+    let LAPTOP_EXIT = null;
+    function laptopExitMarkup(now) {
+      if (!LAPTOP_EXIT) return '';
+      const e = LAPTOP_EXIT, dur = e.kind === 'drop' ? 520 : e.kind === 'pop' ? 360 : 260;
+      const u = clamp((now - e.start) / dur);
+      if (u >= 1) { LAPTOP_EXIT = null; return ''; }
+      const [dx, dy] = e.shift;
+      let tf = `translate(${dx} ${dy})`, extra = '';
+      if (e.kind === 'pop') {
+        const k = 1 + 0.16 * smooth3(u);
+        tf += ` translate(700 690) scale(${k}) translate(-700 -690)`;
+        // Three short "poof" lines around the laptop.
+        const r = 150 + 90 * u, o = (1 - u).toFixed(3);
+        extra = [-0.9, -0.35, 0.25].map(a => `<line class="accessory" style="opacity:${o}" x1="${700 + Math.cos(a) * r}" y1="${640 + Math.sin(a) * r}" x2="${700 + Math.cos(a) * (r + 34)}" y2="${640 + Math.sin(a) * (r + 34)}"/>`).join('');
+      } else if (e.kind === 'drop') {
+        const g = u * u;
+        tf += ` translate(0 ${130 * g}) rotate(${22 * g} 640 740)`;
+      }
+      const opacity = e.kind === 'drop' ? 1 - smooth3(clamp((u - 0.35) / 0.65)) : 1 - smooth3(u);
+      return `<g class="fxLaptopExit" opacity="${opacity.toFixed(3)}"><g transform="${tf}">${loadingLaptopMarkup(true)}</g>${extra}</g>`;
+    }
+
+    // Pose the clip of `state` would show at `now` if it had started at `startAt`.
+    function previewPose(state, startAt) {
+      const saved = [current, start, entered];
+      current = state; start = startAt; entered = false;
+      let p;
+      try { p = solveSkeleton(resolveMainMotionFrame(motionNow(), 1).pose); }
+      finally { [current, start, entered] = saved; }
+      return p;
+    }
+
+    // Additive gesture layer on top of the authored clips. Rotations happen around
+    // the elbow, so bone lengths are untouched.
+    function rotateAround(p, pivot, keys, deg) {
+      const a = deg * Math.PI / 180, c = Math.cos(a), s = Math.sin(a);
+      for (const k of keys) {
+        const dx = p[k][0] - pivot[0], dy = p[k][1] - pivot[1];
+        p[k] = [pivot[0] + dx * c - dy * s, pivot[1] + dx * s + dy * c];
+      }
+    }
+    // Same rule around a character head (robot box, cat ears): a raised hand that
+    // would hide behind it moves out of the silhouette; hands touching the head on
+    // purpose (scratching, chin) stay where they are.
+    function clearCharacterHead(q) {
+      const hc = q.head_center;
+      for (const s of ['L', 'R']) {
+        const h = q[`hand_${s}_center`];
+        const d = Math.hypot(h[0] - hc[0], h[1] - hc[1]);
+        if (d < 1 || !characterCovers(q, h, 0, 44)) continue;
+        const w = smooth5(clamp((q.neck[1] - 40 - h[1]) / 80)) * smooth5(clamp((d - (q.head_radius + 40)) / 60));
+        if (w <= 0) continue;
+        let k = 0;
+        while (k < 1.2 && characterCovers(q, [h[0] + (h[0] - hc[0]) * k, h[1] + (h[1] - hc[1]) * k], 0, 44)) k += .02;
+        k *= w;
+        for (const key of [`wrist_${s}`, `hand_${s}_center`]) q[key] = [q[key][0] + (h[0] - hc[0]) * k, q[key][1] + (h[1] - hc[1]) * k];
+        const arm = drawnChain(q[`shoulder_${s}`], sub(q[`elbow_${s}`], q[`shoulder_${s}`]), q[`wrist_${s}`], SKELETON.upperArm[s], SKELETON.foreArm[s]);
+        const off = sub(q[`hand_${s}_center`], q[`wrist_${s}`]);
+        q[`elbow_${s}`] = arm.joint; q[`wrist_${s}`] = arm.end;
+        q[`hand_${s}_center`] = [arm.end[0] + off[0], arm.end[1] + off[1]];
+      }
+    }
+    // Raised hands never get lost inside a big hairstyle: push the hand radially
+    // out of the hair silhouette when the arm is long enough, then re-cap lengths.
+    function clearHairForHands(q) {
+      if (cur === 'sleep' || cur === 'wake') return;
+      if (characterDef()) return clearCharacterHead(q);
+      const hc = q.head_center, reach = hairReach() * q.head_radius / 185 + 30;
+      if (reach < 260) return;
+      for (const s of ['L', 'R']) {
+        const h = q[`hand_${s}_center`];
+        const d = Math.hypot(h[0] - hc[0], h[1] - hc[1]);
+        if (d >= reach || d < 1) continue;
+        // Continuous weights: fades in with height, and never moves a hand that
+        // touches the head on purpose (scratching, chin).
+        const w = smooth5(clamp((q.neck[1] - 40 - h[1]) / 80)) * smooth5(clamp((d - (q.head_radius + 40)) / 60));
+        if (w <= 0) continue;
+        const k = w * (reach - d) / d;
+        for (const key of [`wrist_${s}`, `hand_${s}_center`]) q[key] = [q[key][0] + (h[0] - hc[0]) * k, q[key][1] + (h[1] - hc[1]) * k];
+        const arm = drawnChain(q[`shoulder_${s}`], sub(q[`elbow_${s}`], q[`shoulder_${s}`]), q[`wrist_${s}`], SKELETON.upperArm[s], SKELETON.foreArm[s]);
+        const off = sub(q[`hand_${s}_center`], q[`wrist_${s}`]);
+        q[`elbow_${s}`] = arm.joint; q[`wrist_${s}`] = arm.end;
+        q[`hand_${s}_center`] = [arm.end[0] + off[0], arm.end[1] + off[1]];
+      }
+    }
+
+    function applyGestures(q, state, t) {
+      if (state === 'welcome' && t > .34 && t < .68) {
+        // A real hello: the forearm swings from the elbow, ~2.5 times.
+        const env = Math.sin(Math.PI * (t - .34) / .34);
+        rotateAround(q, q.elbow_L, ['wrist_L', 'hand_L_center'], 16 * env * Math.sin(2 * Math.PI * (t * DUR.welcome) / 440));
+      } else if (state === 'error' && t > .46 && t < .64) {
+        // Head scratch: small quick rubs of the hand on the head.
+        const env = Math.sin(Math.PI * (t - .46) / .18);
+        rotateAround(q, q.elbow_R, ['wrist_R', 'hand_R_center'], 6 * env * Math.sin(2 * Math.PI * (t * DUR.error) / 180));
+      }
+    }
+
+    function finishOneShot(now) {
+      const done = cur;
+      if (options.onComplete) options.onComplete(done);
+      if (oneShotMode === 'loop' && done !== 'wake') {
+        curStart = now;
+        return;
+      }
+      go('idle', 'completed');
+    }
+
+    let debugFrame = null;
+    // Scripted move in progress (climb): it owns the whole body until it ends.
+    const MOVE = { name: null, start: 0, done: null, behind: false, onto: 0 };
+    function moveFrame(now) {
+      const onto = MOVE.onto;
+      const u = clamp((now - MOVE.start) / (onto ? MOVES.climbOnto.dur : MOVES[MOVE.name].dur));
+      if (u >= 1) {
+        const done = MOVE.done;
+        MOVE.name = null; MOVE.done = null; MOVE.onto = 0;
+        // Onto an object: it ends standing on it, the host raises the box (no blend down).
+        // The last pose drawn moves into the new frame of reference, so the planted feet
+        // stay on the top instead of where they were drawn inside the old box.
+        if (onto && shown) { for (const k of Object.keys(shown)) if (Array.isArray(shown[k]) && shown[k].length === 2) shown[k] = [shown[k][0], shown[k][1] + onto]; resetFootwork(); }
+        if (shown && !onto) blend = { from: cpy(shown), fromFace: shownFace, fromRot: shownRot, start: now, dur: 380, fromThinking: false };
+        if (done) done();
+        if (options.onComplete) options.onComplete('climb');
+        return null;
+      }
+      if (onto) return { pose: climbOntoPose(u, onto), face: climbOntoFace(u), rot: climbOntoRot(u), frontArms: false };
+      return { pose: climbPose(u, MOVE.behind), face: climbFace(u), rot: climbRot(u), frontArms: !MOVE.behind && u < .86 };
+    }
+
+    function frame(now) {
+      // Legacy layer reads these.
+      current = cur; start = curStart; entered = curEntered;
+      smMode = true; smInternal = null; smBridge = null; smFaceHold = null; thinkExitStart = 0;
+
+      const elapsed = now - curStart;
+      if (ONE_SHOTS.has(cur) && elapsed >= DUR[cur]) finishOneShot(now);
+      current = cur; start = curStart; entered = curEntered;
+
+      const main = resolveMainMotionFrame(now, 1);
+      let p = main.pose, t = main.t, loop = main.loop;
+      curEntered = entered = main.entered;
+      const mv = MOVE.name && !CLOCK.reduced ? moveFrame(now) : null;
+      if (mv) p = mv.pose;
+      MOVE_FRONT_ARMS = !!mv && mv.frontArms;
+
+      const walkActive = WALK.active;
+      let rotOffset = 0;
+      if (cur === 'idle' && !walkActive && !CLOCK.reduced && !mv) {
+        rotOffset += applyIdleLife(p, loop);
+        rotOffset += applyMicroInteractions(p, now);
+      }
+
+      // Life layer (core/life.js): breathing, weight shifts and small gestures in the
+      // persistent states, paused while a tap reaction or the pointer owns Uko.
+      let life = { rot: 0, eye: [0, 0] };
+      if (now - LIFE.gainAt > 500 || now < LIFE.gainAt) { const w = el.clientWidth || 240; LIFE.gain = lifeGainFor(w); LIFE.lod = w * ((typeof window !== "undefined" && window.devicePixelRatio) || 1) < 200; LIFE.gainAt = now; }
+      if (!walkActive && !CLOCK.reduced && !mv) {
+        const busy = cur === 'idle' && (MICRO.tap.active || MICRO.idleVariation.active || MICRO.eyeTracking.hovering || !!GAZE.target);
+        life = applyLife(p, cur, now, cur === 'idle' || curEntered, busy);
+        rotOffset += life.rot;
+      }
+
+      let faceMode = CLOCK.reduced ? (cur === 'wake' ? 'idle' : DATA.faceModes[cur]) : faceSpecFor(cur, t, curEntered, now);
+      faceMode = applyMicroFace(faceMode, now);
+      if (mv) faceMode = mv.face;
+
+      if (!CLOCK.reduced) updateGaze();
+      const attention = CLOCK.reduced || mv ? { eye: [0, 0], head: [0, 0, 0] } : updateAttentionTracking(now, faceMode, p);
+      const attentionRot = applyAttentionPose(p, attention);
+      // Gaze with the body (core/touch.js): turn towards what it looks at, reach for it.
+      const gazeDt = Math.min(50, Math.max(0, now - lastGazeFrame)); lastGazeFrame = now;
+      const bodyFree = cur === 'idle' && !walkActive && !mv && !CLOCK.reduced && !MICRO.tap.active;
+      const eyes = MICRO.eyeTracking;
+      const gazePoint = !eyes.pointerInside ? null : GAZE.target ? eyes.pointer : followMode === 'page' && !eyes.hovering ? eyes.pointer : null;
+      if (bodyFree) gazeBodyTurn(now, gazePoint, shown, !!GAZE.target);
+      if (bodyFree || GAZE_BODY.reach > .01) gazeReach(p, bodyFree && GAZE.target ? gazePoint : null, gazeDt);
+      attention.eye = [attention.eye[0] + life.eye[0], attention.eye[1] + life.eye[1]];
+
+      let q = solveSkeleton(p);
+      if (!CLOCK.reduced && !mv) applyGestures(q, cur, t);
+      if (!CLOCK.reduced && !walkActive && !mv) applyLifeGestures(q, cur, now);
+      if (!mv) clearHairForHands(q);
+      let rot = (CLOCK.reduced ? (DATA.headRot[cur === 'wake' ? 'idle' : cur] || 0) : headRotationFor(cur, t, curEntered)) + rotOffset + attentionRot;
+      if (mv) rot = mv.rot;
+
+      const orient = orientationMotionFrame(now);
+      const yaw = mv ? 0 : cur === 'idle' || walkActive ? orient.bodyYaw : 0;
+      const headYaw = orient.headYaw;
+      if (Math.abs(yaw) > 0.001) q = applyOrientationPose(q, yaw);
+      if (Math.abs(orient.velocity) > 0.00001 && cur === 'idle') q = applyTurnDynamics(q, yaw, orient.velocity);
+      // Feet stay planted while turning, including the turn that starts a walk;
+      // the gait takes over once the body is in profile and the walk has begun.
+      const gaitLive = walkActive && Math.abs(yaw) > 0.68 && now >= WALK.start;
+      // First gait frame: ease from the planted stance into the stride.
+      if (gaitLive && !wasGaitLive && shown && !blend && !CLOCK.reduced) blend = { from: cpy(shown), fromFace: shownFace, fromRot: shownRot, start: now, dur: 300, fromThinking: false };
+      wasGaitLive = gaitLive;
+      if (cur === 'idle' && !gaitLive && !blend && !mv) applyFootPlanting(q, now, shown, yaw); else resetFootwork();
+      if (gaitLive) { q = applyWalkCycle(q, yaw, now); rot += WALK.rot; }
+      resolveLimbs(q); reattachHead(q);
+
+      // Transitions blend displayed poses: the pose on screen when the change was
+      // requested → the fully composed pose of the new state.
+      HOLD_THINKING_FRONT = false;
+      if (blend) {
+        const u = clamp((now - blend.start) / blend.dur);
+        const w = smooth5(u);
+        // Overlapping action: the head leads, the legs follow, the arms trail.
+        q = mixPoses(blend.from, q, blendWeights(u));
+        rot = lp(blend.fromRot, rot, w);
+        const toFace = dominantFace(faceMode);
+        if (u < 1 && blend.fromFace !== toFace) faceMode = faceBlendSpec(blend.fromFace, toFace, w);
+        HOLD_THINKING_FRONT = blend.fromThinking && w < 0.7;
+        if (u >= 1) blend = null;
+      }
+
+      lastPose = q;
+      shown = q;
+      shownFace = dominantFace(faceMode);
+      shownRot = rot;
+
+      const [hx, hy] = q.head_center;
+      updateHairPhysics(now, hx, hy, q.head_radius, rot, headYaw);
+      const blink = CLOCK.reduced ? 0 : blinkAmount(now, faceMode);
+      const laptop = cur === 'loading';
+      HAIR_LOD = !!LIFE.lod;
+      rigEl.innerHTML = renderRig(q, faceMode, rot, blink, laptop, attention.eye, yaw, headYaw);
+      fxEl.innerHTML = fxMarkup(cur, q, t, loop, laptop ? true : curEntered) + laptopExitMarkup(now) + microFxMarkup(now);
+      // Debug builds expose the composed frame (used to bake the Rive file).
+      if (DEBUG_BUILD) debugFrame = { state: cur, t, loop, entered: curEntered, pose: q, face: faceMode, rot, blink, yaw,
+        eye: attention.eye.slice(), lapShift: LIFE.laptopShift.slice(),
+        tail: CHARACTER.id === 'meowuko' ? catTailParams(q, yaw) : null,
+        lapExit: LAPTOP_EXIT ? { kind: LAPTOP_EXIT.kind, since: now - LAPTOP_EXIT.start, shift: LAPTOP_EXIT.shift } : null };
+    }
+
+    function loopTick(wall) {
+      if (destroyed) return;
+      const delta = CLOCK.lastWall === null ? 0 : Math.min(50, Math.max(0, wall - CLOCK.lastWall));
+      CLOCK.lastWall = wall;
+      // Time runs under reduced motion too (one-shots still complete); only the visuals are static.
+      if (!document.hidden && !CLOCK.paused) CLOCK.time += delta;
+      sinceDraw += delta;
+      if (sinceDraw + 1 >= (onScreen ? minFrameMs : OFFSCREEN_FRAME_MS) && !CLOCK.paused) { sinceDraw = 0; frame(motionNow()); }
+      rafId = requestAnimationFrame(loopTick);
+    }
+
+    // Off screen (scrolled away, display: none), a mascot keeps its clock and logic
+    // (one-shots end, moves call onDone) but redraws only 4 times a second.
+    const OFFSCREEN_FRAME_MS = 250;
+    let onScreen = true;
+    const viewObserver = typeof IntersectionObserver === 'function'
+      ? new IntersectionObserver(es => { const e = es[es.length - 1]; const was = onScreen; onScreen = e.isIntersecting; if (onScreen && !was) sinceDraw = Infinity; }, { rootMargin: '120px' })
+      : null;
+    if (viewObserver) viewObserver.observe(el);
+
+    curStart = motionNow();
+    // No onStateChange during create(): the host already knows the initial state and
+    // its callback may reference bindings that are not initialised yet.
+    frame(motionNow());
+    rafId = requestAnimationFrame(loopTick);
+
+    const themeObserver = new MutationObserver(updateColors);
+    themeObserver.observe(document.documentElement, { attributes: true, attributeFilter: ['class', 'data-theme'] });
+    if (systemDarkQuery && systemDarkQuery.addEventListener) systemDarkQuery.addEventListener('change', updateColors);
+
+    function flow(first, second, delay, onDone) {
+      if (flowTimer) clearTimeout(flowTimer);
+      go(first);
+      flowTimer = setTimeout(() => { flowTimer = null; go(second); if (onDone) onDone(); }, delay);
+    }
+
+    return {
+      setState(nextState) { if (flowTimer) { clearTimeout(flowTimer); flowTimer = null; } go(nextState); },
+      trigger(name) {
+        const target = TRIGGER_MAP[name];
+        if (!target) throw new Error(`[UkoMascot] Unknown trigger "${name}". Expected one of: ${Object.keys(TRIGGER_MAP).join(', ')}`);
+        go(target);
+      },
+      startLoading() { go('loading'); },
+      resolveSuccess() { go('success'); },
+      resolveError() { go('error'); },
+      wake() { go('wake'); },
+
+      // Walk in place. speed scales the cadence (1 = 1080 ms per cycle).
+      // To walk *across* the screen, move the host element by getWalkVelocity():
+      // the planted foot then stays fixed on the ground.
+      startWalk(dir = 1, speed = 1) {
+        if (paidOnly('walk')) return;
+        if (cur !== 'idle') go('idle');
+        blend = null;
+        startWalk(dir);
+        WALK.speed = Math.max(0.25, Math.min(3, Number(speed) || 1));
+        emit('walk');
+      },
+      // Ground speed of the walk in viewBox units per second (signed, screen x).
+      // Multiply by (element height / 1536) to get CSS px per second.
+      getWalkVelocity() {
+        if (!WALK.active || motionNow() < WALK.start) return 0;
+        const blendIn = smooth5(clamp((Math.abs(ORIENTATION.value) - .68) / .32));
+        const stance = 2 * WALK_GAIT.stride / (WALK_GAIT.stance * WALK.cycleMs / WALK.speed); // units per ms, see walkLegSample
+        return WALK.screenDir * stance * 1000 * blendIn;
+      },
+      stopWalk() {
+        // Settle from the last walking pose into the standing pose.
+        if (WALK.active && shown && !CLOCK.reduced) blend = { from: cpy(shown), fromFace: shownFace, fromRot: shownRot, start: motionNow(), dur: 420, fromThinking: false };
+        stopWalk();
+        setOrientationTarget(0, 520);
+        emit(cur);
+      },
+      isWalking() { return Boolean(WALK.active); },
+      setOrientation(yaw, duration = 520) {
+        if (paidOnly('setOrientation')) return;
+        if (WALK.active) stopWalk();
+        if (cur !== 'idle') go('idle');
+        setOrientationTarget(yaw, duration);
+        GAZE_BODY.base = clamp(Number(yaw) || 0, -1, 1);
+      },
+      playTurnDemo() {
+        if (paidOnly('playTurnDemo')) return;
+        if (WALK.active) stopWalk();
+        if (cur !== 'idle') go('idle');
+        GAZE_BODY.base = 0;
+        playOrientationTurn();
+      },
+
+      flowThinkingToLoading(onComplete) { flow('thinking', 'loading', 1800, onComplete); },
+      flowLoadingToSuccess(onComplete) { flow('loading', 'success', 1800, onComplete); },
+      flowLoadingToError(onComplete) { flow('loading', 'error', 1800, onComplete); },
+      flowSleepToWake(onComplete) { flow('sleep', 'wake', 2600, onComplete); },
+
+      setBrandColor(hex) { brandColor = hex; updateColors(); },
+      setHairColor(hex) { hairColorVal = hex; updateColors(); },
+      setTheme(mode) { themeOpt = mode || 'auto'; updateColors(); },
+      setLineColor(hex) { lineColorOpt = hex || 'auto'; updateColors(); },
+      getTheme() { return currentThemeMode(); },
+      setHairStyle(style) { APPEARANCE.hairStyle = normalizeHairStyle(style); },
+      setCheeks(on) { APPEARANCE.cheeks = on !== false; },
+      // Scripted move: climb onto the ledge the mascot stands on (see core/moves.js).
+      // Idle afterwards; onDone when standing. Ignored under prefers-reduced-motion.
+      // onto: climb onto a low object whose top is that high above the feet line (fraction
+      // of the mascot box, 0.1–0.45); without it, climb up the ledge it hangs from.
+      climb({ onDone, behind = false, onto = 0 } = {}) {
+        if (paidOnly('climb')) { if (onDone) onDone(); return; }
+        if (CLOCK.reduced) { if (onDone) onDone(); return; }
+        if (WALK.active) stopWalk();
+        if (cur !== 'idle') go('idle');
+        blend = null;
+        MOVE.name = 'climb'; MOVE.start = motionNow(); MOVE.done = onDone || null; MOVE.behind = Boolean(behind);
+        MOVE.onto = onto ? clamp(Number(onto) || 0, .1, .45) * 1536 : 0;
+      },
+      isMoving() { return Boolean(MOVE.name); },
+      // Play a touch reaction as if that zone were tapped: 'head', 'hand', 'foot', 'body'
+      // (or 'hand_L'…). Optional reaction id (e.g. 'highFive', 'dizzy', 'laugh', 'joy').
+      poke(zone = 'body', reaction) {
+        if (!shown || CLOCK.reduced) return null;
+        const z = ['head', 'hand_L', 'hand_R', 'foot_L', 'foot_R', 'body'].includes(zone) ? zone : zone === 'hand' ? 'hand_R' : zone === 'foot' ? 'foot_R' : 'body';
+        const r = touchTap(zonePoint(z, shown), shown, cur, motionNow(), z, reaction);
+        if (r && r.wake) go('wake', 'poke');
+        return r ? r.reaction : null;
+      },
+      setCharacter(id) { CHARACTER.id = normalizeCharacter(id); },
+      setAccentColor(hex) { CHARACTER.accent = hex || '#FFC93C'; updateColors(); },
+      setBrandContrast(mode) { brandContrastMode = mode; updateColors(); },
+      setHairContrast(mode) { hairContrastMode = mode; updateColors(); },
+      setContrastMode(mode) { brandContrastMode = mode; hairContrastMode = mode; updateColors(); },
+      setInteractive(val) { interactive = Boolean(val); if (!interactive) { MICRO.eyeTracking.pointerInside = false; MICRO.eyeTracking.hovering = false; } },
+      // Eyes follow the pointer: 'hover', 'page' (whole page, finger on touch) or 'none'.
+      setFollow(mode) { if (mode === 'page' && paidOnly('follow="page"')) mode = 'hover'; followMode = ['hover', 'page', 'none'].includes(mode) ? mode : 'hover'; if (followMode === 'none') MICRO.eyeTracking.pointerInside = false; },
+      // Look at an element, a point on the page ({ x, y } in client px) or a point of the
+      // mascot's own drawing ({ x, y, viewBox: true }); null gives the gaze back.
+      lookAt(target) {
+        if (target && paidOnly('lookAt')) return;
+        GAZE.target = target || null;
+        if (!target) { MICRO.eyeTracking.pointerInside = false; MICRO.eyeTracking.reach = followMode === 'page' ? 'eyes' : 'full'; }
+      },
+      setOneShotMode(mode) { oneShotMode = mode === 'loop' ? 'loop' : 'return'; },
+      setMaxFps(fps) { minFrameMs = 1000 / Math.max(1, Math.min(120, Number(fps) || 60)); },
+      pause() { CLOCK.paused = true; },
+      resume() { CLOCK.paused = false; CLOCK.lastWall = null; },
+
+      getState() { return WALK.active ? 'walk' : cur; },
+      getBrandColor() { return brandColor; },
+      getHairColor() { return hairColorVal; },
+      getHairStyle() { return APPEARANCE.hairStyle; },
+      getCharacter() { return CHARACTER.id; },
+      getSvgElement() { return svgEl; },
+      // Debug/QA: the pose that was last drawn (joint positions in the 1024×1536 viewBox).
+      getPose() { return shown ? cpy(shown) : null; },
+      // Canonical bone lengths (viewBox px) shared with the Rive export.
+      getSkeleton() { return cpy(SKELETON); },
+      // QA builds only (build_mascot_engine.js --debug): internal state for tests.
+      ...(DEBUG_BUILD ? { _debug() {
+        return {
+          hair: HAIR_DYNAMICS, walk: WALK, orientation: ORIENTATION, frame: debugFrame,
+          face: (spec, blink = 0) => orientedFaceSpec(spec, 0, 0, 185, 0, blink, [0, 0], 0),
+          fx: () => fxEl.innerHTML,
+          gaze: () => ({ ...MICRO.eyeTracking, follow: followMode, target: !!GAZE.target, idleVar: MICRO.idleVariation.active, tap: MICRO.tap.active }),
+          // Head silhouette (head-local units): < 0 inside. Uko: the head circle.
+          silhouette: (x, y) => characterDef() ? characterDef().distance(x, y) : Math.hypot(x, y) - 185,
+          // Character artwork (head-local units) for the Rive export.
+          art: () => ({
+            character: CHARACTER.id, accent: CHARACTER.accent,
+            robot: null, cat: null
+          }),
+          // Rive baking: life({ auto: false, bake: {...rates} }) and beat(name, side).
+          life: (cfg) => { if ('auto' in cfg) LIFE.auto = cfg.auto; if ('bake' in cfg) LIFE.bake = cfg.bake; },
+          beat: (name, side) => lifeForce(name, side, motionNow())
+        };
+      } } : {}),
+      // QA: advance this instance's clock deterministically (ms) and draw one frame.
+      step(ms) { CLOCK.time += Math.max(0, ms); frame(motionNow()); },
+      destroy() {
+        destroyed = true;
+        if (rafId) cancelAnimationFrame(rafId);
+        if (flowTimer) clearTimeout(flowTimer);
+        el.removeEventListener('pointermove', onPointerMove);
+        el.removeEventListener('pointerleave', onPointerLeave);
+        el.removeEventListener('pointerdown', onTapDown);
+        document.removeEventListener('visibilitychange', onVisibility);
+        window.removeEventListener('pointermove', onPagePointer);
+        window.removeEventListener('pointerdown', onPagePointer);
+        document.removeEventListener('pointerleave', onPageLeave);
+        themeObserver.disconnect();
+        if (viewObserver) viewObserver.disconnect();
+        if (systemDarkQuery && systemDarkQuery.removeEventListener) systemDarkQuery.removeEventListener('change', updateColors);
+        el.innerHTML = '';
+      }
+    };
+
+  }
+
+  // <uko-mascot state="idle" hair="original|classique|chauve" brand="#FFFFFF" hair-color="#0B0B0B" theme="auto|system|light|dark" contrast="direct|auto" interactive="true|false" one-shot="return|loop" cheeks="true|false" follow="hover|none">
+  if (typeof customElements !== 'undefined' && !customElements.get('uko-mascot')) {
+    class UkoMascotElement extends HTMLElement {
+      static get observedAttributes() {
+        return ['state', 'brand', 'hair', 'hair-color', 'contrast', 'interactive', 'walk', 'one-shot', 'cheeks', 'theme', 'character', 'accent', 'follow'];
+      }
+      connectedCallback() {
+        if (!this.style.display) this.style.display = 'block';
+        this.mascot = createUkoMascot(this, {
+          state: this.getAttribute('state') || 'idle',
+          brandColor: this.getAttribute('brand') || '#FFFFFF',
+          hairStyle: this.getAttribute('hair') || 'dreadlocks',
+          hairColor: this.getAttribute('hair-color') || '#0B0B0B',
+          contrastMode: this.getAttribute('contrast') || 'auto',
+          theme: this.getAttribute('theme') || 'auto',
+          interactive: this.getAttribute('interactive') !== 'false',
+          oneShotMode: this.getAttribute('one-shot') || 'return',
+          cheeks: this.getAttribute('cheeks') !== 'false',
+          character: this.getAttribute('character') || 'uko',
+          accentColor: this.getAttribute('accent') || '#FFC93C',
+          follow: this.getAttribute('follow') || 'hover',
+          onStateChange: state => this.dispatchEvent(new CustomEvent('statechange', { detail: { state } })),
+          onComplete: state => this.dispatchEvent(new CustomEvent('complete', { detail: { state } })),
+          onTap: detail => this.dispatchEvent(new CustomEvent('tap', { detail }))
+        });
+        if (this.getAttribute('walk') === 'true') this.mascot.startWalk();
+      }
+      disconnectedCallback() {
+        if (this.mascot) { this.mascot.destroy(); this.mascot = null; }
+      }
+      attributeChangedCallback(name, oldVal, newVal) {
+        if (!this.mascot || oldVal === newVal) return;
+        if (name === 'state') this.mascot.setState(newVal);
+        else if (name === 'brand') this.mascot.setBrandColor(newVal);
+        else if (name === 'hair') this.mascot.setHairStyle(newVal);
+        else if (name === 'hair-color') this.mascot.setHairColor(newVal);
+        else if (name === 'contrast') this.mascot.setContrastMode(newVal);
+        else if (name === 'interactive') this.mascot.setInteractive(newVal !== 'false');
+        else if (name === 'one-shot') this.mascot.setOneShotMode(newVal);
+        else if (name === 'cheeks') this.mascot.setCheeks(newVal !== 'false');
+        else if (name === 'theme') this.mascot.setTheme(newVal);
+        else if (name === 'character') this.mascot.setCharacter(newVal);
+        else if (name === 'accent') this.mascot.setAccentColor(newVal);
+        else if (name === 'follow') this.mascot.setFollow(newVal);
+        else if (name === 'walk') newVal === 'true' ? this.mascot.startWalk() : this.mascot.stopWalk();
+      }
+    }
+    customElements.define('uko-mascot', UkoMascotElement);
+  }
+
+
+  root.UkoMascot = {
+    version: "2.3.0",
+    edition: EDITION,
+    create: createUkoMascot,
+    ORDER,
+    DUR,
+    HAIR_STYLES: HAIR_CATALOG,
+    HAIR_ALIASES,
+    CHARACTERS: CHARACTER_LIST,
+  };
+})(typeof window !== 'undefined' ? window : this);

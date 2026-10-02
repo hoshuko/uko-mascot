@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Uko Starter — Rive (web)</title>
+  <style>
+    body { font-family: system-ui, sans-serif; display: grid; place-items: center; gap: 12px; min-height: 100vh; margin: 0; }
+    canvas { width: 240px; height: 360px; }
+  </style>
+</head>
+<body>
+  <canvas id="uko" width="480" height="720"></canvas>
+  <div>
+    state : <button data-s="0">idle</button> <button data-s="2">loading</button>
+  </div>
+  <div>
+    trigger : <button data-t="welcome">welcome</button> <button data-t="success">success</button>
+  </div>
+  <!-- ou : npm install @rive-app/canvas-lite -->
+  <script src="https://unpkg.com/@rive-app/canvas-lite@2.43.1"></script>
+  <script>
+    const uko = new rive.Rive({
+      src: '../rive/uko.riv',
+      canvas: document.getElementById('uko'),
+      stateMachines: 'Uko',
+      autoplay: true,
+      autoBind: true,
+      onLoad: () => {
+        uko.resizeDrawingSurfaceToCanvas();
+        uko.viewModelInstance.color('bodyColor').value = 0xFFFFD6E0; // ARGB
+      }
+    });
+    const input = n => uko.stateMachineInputs('Uko').find(i => i.name === n);
+    document.querySelectorAll('[data-s]').forEach(b => b.onclick = () => { input('state').value = +b.dataset.s; });
+    document.querySelectorAll('[data-t]').forEach(b => b.onclick = () => input(b.dataset.t).fire());
+  </script>
+</body>
+</html>
