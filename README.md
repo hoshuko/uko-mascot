@@ -5,7 +5,7 @@
 <h1 align="center">Uko — a living mascot for your app</h1>
 
 <p align="center">
-  A stick-figure mascot that acts out the states of your interface: <b>welcome, loading, success</b>.<br>
+  A stick-figure mascot that acts out every state of your interface: <b>welcome, loading, success, error, empty, sleep…</b><br>
   It breathes, blinks, reacts to touch and never freezes. One tag on the web, one Rive file everywhere else.
 </p>
 
@@ -33,7 +33,8 @@ This repository is **Uko Starter**, the free edition: the files you get in the d
 |---|---|---|
 | Characters | Uko | Uko, Aituko the robot, Meowuko the cat |
 | Hairstyles | 3: `original`, `classique`, `chauve` | 17 |
-| States | `idle` `welcome` `loading` `success` | the 4 + `thinking` `error` `empty` `sleep` `wake` |
+| States (web engine) | all 9: `idle` `welcome` `thinking` `loading` `success` `error` `empty` `sleep` `wake` | same |
+| Rive files (mobile) | `uko.riv`, 4 states | all 3 characters, 9 states each |
 | Colours, light and dark themes, touch reactions | ✓ | ✓ |
 | Walk, turn, climb, gaze over the whole page | — | ✓ |
 | Commercial use | ✓ | ✓ |
@@ -84,7 +85,7 @@ import { Rive } from '@rive-app/canvas-lite';
 const uko = new Rive({ src: 'rive/uko.riv', canvas: document.querySelector('canvas'), stateMachines: 'Uko', autoplay: true });
 const input = name => uko.stateMachineInputs('Uko').find(i => i.name === name);
 input('state').value = 2;   // 0 idle, 2 loading
-input('success').fire();    // triggers: welcome, success
+input('success').fire();    // triggers: welcome, success (the free Rive file has 4 states)
 ```
 
 Complete examples for React, Flutter, iOS (Swift) and Android (Kotlin) are in [`examples/`](examples).
