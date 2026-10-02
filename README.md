@@ -20,7 +20,7 @@
   <img alt="Free, commercial use included" src="https://img.shields.io/badge/price-free%20·%20commercial%20use%20OK-FF7AAE">
   <img alt="Web + Rive" src="https://img.shields.io/badge/web%20%2B%20Rive-iOS%20·%20Android%20·%20Flutter%20·%20React-3B5BFF">
   <img alt="Zero dependencies" src="https://img.shields.io/badge/dependencies-0-3DDC97">
-  <img alt="Web engine size" src="https://img.shields.io/badge/web%20engine-45%20KB%20gzip-FFC93C">
+  <img alt="Web engine size" src="https://img.shields.io/badge/web%20engine-50%20KB%20gzip-FFC93C">
 </p>
 
 <p align="center"><i>Français : <a href="README.fr.md">README.fr.md</a> · Español: <a href="README.es.md">README.es.md</a></i></p>
@@ -95,7 +95,7 @@ Full documentation: [README.en.md](README.en.md).
 
 | File | What |
 |---|---|
-| `uko-mascot-engine.min.js` | The web engine to load in your site or app (45 KB gzip, zero dependencies) |
+| `uko-mascot-engine.min.js` | The web engine to load in your site or app (50 KB gzip, zero dependencies) |
 | `uko-mascot-engine.js` | The same code, readable |
 | `rive/uko.riv` | The same mascot for iOS, Android, Flutter, React Native and the web (74 KB) |
 | `examples/` | One ready-to-open example per platform |

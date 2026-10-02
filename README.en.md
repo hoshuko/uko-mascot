@@ -2,7 +2,7 @@
 
 *Français : `README.md` · Español: `README.es.md`*
 
-Uko, free edition: **4 states**, **3 hairstyles** (`original`, `classique`, `chauve`), any colors, light or dark theme.
+Uko, free edition: **all 9 states**, **3 hairstyles** (`original`, `classique`, `chauve`), any colors, light or dark theme.
 Try it in your app, and keep it in production if you like: that is allowed
 (see `LICENSE.md`; the French text of the license prevails).
 
@@ -16,9 +16,9 @@ Try it in your app, and keep it in production if you like: that is allowed
 | | Starter (free) | Full pack |
 |---|---|---|
 | Mascots | Uko | Uko, Aituko the robot, Meowuko the cat |
-| States | `idle` `welcome` `loading` `success` | those 4 + `thinking` `error` `empty` `sleep` `wake` |
+| States (web engine) | all 9: `idle` `welcome` `thinking` `loading` `success` `error` `empty` `sleep` `wake` | same |
 | Hairstyles, colors, theme | 3 hairstyles, any colors | 17 hairstyles, any colors |
-| Rive files | 4 states | 9 states |
+| Rive files (mobile) | `uko.riv`, 4 states | all 3 characters, 9 states each |
 | Movements: walk, turn around, climb `climb()` | — | yes |
 | Gaze: follows the mouse on hover | yes | yes |
 | Gaze over the whole page (`follow="page"`, finger on mobile), `lookAt()` | — | yes |
@@ -38,7 +38,7 @@ Full pack: https://uko-mascot.pages.dev/en/#prix
 - `examples/`: one ready-to-open example per platform.
 - `AI-PROMPT.md`: the prompt to fit the mascot to your app with AI.
 
-**It is a base.** The Starter's 4 states work as they are. What is specific to your app
+**It is a base.** The Starter's 9 states work as they are. What is specific to your app
 (when the mascot reacts, where it sits, a custom behavior such as climbing onto a form)
 takes a few lines of code: paste the prompt from `AI-PROMPT.md` into your coding assistant
 (Claude, ChatGPT, Cursor, Copilot…) and it does it for you.
@@ -61,7 +61,7 @@ document.querySelector('uko-mascot').setAttribute('state', 'success');
 
 | Attribute | Values | Default |
 |---|---|---|
-| `state` | `idle` `welcome` `loading` `success` | `idle` |
+| `state` | `idle` `welcome` `thinking` `loading` `success` `error` `empty` `sleep` `wake` | `idle` |
 | `character` | `uko` (Aituko and Meowuko: full pack) | `uko` |
 | `hair` | `original`, `classique` (classic), `chauve` (bald) | `original` |
 | `brand` | color of the face, hands and feet (`#RRGGBB`) | `#FFFFFF` |

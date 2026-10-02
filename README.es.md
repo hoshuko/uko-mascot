@@ -2,7 +2,7 @@
 
 *Français : `README.md` · English: `README.en.md`*
 
-Uko en versión gratuita: **4 estados**, **3 peinados** (`original`, `classique`, `chauve`), colores libres, tema claro u oscuro.
+Uko en versión gratuita: **los 9 estados**, **3 peinados** (`original`, `classique`, `chauve`), colores libres, tema claro u oscuro.
 Pruébalo en tu app y quédatelo en producción si quieres: está permitido
 (ver `LICENSE.md`; prevalece el texto francés de la licencia).
 
@@ -16,9 +16,9 @@ Pruébalo en tu app y quédatelo en producción si quieres: está permitido
 | | Starter (gratis) | Pack completo |
 |---|---|---|
 | Mascotas | Uko | Uko, Aituko el robot, Meowuko el gato |
-| Estados | `idle` `welcome` `loading` `success` | esos 4 + `thinking` `error` `empty` `sleep` `wake` |
+| Estados (motor web) | los 9: `idle` `welcome` `thinking` `loading` `success` `error` `empty` `sleep` `wake` | igual |
 | Peinados, colores, tema | 3 peinados, colores libres | 17 peinados, colores libres |
-| Archivos Rive | 4 estados | 9 estados |
+| Archivos Rive (móvil) | `uko.riv`, 4 estados | los 3 personajes, 9 estados cada uno |
 | Movimientos: caminar, media vuelta, escalar `climb()` | — | sí |
 | Mirada: sigue el ratón al pasar por encima | sí | sí |
 | Mirada en toda la página (`follow="page"`, dedo en móvil), `lookAt()` | — | sí |
@@ -38,7 +38,7 @@ Pack completo: https://uko-mascot.pages.dev/es/#prix
 - `examples/`: un ejemplo listo para abrir por plataforma.
 - `AI-PROMPT.md`: el prompt para adaptar la mascota a tu app con IA.
 
-**Es una base.** Los 4 estados del Starter funcionan tal cual. Lo propio de tu app
+**Es una base.** Los 9 estados del Starter funcionan tal cual. Lo propio de tu app
 (cuándo reacciona la mascota, dónde se coloca, un comportamiento a medida como trepar a un formulario)
 se conecta con unas pocas líneas de código: pega el prompt de `AI-PROMPT.md` en tu asistente de código
 (Claude, ChatGPT, Cursor, Copilot…) y lo hace por ti.
@@ -61,7 +61,7 @@ document.querySelector('uko-mascot').setAttribute('state', 'success');
 
 | Atributo | Valores | Por defecto |
 |---|---|---|
-| `state` | `idle` `welcome` `loading` `success` | `idle` |
+| `state` | `idle` `welcome` `thinking` `loading` `success` `error` `empty` `sleep` `wake` | `idle` |
 | `character` | `uko` (Aituko y Meowuko: pack completo) | `uko` |
 | `hair` | `original`, `classique` (clásico), `chauve` (calvo) | `original` |
 | `brand` | color de la cara, las manos y los pies (`#RRGGBB`) | `#FFFFFF` |

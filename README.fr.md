@@ -2,7 +2,7 @@
 
 *English: `README.en.md` · Español: `README.es.md`*
 
-Uko en version gratuite : **4 états**, **3 coiffures** (`original`, `classique`, `chauve`), toutes les couleurs, thème clair ou sombre.
+Uko en version gratuite : **les 9 états**, **3 coiffures** (`original`, `classique`, `chauve`), toutes les couleurs, thème clair ou sombre.
 Essaie-le dans ton app, et garde-le en production si tu veux : c'est permis (voir `LICENSE.md`).
 
 | | Pour qui | Fichier |
@@ -15,9 +15,9 @@ Essaie-le dans ton app, et garde-le en production si tu veux : c'est permis (voi
 | | Starter (gratuit) | Pack complet |
 |---|---|---|
 | Mascottes | Uko | Uko, Aituko le robot, Meowuko le chat |
-| États | `idle` `welcome` `loading` `success` | les 4 + `thinking` `error` `empty` `sleep` `wake` |
+| États (moteur web) | les 9 : `idle` `welcome` `thinking` `loading` `success` `error` `empty` `sleep` `wake` | pareil |
 | Coiffures, couleurs, thème | 3 coiffures, couleurs libres | 17 coiffures, couleurs libres |
-| Fichiers Rive | 4 états | 9 états |
+| Fichiers Rive (mobile) | `uko.riv`, 4 états | les 3 personnages, 9 états chacun |
 | Mouvements : marche, demi-tour, escalade `climb()` | — | oui |
 | Regard : suit la souris au survol | oui | oui |
 | Regard sur toute la page (`follow="page"`, doigt sur mobile), `lookAt()` | — | oui |
@@ -37,7 +37,7 @@ Pack complet : https://uko-mascot.pages.dev/#prix
 - `examples/` : un exemple prêt à ouvrir par plateforme.
 - `AI-PROMPT.md` : le prompt pour adapter la mascotte à ton app avec l'IA.
 
-**C'est une base.** Les 4 états du Starter marchent tels quels. Ce qui est propre à ton app
+**C'est une base.** Les 9 états du Starter marchent tels quels. Ce qui est propre à ton app
 (à quel moment la mascotte réagit, où elle se place, un comportement sur mesure comme grimper sur un formulaire)
 se branche avec quelques lignes de code : colle le prompt de `AI-PROMPT.md` dans ton assistant de code
 (Claude, ChatGPT, Cursor, Copilot…), il le fait pour toi.
@@ -60,7 +60,7 @@ document.querySelector('uko-mascot').setAttribute('state', 'success');
 
 | Attribut | Valeurs | Défaut |
 |---|---|---|
-| `state` | `idle` `welcome` `loading` `success` | `idle` |
+| `state` | `idle` `welcome` `thinking` `loading` `success` `error` `empty` `sleep` `wake` | `idle` |
 | `character` | `uko` (Aituko et Meowuko : pack complet) | `uko` |
 | `hair` | `original`, `classique`, `chauve` | `original` |
 | `brand` | couleur du visage, des mains et des pieds (`#RRGGBB`) | `#FFFFFF` |

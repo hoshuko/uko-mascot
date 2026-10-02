@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.4.0 — 2 octobre 2026
+- **Starter : les 9 états** dans le moteur web (`thinking`, `error`, `empty`, `sleep`, `wake` en plus). Le fichier Rive
+  gratuit garde 4 états.
+- Le pack complet se concentre sur la bande : Aituko et Meowuko, les 14 autres coiffures, les mouvements, le regard sur
+  toute la page, et les fichiers Rive des 3 personnages avec les 9 états.
+
 ## 2.3.0 — 2 octobre 2026
 - **Deux éditions.** Le Starter reste gratuit : Uko, 3 coiffures (`original`, `classique`, `chauve`), 4 états
   (`idle`, `welcome`, `loading`, `success`), toutes les couleurs. Le pack complet ajoute Aituko et Meowuko, les 14 autres
