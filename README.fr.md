@@ -7,7 +7,7 @@ Essaie-le dans ton app, et garde-le en production si tu veux : c'est permis (voi
 
 | | Pour qui | Fichier |
 |---|---|---|
-| **Moteur web** | sites et apps web (HTML, React, Vue, Svelte…) | `uko-mascot-engine.min.js` (≈ 53 Ko gzip, zéro dépendance) ; `uko-mascot-engine.js` = le même, lisible |
+| **Moteur web** | sites et apps web (HTML, React, Vue, Svelte…) | `uko-mascot-engine.min.js` (≈ 55 Ko gzip, zéro dépendance) ; `uko-mascot-engine.js` = le même, lisible |
 | **Fichier Rive** | web, Flutter, iOS, Android, React Native… | `rive/uko.riv`, `rive/aituko.riv`, `rive/meowuko.riv` + machine à états « Uko » |
 
 ## Starter ou pack complet
@@ -128,9 +128,9 @@ affiche `original` et la console indique où la trouver.
 ### Accessibilité et performance
 
 - `prefers-reduced-motion` est respecté (poses fixes, pas d'effets).
-- L'animation se met en pause quand l'onglet est caché. `setMaxFps(30)` pour les pages très chargées.
+- L'animation se met en pause quand l'onglet est caché. La cadence s'adapte toute seule (`maxFps: 'auto'`, par défaut) : 60 images/s, puis 30 ou 20, avec des cheveux simplifiés, quand les mascottes de la page coûtent trop (téléphone modeste, beaucoup de mascottes) ; elle remonte dès que possible. Les cheveux longs ne calculent leur physique que quand la tête bouge. Un nombre fixe la cadence : `maxFps: 60`, ou `setMaxFps(30)`.
 - Hors de l'écran (page défilée, `display: none`), une mascotte ne se redessine que 4 fois par seconde ; ses états et mouvements continuent. Les coiffures détaillées s'allègent toutes seules en petit (moins de ~200 pixels d'écran de large), sans différence visible.
-- Poids : moteur web **≈ 53 Ko gzip** (`uko-mascot-engine.min.js`, 164 Ko brut ; la version lisible fait 310 Ko). Fichiers Rive : uko.riv 74 · aituko.riv 72 · meowuko.riv 73 Ko.
+- Poids : moteur web **≈ 55 Ko gzip** (`uko-mascot-engine.min.js`, 168 Ko brut ; la version lisible fait 321 Ko). Fichiers Rive : uko.riv 74 · aituko.riv 72 · meowuko.riv 73 Ko.
 
 ---
 

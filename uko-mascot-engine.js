@@ -1,11 +1,11 @@
 /**
- * Uko Mascot Engine v2.5.0 · vector runtime (SVG, 60 FPS)
+ * Uko Mascot Engine v2.5.1 · vector runtime (SVG, 60 FPS)
  * Canonical fixed-length skeleton with soft IK, blended state transitions,
  * modular hairstyles with secondary motion, attention tracking, walk cycle,
  * WCAG contrast helpers. Each instance is fully isolated.
  *
  * Generated file — edit mascot_engine/src/ and run build_mascot_engine.js.
- * Starter edition (free): Uko, 3 hairstyles (original, classique, chauve), all 9 states. Full pack: https://uko-mascot.pages.dev/#prix
+ * Starter edition (free): Uko, Aituko and Meowuko, 3 hairstyles (original, classique, chauve), all 9 states. Full pack: https://uko-mascot.pages.dev/#prix
  */
 (function (root) {
   'use strict';
@@ -19,7 +19,7 @@
   const CHARACTER_LIST = ['uko', 'aituko', 'meowuko'];
   const FULL_PACK_URL = "https://uko-mascot.pages.dev/#prix";
   const DUR = { idle: 4000, welcome: 3200, thinking: 1000, loading: 1000, success: 3600, error: 3800, empty: 3400, sleep: 2600, wake: 2200 };
-  const MASCOT_SVG_STYLES = ".bone{stroke:var(--bodyStrokeColor, #0B0B0B);stroke-width:15;stroke-linecap:round;}\n.hand{fill:var(--handFillColor, #FFFFFF);stroke:var(--bodyStrokeColor, #0B0B0B);stroke-width:15;}\n.foot{fill:var(--footFillColor, #FFFFFF);stroke:var(--bodyStrokeColor, #0B0B0B);stroke-width:15;}\n.headCircle{fill:var(--headFillColor, #FFFFFF);stroke:var(--bodyStrokeColor, #0B0B0B);stroke-width:15;}\n.hair{fill:none;stroke:var(--hairColor, #0B0B0B);stroke-width:15;stroke-linecap:round;stroke-linejoin:round;}\n.hairStroke{fill:none;stroke:var(--hairColor, #0B0B0B);stroke-linecap:round;stroke-linejoin:round;}\n.hairFill{fill:var(--hairColor, #0B0B0B);}\n.moustache{fill:none;stroke:var(--hairColor, #0B0B0B);stroke-linecap:round;stroke-linejoin:round;}\n.hairDetail{fill:none;stroke:var(--hairDetailColor, #FFFFFF);stroke-width:4.5;stroke-linecap:round;opacity:.58;}\n.hairFadeMid{fill:var(--hairColor, #0B0B0B);opacity:.68;}\n.hairFadeTip{fill:var(--hairColor, #0B0B0B);opacity:.42;}\n.faceStroke{fill:none;stroke:var(--detailColor, #0B0B0B);stroke-width:11;stroke-linecap:round;stroke-linejoin:round;}\n.eye{fill:var(--detailColor, #0B0B0B);}\n.accessory{fill:none;stroke:var(--bodyStrokeColor, #0B0B0B);stroke-width:12;stroke-linecap:round;stroke-linejoin:round;}\n.blue{stroke:var(--bodyStrokeColor, #0B0B0B);fill:none;}\n.red{stroke:var(--bodyStrokeColor, #0B0B0B);fill:none;}\n.fxLoading .loadingSpinner{fill:none;stroke:var(--bodyStrokeColor, #0B0B0B);stroke-width:12;stroke-linecap:round;}\n.fxWelcome .accessory,.fxEmpty .accessory{stroke:var(--bodyStrokeColor, #0B0B0B);}\n.fxSuccess .accessory{stroke:var(--bodyStrokeColor, #0B0B0B);}\n.fxError .accessory{stroke:var(--bodyStrokeColor, #0B0B0B);}\n.fxError circle{fill:var(--bodyStrokeColor, #0B0B0B);}\n.fxSleep .accessory{stroke:var(--bodyStrokeColor, #0B0B0B);}\n.fxSleep text{fill:var(--bodyStrokeColor, #0B0B0B);}\n.fxThoughtBubble .bubble{fill:var(--surfaceColor, #FFFFFF);stroke:var(--bodyStrokeColor, #0B0B0B);stroke-width:12;stroke-linejoin:round;}\n.fxThoughtBubble .bubbleTail{fill:var(--surfaceColor, #FFFFFF);stroke:var(--bodyStrokeColor, #0B0B0B);stroke-width:10;}\n.fxThoughtBubble .question{fill:none;stroke:var(--bodyStrokeColor, #0B0B0B);stroke-width:12;stroke-linecap:round;stroke-linejoin:round;}\n.fxThoughtBubble .questionDot{fill:var(--bodyStrokeColor, #0B0B0B);}\n.faceOpenMouth{fill:var(--headFillColor, #FFFFFF);stroke:var(--detailColor, #0B0B0B);stroke-width:11;stroke-linejoin:round;}\n.thinkingForeground .hand{fill:var(--handFillColor, #FFFFFF);stroke:var(--bodyStrokeColor, #0B0B0B);stroke-width:15;}\n.loadingLaptop .laptopSurface{fill:var(--stageBackground, #FFFFFF);stroke:var(--bodyStrokeColor, #0B0B0B);stroke-width:9;stroke-linecap:round;stroke-linejoin:round;}\n.loadingLaptop .laptopEdge{fill:var(--stageBackground, #FFFFFF);stroke:var(--bodyStrokeColor, #0B0B0B);stroke-width:8;stroke-linecap:round;stroke-linejoin:round;}\n.loadingLaptop .laptopDetail{fill:none;stroke:var(--bodyStrokeColor, #0B0B0B);stroke-width:5;stroke-linecap:round;opacity:.58;}\n.blush{fill:var(--blushColor, #F6A7B7);opacity:.55;}\n.eyeShine{fill:var(--headFillColor, #FFFFFF);}\n.fxSpark{fill:var(--bodyStrokeColor, #0B0B0B);}\n.boneHalo{stroke:var(--surfaceColor, #FFFFFF);stroke-width:29;stroke-linecap:round;}\n.robotScreen{fill:#1C2033;}\n.robotGlare{fill:none;stroke:#FFFFFF;stroke-width:10;stroke-linecap:round;opacity:.35;}\n.robotMark{fill:var(--characterAccent, #FFC93C);stroke:var(--bodyStrokeColor, #0B0B0B);stroke-width:12;}\n.led{fill:none;stroke:#6CF0E0;stroke-width:14;stroke-linecap:round;stroke-linejoin:round;}\n.ledFill{fill:#6CF0E0;stroke:#6CF0E0;stroke-width:6;stroke-linejoin:round;}\n.catInnerEar{fill:var(--blushColor, #F6A7B7);}\n.catNose{fill:#F48FA2;stroke:var(--detailColor, #0B0B0B);stroke-width:5;stroke-linejoin:round;}\n.catWhisker{fill:none;stroke:var(--detailColor, #0B0B0B);stroke-width:7;stroke-linecap:round;}\n.catTail{fill:none;stroke:var(--bodyStrokeColor, #0B0B0B);stroke-width:15;stroke-linecap:round;stroke-linejoin:round;}\n.touchInk{fill:none;stroke:var(--bodyStrokeColor, #0B0B0B);stroke-width:10;stroke-linecap:round;stroke-linejoin:round;}\n.touchBold{stroke-width:16;}\n.touchDot{fill:var(--bodyStrokeColor, #0B0B0B);}\n.touchStar{fill:#FFC93C;stroke:var(--bodyStrokeColor, #0B0B0B);stroke-width:7;stroke-linejoin:round;}\n.touchHeart{fill:#FF7AAE;stroke:var(--bodyStrokeColor, #0B0B0B);stroke-width:7;stroke-linejoin:round;}\n.touchPuff{fill:var(--surfaceColor, #FFFFFF);stroke:var(--bodyStrokeColor, #0B0B0B);stroke-width:7;}\n.touchConfetti{stroke:var(--bodyStrokeColor, #0B0B0B);stroke-width:4;}\n.touchC0{fill:#FFC93C;}.touchC1{fill:#FF7AAE;}.touchC2{fill:#3B5BFF;}.touchC3{fill:#3DDC97;}\n.touchNote{fill:#3B5BFF;stroke:var(--bodyStrokeColor, #0B0B0B);stroke-width:6;}\n.fxNote .noteHead{fill:var(--bodyStrokeColor, #0B0B0B);}\n.fxNote .noteStem,.fxNote .noteFlag{fill:none;stroke:var(--bodyStrokeColor, #0B0B0B);stroke-width:11;stroke-linecap:round;}";
+  const MASCOT_SVG_STYLES = ".bone{stroke:var(--bodyStrokeColor, #0B0B0B);stroke-width:15;stroke-linecap:round;}\n.hand{fill:var(--handFillColor, #FFFFFF);stroke:var(--bodyStrokeColor, #0B0B0B);stroke-width:15;}\n.foot{fill:var(--footFillColor, #FFFFFF);stroke:var(--bodyStrokeColor, #0B0B0B);stroke-width:15;}\n.headCircle{fill:var(--headFillColor, #FFFFFF);stroke:var(--bodyStrokeColor, #0B0B0B);stroke-width:15;}\n.hair{fill:none;stroke:var(--hairColor, #0B0B0B);stroke-width:15;stroke-linecap:round;stroke-linejoin:round;}\n.hairStroke{fill:none;stroke:var(--hairColor, #0B0B0B);stroke-linecap:round;stroke-linejoin:round;}\n.hairFill{fill:var(--hairColor, #0B0B0B);}\n.moustache{fill:none;stroke:var(--hairColor, #0B0B0B);stroke-linecap:round;stroke-linejoin:round;}\n.hairDetail{fill:none;stroke:var(--hairDetailColor, #FFFFFF);stroke-width:4.5;stroke-linecap:round;opacity:.58;}\n.hairFadeMid{fill:var(--hairColor, #0B0B0B);opacity:.68;}\n.hairFadeTip{fill:var(--hairColor, #0B0B0B);opacity:.42;}\n.faceStroke{fill:none;stroke:var(--detailColor, #0B0B0B);stroke-width:11;stroke-linecap:round;stroke-linejoin:round;}\n.eye{fill:var(--detailColor, #0B0B0B);}\n.accessory{fill:none;stroke:var(--bodyStrokeColor, #0B0B0B);stroke-width:12;stroke-linecap:round;stroke-linejoin:round;}\n.blue{stroke:var(--bodyStrokeColor, #0B0B0B);fill:none;}\n.red{stroke:var(--bodyStrokeColor, #0B0B0B);fill:none;}\n.fxLoading .loadingSpinner{fill:none;stroke:var(--bodyStrokeColor, #0B0B0B);stroke-width:12;stroke-linecap:round;}\n.fxWelcome .accessory,.fxEmpty .accessory{stroke:var(--bodyStrokeColor, #0B0B0B);}\n.fxSuccess .accessory{stroke:var(--bodyStrokeColor, #0B0B0B);}\n.fxError .accessory{stroke:var(--bodyStrokeColor, #0B0B0B);}\n.fxError circle{fill:var(--bodyStrokeColor, #0B0B0B);}\n.fxSleep .accessory{stroke:var(--bodyStrokeColor, #0B0B0B);}\n.fxSleep text{fill:var(--bodyStrokeColor, #0B0B0B);}\n.fxThoughtBubble .bubble{fill:var(--surfaceColor, #FFFFFF);stroke:var(--bodyStrokeColor, #0B0B0B);stroke-width:12;stroke-linejoin:round;}\n.fxThoughtBubble .bubbleTail{fill:var(--surfaceColor, #FFFFFF);stroke:var(--bodyStrokeColor, #0B0B0B);stroke-width:10;}\n.fxThoughtBubble .question{fill:none;stroke:var(--bodyStrokeColor, #0B0B0B);stroke-width:12;stroke-linecap:round;stroke-linejoin:round;}\n.fxThoughtBubble .questionDot{fill:var(--bodyStrokeColor, #0B0B0B);}\n.faceOpenMouth{fill:var(--headFillColor, #FFFFFF);stroke:var(--detailColor, #0B0B0B);stroke-width:11;stroke-linejoin:round;}\n.faceTalkMouth{fill:var(--detailColor, #0B0B0B);stroke:var(--detailColor, #0B0B0B);stroke-width:9;stroke-linejoin:round;}\n.faceTongue{fill:#FF8FB1;}\n.thinkingForeground .hand{fill:var(--handFillColor, #FFFFFF);stroke:var(--bodyStrokeColor, #0B0B0B);stroke-width:15;}\n.loadingLaptop .laptopSurface{fill:var(--stageBackground, #FFFFFF);stroke:var(--bodyStrokeColor, #0B0B0B);stroke-width:9;stroke-linecap:round;stroke-linejoin:round;}\n.loadingLaptop .laptopEdge{fill:var(--stageBackground, #FFFFFF);stroke:var(--bodyStrokeColor, #0B0B0B);stroke-width:8;stroke-linecap:round;stroke-linejoin:round;}\n.loadingLaptop .laptopDetail{fill:none;stroke:var(--bodyStrokeColor, #0B0B0B);stroke-width:5;stroke-linecap:round;opacity:.58;}\n.blush{fill:var(--blushColor, #F6A7B7);opacity:.55;}\n.eyeShine{fill:var(--headFillColor, #FFFFFF);}\n.fxSpark{fill:var(--bodyStrokeColor, #0B0B0B);}\n.boneHalo{stroke:var(--surfaceColor, #FFFFFF);stroke-width:29;stroke-linecap:round;}\n.robotScreen{fill:#1C2033;}\n.robotGlare{fill:none;stroke:#FFFFFF;stroke-width:10;stroke-linecap:round;opacity:.35;}\n.robotMark{fill:var(--characterAccent, #FFC93C);stroke:var(--bodyStrokeColor, #0B0B0B);stroke-width:12;}\n.led{fill:none;stroke:#6CF0E0;stroke-width:14;stroke-linecap:round;stroke-linejoin:round;}\n.ledFill{fill:#6CF0E0;stroke:#6CF0E0;stroke-width:6;stroke-linejoin:round;}\n.catInnerEar{fill:var(--blushColor, #F6A7B7);}\n.catNose{fill:#F48FA2;stroke:var(--detailColor, #0B0B0B);stroke-width:5;stroke-linejoin:round;}\n.catWhisker{fill:none;stroke:var(--detailColor, #0B0B0B);stroke-width:7;stroke-linecap:round;}\n.catTail{fill:none;stroke:var(--bodyStrokeColor, #0B0B0B);stroke-width:15;stroke-linecap:round;stroke-linejoin:round;}\n.touchInk{fill:none;stroke:var(--bodyStrokeColor, #0B0B0B);stroke-width:10;stroke-linecap:round;stroke-linejoin:round;}\n.touchBold{stroke-width:16;}\n.touchDot{fill:var(--bodyStrokeColor, #0B0B0B);}\n.touchStar{fill:#FFC93C;stroke:var(--bodyStrokeColor, #0B0B0B);stroke-width:7;stroke-linejoin:round;}\n.touchHeart{fill:#FF7AAE;stroke:var(--bodyStrokeColor, #0B0B0B);stroke-width:7;stroke-linejoin:round;}\n.touchPuff{fill:var(--surfaceColor, #FFFFFF);stroke:var(--bodyStrokeColor, #0B0B0B);stroke-width:7;}\n.touchConfetti{stroke:var(--bodyStrokeColor, #0B0B0B);stroke-width:4;}\n.touchC0{fill:#FFC93C;}.touchC1{fill:#FF7AAE;}.touchC2{fill:#3B5BFF;}.touchC3{fill:#3DDC97;}\n.touchNote{fill:#3B5BFF;stroke:var(--bodyStrokeColor, #0B0B0B);stroke-width:6;}\n.touchSweat{fill:#9ED8FF;stroke:var(--bodyStrokeColor, #0B0B0B);stroke-width:6;stroke-linejoin:round;}\n.touchAnger{fill:none;stroke:#E5484D;stroke-width:11;stroke-linecap:round;}\n.fxNote .noteHead{fill:var(--bodyStrokeColor, #0B0B0B);}\n.fxNote .noteStem,.fxNote .noteFlag{fill:none;stroke:var(--bodyStrokeColor, #0B0B0B);stroke-width:11;stroke-linecap:round;}";
 
   // Public hairstyle catalogue. Names are neutral: any style fits any character.
   // id → French label shown in UIs. Old ids stay accepted through HAIR_ALIASES.
@@ -398,7 +398,8 @@
 
       // Kawaii cheeks, under and outside the eyes (hidden by a beard).
       const cheeks=(typeof APPEARANCE==='undefined'||APPEARANCE.cheeks!==false)&&!wearsBeard()
-        ?`<ellipse class="blush" cx="${cx-86*s}" cy="${cy+30*s}" rx="${25*s}" ry="${14*s}"/><ellipse class="blush" cx="${cx+84*s}" cy="${cy+30*s}" rx="${25*s}" ry="${14*s}"/>`:'';
+        ?`<ellipse class="blush" cx="${cx-86*s}" cy="${cy+30*s}" rx="${25*s}" ry="${14*s}"/><ellipse class="blush" cx="${cx+84*s}" cy="${cy+30*s}" rx="${25*s}" ry="${14*s}"/>`
+        :'';
       brows=cheeks+brows;
       return {brows,eyes,mouth};
     }
@@ -411,8 +412,12 @@
     let BEARD_MOUTH=null;
     // Level of detail: below ~200 device pixels wide, the faint texture strokes of the hair (opacity
     // ≤ .3) are thinner than a pixel and invisible, but they are most of the DOM of the
-    // afro, dreadlocks and braids. The runtime sets this flag before each render.
+    // afro, dreadlocks and braids. The runtime sets this flag before each render (also on the load
+    // governor's last step, where sparing the device matters more than that texture).
     let HAIR_LOD=false;
+    // Coarse hair physics while the page's mascots draw below 60 fps to spare the device (load governor,
+    // core/runtime.js): half the substeps and constraint passes. The runtime sets it before each frame.
+    let HAIR_COARSE=false;
     const hairLod=svg=>svg.indexOf('hairDetail')<0?svg:svg.replace(/<path [^>]*class="hairDetail" style="[^"]*opacity:(0?\.[0-2]\d*|\.30*)"\/>/g,'');
     function quadMaxY(y0,qy,y1){const d=y0-2*qy+y1,t=d?clamp((y0-qy)/d):0;return Math.max(y0,y1,(1-t)*(1-t)*y0+2*(1-t)*t*qy+t*t*y1);}
     // The beard is one of Uko's hairstyles: the other characters never wear it.
@@ -453,7 +458,9 @@
 
     function face(mode,cx,cy,r,rot=0,blink=0,eyeOffset=[0,0]){
       const p=faceParts(mode,cx,cy,r,blink,eyeOffset);
-      return `<g transform="rotate(${rot} ${cx} ${cy})">${p.brows}${p.eyes}${beardMoustache(p.mouth,cx,cy,r/185)}${p.mouth}</g>`;
+      // Speaking (core/talk.js): the mouth talks, the rest of the expression stays.
+      const mouth=talking()?talkMouth(mode,cx,cy,r/185):p.mouth;
+      return `<g transform="rotate(${rot} ${cx} ${cy})">${p.brows}${p.eyes}${beardMoustache(p.mouth,cx,cy,r/185)}${mouth}</g>`;
     }
 
     function faceBlend(spec,cx,cy,r,rot=0,blink=0,eyeOffset=[0,0]){
@@ -627,7 +634,7 @@
     function updateHairPhysics(now,cx,cy,r,rot,yaw){
      const h=HAIR_DYNAMICS,model=hairModel(APPEARANCE.hairStyle),f={cx,cy,scale:r/185,rot,yaw};
      const reset=h.style!==model.style||!h.frame||Math.hypot(cx-h.frame.cx,cy-h.frame.cy)>100||Math.abs(yaw-(h.frame?.yaw||0))>.8||Math.abs(rot-(h.frame?.rot||0))>50;
-     if(reset){h.style=model.style;h.model=model;h.chains=model.locks.map(lock=>{const p=lock.points.map(p=>hairTransform(p,f));return {p,old:p.map(p=>p.slice())};});h.last=now;h.soft={offset:[0,0,0],velocity:[0,0,0],tipOffset:[0,0],tipVelocity:[0,0],base:hairTransform([0,-230,0],f),baseVelocity:[0,0,0]};h.sleepSettled=null;h.sleepSettleCount=0;}
+     if(reset){h.style=model.style;h.model=model;h.chains=model.locks.map(lock=>{const p=lock.points.map(p=>hairTransform(p,f));return {p,old:p.map(p=>p.slice())};});h.last=now;h.soft={offset:[0,0,0],velocity:[0,0,0],tipOffset:[0,0],tipVelocity:[0,0],base:hairTransform([0,-230,0],f),baseVelocity:[0,0,0]};h.sleepSettled=null;h.sleepSettleCount=0;h.rest=null;h.calmSince=null;}
      const dt=Math.min(.05,Math.max(0,(now-h.last)/1000));h.last=now;h.frame=f;
      if(freeze.checked||CLOCK.reduced){h.soft.offset=[0,0,0];h.soft.velocity=[0,0,0];h.soft.tipOffset=[0,0];h.soft.tipVelocity=[0,0];h.soft.base=hairTransform([0,-230,0],f);h.soft.baseVelocity=[0,0,0];for(let k=0;k<model.locks.length;k++){const pts=model.locks[k].points.map(p=>hairTransform(p,f));h.chains[k]={p:pts,old:pts.map(p=>p.slice())};}return;}
      if(!dt)return;
@@ -676,8 +683,20 @@
       soft.tipEq=[clamp(residual[0]/k,-12*f.scale,12*f.scale),clamp(residual[1]/k,-12*f.scale,12*f.scale)];
      }
      soft.base=base;soft.baseVelocity=vel;
-     const calm=1-(h.activity||0);
-     const steps=Math.max(1,Math.ceil(dt/(1/120))),step=dt/steps,damping=Math.exp(-(4.8+34*calm)*step);
+     // At rest the chains are carried rigidly by the head anyway (the activity gate damps them hard):
+     // once the head has been calm for 0.6 s, their settled shape is kept in the head's frame and the
+     // simulation sleeps, which is most of the hair's cost per frame. A jump, a walk or a turn wakes it
+     // at once, from the carried positions (their velocity is the head's).
+     const act=h.activity||0;
+     if(act<.02){if(h.calmSince==null)h.calmSince=now;}else h.calmSince=null;
+     if(h.rest&&act>.05)h.rest=null;
+     if(!h.rest&&h.calmSince!=null&&now-h.calmSince>600)h.rest=h.chains.map((c,k)=>model.locks[k].isStatic?null:c.p.map(p=>hairLocal(p,f)));
+     if(h.rest){
+      for(let k=0;k<h.chains.length;k++){const loc=h.rest[k];if(!loc)continue;const c=h.chains[k];c.old=c.p;c.p=loc.map(q=>hairTransform(q,f));}
+      return;
+     }
+     const calm=1-act;
+     const steps=Math.max(1,Math.ceil(dt*(HAIR_COARSE?60:120))),step=dt/steps,damping=Math.exp(-(4.8+34*calm)*step),passes=HAIR_COARSE?4:8;
      const targets=model.locks.map(lock=>{
       if(lock.isStatic)return null;
       const p=lock.points.map(p=>hairTransform(p,f));
@@ -696,7 +715,7 @@
        chain.old[i]=p.slice();chain.p[i]=next;
       }
       chain.step=step;
-      for(let pass=0;pass<8;pass++){
+      for(let pass=0;pass<passes;pass++){
        for(let i=1;i<n;i++){
         const a=chain.p[i-1],b=chain.p[i],dist=hLen(a,b)||1,rest=lengths[i-1],diff=(dist-rest)/dist;
         const wa=i-1<lock.anchor?0:.5,wb=i<lock.anchor?0:wa===0?1:.5;
@@ -1478,12 +1497,13 @@
       const mouthStartY=cy+lp(55,76,mouthU)*s;
       const mouthCtrlY =cy+lp(84,98,mouthU)*s;
       const mouthEndY  =cy+lp(55,84,mouthU)*s;
-      const mouth=`<path class="faceStroke" d="M ${mouthStartX} ${mouthStartY} Q ${mouthCtrlX} ${mouthCtrlY} ${mouthEndX} ${mouthEndY}"/>`;
+      const restMouth=`<path class="faceStroke" d="M ${mouthStartX} ${mouthStartY} Q ${mouthCtrlX} ${mouthCtrlY} ${mouthEndX} ${mouthEndY}"/>`;
+      const mouth=talking()?talkMouthAt((mouthStartX+mouthEndX)/2,(mouthStartY+mouthEndY)/2-3*s,Math.abs(mouthEndX-mouthStartX)/2*.68,s,TALK_MOOD.idle):restMouth;
 
       const cheeksOn=(typeof APPEARANCE==='undefined'||APPEARANCE.cheeks!==false)&&!wearsBeard();
       const nearCheek=cheeksOn?`<ellipse class="blush" cx="${nearX+eyeDir*lp(-38,-10,nearU)*s}" cy="${cy+30*s}" rx="${lp(25,19,nearU)*s}" ry="${14*s}"/>`:'';
       const farCheek=cheeksOn&&farVis>.2?`<ellipse class="blush" cx="${farX+eyeDir*36*s*farVis}" cy="${cy+30*s}" rx="${25*s*farVis}" ry="${14*s}" opacity="${farVis}"/>`:'';
-      return `<g transform="rotate(${rot} ${cx} ${cy})">${farCheek}${nearCheek}${farBrow}${nearBrow}${farEye}${nearEye}${beardMoustache(mouth,cx,cy,s)}${mouth}</g>`;
+      return `<g transform="rotate(${rot} ${cx} ${cy})">${farCheek}${nearCheek}${farBrow}${nearBrow}${farEye}${nearEye}${beardMoustache(restMouth,cx,cy,s)}${mouth}</g>`;
     }
     function profileFaceMarkup(mode,cx,cy,r,rot=0,blink=0,dir=1){
       const s=r/185;
@@ -1638,7 +1658,10 @@
       // Orientation Lab gets a real depth-aware body renderer.  Face view and every
       // production state keep the previous renderer byte-for-byte in behaviour.
       const hasFootTilt=p.walkFootAngle&&(Math.abs(p.walkFootAngle.L||0)>.1||Math.abs(p.walkFootAngle.R||0)>.1);
-      if(current==='idle'&&(Math.abs(yaw)>.015||hasFootTilt)&&!showLoadingLaptop&&!thinkingFront){
+      // The soul's gestures to the face (rubbing the eyes, the nose…) keep their hands in front:
+      // the front renderer draws them over the head, the turned one would hide them behind it.
+      const soulFront=typeof SOUL!=='undefined'&&SOUL.front||{};
+      if(current==='idle'&&(Math.abs(yaw)>.015||hasFootTilt)&&!showLoadingLaptop&&!thinkingFront&&!soulFront.L&&!soulFront.R){
         return renderOrientationIdleRig(p,faceMode,rot,blink,eyeOffset,yaw,headYaw);
       }
 
@@ -1652,7 +1675,7 @@
       const reachPx=hairReach()*p.head_radius/185;
       const raisedInHair=h=>current!=='sleep'&&current!=='wake'&&h[1]<p.neck[1]-40&&(characterDef()?characterCovers(p,h,rot,40):Math.hypot(h[0]-cx,h[1]-cy)<reachPx+40);
       // A scripted move (climb) draws both forearms in front: hands gripping above the head.
-      const front={L:MOVE_FRONT_ARMS||touchesHead(hcL)||raisedInHair(hcL),R:MOVE_FRONT_ARMS||thinkingFront||touchesHead(hcR)||raisedInHair(hcR)};
+      const front={L:MOVE_FRONT_ARMS||!!soulFront.L||touchesHead(hcL)||raisedInHair(hcL),R:MOVE_FRONT_ARMS||thinkingFront||!!soulFront.R||touchesHead(hcR)||raisedInHair(hcR)};
       p.drawnFront={L:front.L,R:front.R};
       const hand=(c,a)=>`<ellipse class="hand" cx="${c[0]}" cy="${c[1]}" rx="46" ry="26" transform="rotate(${a} ${c[0]} ${c[1]})"/>`;
 
@@ -2853,8 +2876,14 @@
     // LED face, one expression at a time (a screen switches, it never cross-fades).
     function robotFaceParts(mode, blink, gaze) {
       const [ox, oy] = [clamp(gaze[0] * .5, -16, 16), clamp(gaze[1] * .5, -12, 12)];
-      const data = robotFaceData(mode);
+      let data = robotFaceData(mode);
+      if (talking()) {   // speaking: the mouth (everything drawn below the eyes) becomes a talking bar
+        const dim = data.dim;
+        data = data.filter(e => e.t === 'eye' || (e.t === 'ledEllipse' ? e.cy < 15 : +((e.d || '').match(/^M\s*-?[\d.]+\s+(-?[\d.]+)/) || [0, 99])[1] < 15));
+        data.push(robotTalkMouth()); data.dim = dim;
+      }
       const svg = data.map(e => {
+        if (e.t === 'talk') return `<rect class="ledFill" x="${e.x}" y="${e.y}" width="${e.w}" height="${e.h}" rx="${Math.min(16, e.h / 2)}"/>`;
         if (e.t === 'eye') {
           const hh = Math.max(ROBOT_EYE_MIN, e.h * (1 - blink));
           return `<rect class="ledFill" x="${e.x + ox - e.w / 2}" y="${e.y + oy - hh / 2}" width="${e.w}" height="${hh}" rx="${Math.min(14, hh / 2)}"/>`;
@@ -3681,6 +3710,21 @@
       }
       if (Math.abs(want - ORIENTATION.target) > .15 && now - GAZE_BODY.lastAt > 450) gazeTurnTo(want, 560);
     }
+    // In a posture (sitting, leaning…) the body keeps its place: the head alone turns towards
+    // what it watches, a ¾ turn at most, with a damped (never snapped) motion. Returns the yaw.
+    const GAZE_HEAD = { yaw: 0, v: 0, at: 0 };
+    function gazeHeadTurn(now, point, pose, object) {
+      const dt = Math.min(50, Math.max(0, now - (GAZE_HEAD.at || now))) / 1000; GAZE_HEAD.at = now;
+      let want = 0;
+      if (point && pose) {
+        const dx = point[0] - pose.head_center[0];
+        want = -Math.sign(dx) * .42 * smooth5(clamp((Math.abs(dx) - (object ? 60 : 200)) / 460));
+      }
+      const w = 8, acc = w * w * (want - GAZE_HEAD.yaw) - 2 * w * GAZE_HEAD.v;
+      GAZE_HEAD.v += acc * dt; GAZE_HEAD.yaw += GAZE_HEAD.v * dt;
+      if (Math.abs(GAZE_HEAD.yaw) < 1e-4 && !want) GAZE_HEAD.yaw = GAZE_HEAD.v = 0;
+      return GAZE_HEAD.yaw;
+    }
     // A lookAt() target within reach: the nearer hand reaches out towards it.
     function gazeReach(p, point, dt) {
       let want = 0, side = 'R', tip = null;
@@ -3968,6 +4012,24 @@
       }
     }
 
+    const SOUL = { on: false, acts: [], touch: {}, mood: {} };
+    function soulFrame() { return null; }
+    function soulFace(f) { return f; }
+    function soulAttention() {}
+    function soulPress() { return null; }
+    function soulDrag() {}
+    function soulRelease() {}
+    function soulNudge() {}
+    const TALK = { open: 0, nod: 0, manual: false };
+    const TALK_MOOD = { idle: 0 };
+    const talking = () => false;
+    function talkFrame() {}
+    function talkStart() { return null; }
+    function talkStop() {}
+    function talkSet() {}
+    function talkMouth() { return ''; }
+    function talkMouthAt() { return ''; }
+    function robotTalkMouth() { return null; }
     // Theme & contrast math (OKLab/OKLCH, WCAG ratios).
       const THEME_DEFAULTS={"bodyStrokeColor":"#0B0B0B","detailColor":"#0B0B0B","headFillColor":"#FFFFFF","handFillColor":"#FFFFFF","footFillColor":"#FFFFFF","hairColor":"#0B0B0B","accessoryColor":"#0B0B0B","artifactNeutralColor":"#0B0B0B","accentColor":"#0B0B0B","loadingColor":"#0B0B0B","successColor":"#0B0B0B","errorColor":"#0B0B0B","sleepColor":"#0B0B0B"};
     const THEME_PRESET_SEEDS={"original":{"label":"Original","brand":"#0B0B0B"},"ocean":{"label":"Ocean","brand":"#0284C7"},"mint":{"label":"Mint","brand":"#059669"},"sunset":{"label":"Sunset","brand":"#EA580C"},"lavender":{"label":"Lavender","brand":"#7C3AED"},"graphite":{"label":"Graphite","brand":"#475569"}};
@@ -4204,8 +4266,9 @@
       follow: 'hover',
       // Kawaii pink cheeks (false to hide them).
       cheeks: true,
-      // Cap the drawing rate (e.g. 30 for galleries with many mascots). Time stays exact.
-      maxFps: 60,
+      // Drawing rate. 'auto': 60 fps, lowered to 30 or 20 while the page's mascots cost too much
+      // (a modest phone, heavy hairstyles, many mascots). A number fixes the cap. Time stays exact.
+      maxFps: 'auto',
       onStateChange: null,
       onComplete: null,
       onTap: null
@@ -4227,8 +4290,28 @@
     let interactive = options.interactive;
     let oneShotMode = options.oneShotMode === 'loop' ? 'loop' : 'return';
     // Capped frame rate: each instance starts at a random phase, so that several mascots on
-    // a page (30 fps each) don't all redraw on the same display frame.
-    let minFrameMs = 1000 / Math.max(1, Math.min(120, Number(options.maxFps) || 60)), sinceDraw = Math.random() * minFrameMs;
+    // a page don't all redraw on the same display frame.
+    const fpsCap = v => 1000 / Math.max(1, Math.min(120, Number(v) || 60));
+    let autoFps = !(Number(options.maxFps) > 0), minFrameMs = fpsCap(options.maxFps), sinceDraw = Math.random() * minFrameMs;
+    // Load governor (maxFps 'auto'): each second, the time all the mascots of the page spent drawing is
+    // weighed (they share one counter). Above the limit they step down to 30 fps, then 20 (with coarser
+    // hair physics); they step back up after 3 seconds that would stay under two thirds of it at the
+    // faster rate. The limit is 18 % of the second on touch devices (battery, weaker CPUs) and 35 % with
+    // a mouse: a desktop keeps 60 fps, a heavy hairstyle on a modest phone keeps the page fluid.
+    const LOAD_STEPS = [60, 30, 20];
+    const LOAD = (typeof window !== 'undefined' && (window.__ukoLoad = window.__ukoLoad || { spent: 0, since: 0, fps: 60, calm: 0 })) || { spent: 0, since: 0, fps: 60, calm: 0 };
+    if (!LOAD.limit) LOAD.limit = typeof matchMedia === 'function' && matchMedia('(pointer: coarse)').matches ? .18 : .35;
+    function governLoad(wall) {
+      if (!LOAD.since || wall < LOAD.since) { LOAD.since = wall; LOAD.spent = 0; return; }
+      const span = wall - LOAD.since;
+      if (span < 1000) return;
+      const share = LOAD.spent / span, i = Math.max(0, LOAD_STEPS.indexOf(LOAD.fps));
+      LOAD.spent = 0; LOAD.since = wall;
+      if (share > LOAD.limit && i < LOAD_STEPS.length - 1) { LOAD.fps = LOAD_STEPS[i + 1]; LOAD.calm = 0; }
+      else if (i > 0 && share * LOAD_STEPS[i - 1] / LOAD_STEPS[i] < LOAD.limit * 2 / 3) { if (++LOAD.calm >= 3) { LOAD.fps = LOAD_STEPS[i - 1]; LOAD.calm = 0; } }
+      else LOAD.calm = 0;
+    }
+    const frameMs = () => (autoFps ? Math.max(minFrameMs, 1000 / LOAD.fps) : minFrameMs);
     let destroyed = false, rafId = null, flowTimer = null;
 
     let cur = ORDER.includes(options.state) ? options.state : 'idle';
@@ -4305,6 +4388,9 @@
     // The Starter keeps the mascot where it is and says where to get them.
     const paidOnly = (name) => { if (EDITION !== 'starter') return false; fullPackNotice(name); return true; };
     if (followMode === 'page' && paidOnly('follow="page"')) followMode = 'hover';
+    // Soul (core/soul.js, full pack): mood, touch scenes, attention, free time. soul: false
+    // keeps the simple touch reactions.
+    SOUL.on = EDITION !== 'starter' && options.soul !== false;
     const GAZE = { target: null, releaseAt: 0 };
     // null while the mascot is not laid out (hidden tab, closed dialog, display:none).
     const toSvg = (x, y) => { const r = svgEl.getBoundingClientRect(); return r.width > 0 && r.height > 0 ? [(x - r.left) * 1024 / r.width, (y - r.top) * 1536 / r.height] : null; };
@@ -4326,11 +4412,14 @@
     function onTapDown(e) {
       if (!interactive || CLOCK.reduced || destroyed || (e.button !== undefined && e.button > 0)) return;
       const pt = toSvg(e.clientX, e.clientY); if (!pt || !shown) return;
-      const r = touchTap(pt, shown, cur, motionNow());
+      const r = SOUL.on ? soulPress(pt, shown, cur, motionNow(), { posture: PZ.name || 'stand' }) : touchTap(pt, shown, cur, motionNow());
       if (!r) return;
       if (r.wake) go('wake', 'tap');
       if (options.onTap) options.onTap(r);
     }
+    // A press held or dragged on the mascot (the soul's handshake, strokes).
+    function onPressMove(e) { if (SOUL.touch && SOUL.touch.press) { const pt = toSvg(e.clientX, e.clientY); if (pt) { soulDrag(pt, motionNow()); MICRO.eyeTracking.pointer = pt; } } }
+    function onPressEnd() { if (SOUL.touch && SOUL.touch.press) soulRelease(motionNow()); }
     function onPointerLeave() { MICRO.eyeTracking.hovering = false; if (followMode !== 'page') MICRO.eyeTracking.pointerInside = false; }
     // Page follow: the mouse anywhere on the page; on touch screens the finger, then a
     // short moment after it lifts. After a few seconds without movement the mascot
@@ -4365,6 +4454,9 @@
     el.addEventListener('pointerdown', onTapDown, { passive: true });
     window.addEventListener('pointermove', onPagePointer, { passive: true });
     window.addEventListener('pointerdown', onPagePointer, { passive: true });
+    window.addEventListener('pointermove', onPressMove, { passive: true });
+    window.addEventListener('pointerup', onPressEnd, { passive: true });
+    window.addEventListener('pointercancel', onPressEnd, { passive: true });
     document.addEventListener('pointerleave', onPageLeave, { passive: true });
     document.addEventListener('visibilitychange', onVisibility);
 
@@ -4378,7 +4470,7 @@
       const seen = fullPackNotice.seen || (fullPackNotice.seen = new Set());
       if (seen.has(state)) return;
       seen.add(state);
-      console.info(`[UkoMascot] "${state}" fait partie du pack complet (17 coiffures, mouvements, regard sur toute la page) : ${FULL_PACK_URL}`);
+      console.info(`[UkoMascot] "${state}" fait partie du pack complet (l'âme, la parole, 17 coiffures, mouvements, regard sur toute la page) : ${FULL_PACK_URL}`);
     }
 
     // Core state change. Always blends from what is on screen.
@@ -4643,6 +4735,10 @@
 
       const walkActive = WALK.active;
       let rotOffset = 0;
+      const eyesT = MICRO.eyeTracking;
+      const soulCtx = SOUL.on && !CLOCK.reduced && !mv ? { state: cur, posture: posed ? PZ.name : 'stand', walking: walkActive, pose: shown,
+        pointer: eyesT.pointerInside ? eyesT.pointer : null, pointerNear: eyesT.pointerInside && (eyesT.hovering || followMode === 'page') } : null;
+      const soulArms = !!soulCtx && SOUL.acts.some(a => a.def.arms && !a.ending);
       if (cur === 'idle' && !walkActive && !CLOCK.reduced && !mv && !posed) {
         rotOffset += applyIdleLife(p, loop);
         rotOffset += applyMicroInteractions(p, now);
@@ -4653,18 +4749,26 @@
       let life = { rot: 0, eye: [0, 0] };
       if (now - LIFE.gainAt > 500 || now < LIFE.gainAt) { const w = el.clientWidth || 240; LIFE.gain = lifeGainFor(w); LIFE.lod = w * ((typeof window !== "undefined" && window.devicePixelRatio) || 1) < 200; LIFE.gainAt = now; }
       if (!walkActive && !CLOCK.reduced && !mv && !posed) {
-        const busy = cur === 'idle' && (MICRO.tap.active || MICRO.idleVariation.active || MICRO.eyeTracking.hovering || !!GAZE.target);
+        const busy = (cur === 'idle' && (MICRO.tap.active || MICRO.idleVariation.active || MICRO.eyeTracking.hovering || !!GAZE.target)) || soulArms || (soulCtx && SOUL.acts.length > 0);
         life = applyLife(p, cur, now, cur === 'idle' || curEntered, busy);
         rotOffset += life.rot;
       }
+      // The soul's scenes go on top of the life (before the skeleton solve).
+      const soul = soulCtx && !walkActive ? soulFrame(now, p, soulCtx) : null;
+      if (soul) rotOffset += soul.rot;
+      // Speaking (core/talk.js): the mouth follows the voice, the head nods on the syllables.
+      talkFrame(now);
+      if (talking()) rotOffset += 3.2 * (TALK.open - TALK.nod);
 
       let faceMode = CLOCK.reduced ? (cur === 'wake' ? 'idle' : DATA.faceModes[cur]) : faceSpecFor(cur, t, curEntered, now);
       faceMode = applyMicroFace(faceMode, now);
       if (mv) faceMode = mv.face;
       if (posed && pz.face) faceMode = pz.face;
+      if (soulCtx) faceMode = soulFace(faceMode, now, soulCtx);
 
       if (!CLOCK.reduced) updateGaze();
       const attention = CLOCK.reduced || mv ? { eye: [0, 0], head: [0, 0, 0] } : updateAttentionTracking(now, faceMode, p);
+      if (soulCtx) soulAttention(attention, now, soulCtx);
       const attentionRot = applyAttentionPose(p, attention);
       // Gaze with the body (core/touch.js): turn towards what it looks at, reach for it.
       const gazeDt = Math.min(50, Math.max(0, now - lastGazeFrame)); lastGazeFrame = now;
@@ -4674,20 +4778,25 @@
       if (bodyFree) gazeBodyTurn(now, gazePoint, shown, !!GAZE.target);
       if (bodyFree || GAZE_BODY.reach > .01) gazeReach(p, bodyFree && GAZE.target ? gazePoint : null, gazeDt);
       attention.eye = [attention.eye[0] + life.eye[0], attention.eye[1] + life.eye[1]];
+      if (soul) attention.eye = [attention.eye[0] + soul.eye[0], attention.eye[1] + soul.eye[1]];
       if (posed && pz.eye) attention.eye = [attention.eye[0] + pz.eye[0], attention.eye[1] + pz.eye[1]];
 
       let q = solveSkeleton(p);
-      if (!CLOCK.reduced && !mv && !posed) applyGestures(q, cur, t);
-      if (!CLOCK.reduced && !walkActive && !mv && !posed) applyLifeGestures(q, cur, now);
+      const soulOwnsArms = !!(soul && soul.busyArms);
+      if (!CLOCK.reduced && !mv && !posed && !soulOwnsArms) applyGestures(q, cur, t);
+      if (!CLOCK.reduced && !walkActive && !mv && !posed && !soulOwnsArms) applyLifeGestures(q, cur, now);
       if (pz) { q.footScale = pz.pose.footScale; q.walkFootAngle = pz.pose.walkFootAngle; q.transplanted = pz.pose.transplanted; }
-      if (!mv && !posed) clearHairForHands(q);
+      if (!mv && !posed && !soulOwnsArms) clearHairForHands(q);
       let rot = (CLOCK.reduced ? (DATA.headRot[cur === 'wake' ? 'idle' : cur] || 0) : headRotationFor(cur, t, curEntered)) + rotOffset + attentionRot;
       if (mv) rot = mv.rot;
       if (posed && pz.rot !== null && pz.rot !== undefined) rot = pzSpringV('headRot', pz.rot, 2.6, .8) + (PZ_REACTIONS.includes(cur) ? headRotationFor(cur, t, curEntered) : 0) + attentionRot;
 
       const orient = orientationMotionFrame(now);
       const yaw = mv ? 0 : posed ? (pz.yaw || 0) : cur === 'idle' || walkActive ? orient.bodyYaw : 0;
-      const headYaw = posed ? yaw : orient.headYaw;
+      // A soul gesture (hands to the face, a wave…) is made facing front: the head comes back from the gaze for it.
+      const soulGesture = !!soulCtx && SOUL.acts.some(a => !a.ending && a.def.arms);
+      const headYaw = posed ? yaw + gazeHeadTurn(now, soulGesture ? null : gazePoint, p, !!GAZE.target) : orient.headYaw;
+      if (!posed) GAZE_HEAD.yaw = GAZE_HEAD.v = 0;
       if (Math.abs(yaw) > 0.001) q = applyOrientationPose(q, yaw);
       if (Math.abs(orient.velocity) > 0.00001 && cur === 'idle' && !posed) q = applyTurnDynamics(q, yaw, orient.velocity);
       // Feet stay planted while turning, including the turn that starts a walk;
@@ -4722,10 +4831,11 @@
       shownRot = rot;
 
       const [hx, hy] = q.head_center;
+      HAIR_COARSE = autoFps && LOAD.fps < 60;
       updateHairPhysics(now, hx, hy, q.head_radius, rot, headYaw);
       const blink = CLOCK.reduced ? 0 : blinkAmount(now, faceMode);
       const laptop = cur === 'loading' && !posed;
-      HAIR_LOD = !!LIFE.lod;
+      HAIR_LOD = !!LIFE.lod || (autoFps && LOAD.fps <= 20);     // last step of the governor: no faint hair texture
       rigEl.innerHTML = renderRig(q, faceMode, rot, blink, laptop, attention.eye, yaw, headYaw);
       fxEl.innerHTML = (posed && cur === 'welcome' ? '' : fxMarkup(cur, q, t, loop, laptop ? true : curEntered)) + laptopExitMarkup(now) + microFxMarkup(now) + postureFxMarkup(now);
       // Debug builds expose the composed frame (used to bake the Rive file).
@@ -4742,7 +4852,13 @@
       // Time runs under reduced motion too (one-shots still complete); only the visuals are static.
       if (!document.hidden && !CLOCK.paused) CLOCK.time += delta;
       sinceDraw += delta;
-      if (sinceDraw + 1 >= (onScreen ? minFrameMs : OFFSCREEN_FRAME_MS) && !CLOCK.paused) { sinceDraw = 0; frame(motionNow()); }
+      if (sinceDraw + 1 >= (onScreen ? frameMs() : OFFSCREEN_FRAME_MS) && !CLOCK.paused) {
+        sinceDraw = 0;
+        const t0 = performance.now();
+        frame(motionNow());
+        LOAD.spent += performance.now() - t0;
+      }
+      governLoad(wall);
       rafId = requestAnimationFrame(loopTick);
     }
 
@@ -4889,6 +5005,18 @@
       // (or 'hand_L'…). Optional reaction id (e.g. 'highFive', 'dizzy', 'laugh', 'joy').
       poke(zone = 'body', reaction) {
         if (!shown || CLOCK.reduced) return null;
+        if (SOUL.on) {
+          // Soul zones: 'top' (a pat), 'face', 'cheek', 'belly', 'hand', 'foot' (and the classic ones).
+          const map = { head: 'top', body: 'belly', hand_L: 'hand', hand_R: 'hand', foot_L: 'foot', foot_R: 'foot' };
+          const sz = map[zone] || (['top', 'face', 'cheek', 'belly', 'hand', 'foot', 'arm', 'leg'].includes(zone) ? zone : 'belly');
+          const hc = shown.head_center, hr = shown.head_radius;
+          const pt = sz === 'top' ? [hc[0], hc[1] - hr * .8] : sz === 'face' ? [hc[0] + 10, hc[1] + hr * .2] : sz === 'cheek' ? [hc[0] + hr * .7, hc[1] + hr * .3]
+            : sz === 'hand' || sz === 'arm' ? shown[zone === 'hand_L' ? 'hand_L_center' : 'hand_R_center'] : sz === 'foot' || sz === 'leg' ? shown[zone === 'foot_L' ? 'foot_L_center' : 'foot_R_center'] : zonePoint('body', shown);
+          const r = soulPress(pt.slice(), shown, cur, motionNow(), { posture: PZ.name || 'stand' }, sz, reaction);
+          if (SOUL.touch.press && !SOUL.touch.press.held) SOUL.touch.press = null;
+          if (r && r.wake) go('wake', 'poke');
+          return r ? r.reaction : null;
+        }
         const z = ['head', 'hand_L', 'hand_R', 'foot_L', 'foot_R', 'body'].includes(zone) ? zone : zone === 'hand' ? 'hand_R' : zone === 'foot' ? 'foot_R' : 'body';
         const r = touchTap(zonePoint(z, shown), shown, cur, motionNow(), z, reaction);
         if (r && r.wake) go('wake', 'poke');
@@ -4910,7 +5038,7 @@
         if (!target) { MICRO.eyeTracking.pointerInside = false; MICRO.eyeTracking.reach = followMode === 'page' ? 'eyes' : 'full'; }
       },
       setOneShotMode(mode) { oneShotMode = mode === 'loop' ? 'loop' : 'return'; },
-      setMaxFps(fps) { minFrameMs = 1000 / Math.max(1, Math.min(120, Number(fps) || 60)); },
+      setMaxFps(fps) { autoFps = !(Number(fps) > 0); minFrameMs = fpsCap(fps); },
       pause() { CLOCK.paused = true; },
       resume() { CLOCK.paused = false; CLOCK.lastWall = null; },
 
@@ -4919,6 +5047,17 @@
       getHairColor() { return hairColorVal; },
       getHairStyle() { return APPEARANCE.hairStyle; },
       getCharacter() { return CHARACTER.id; },
+      // Soul (full pack): its mood (0..1 each), and a nudge from the app (e.g. { joy: .2 }).
+      getMood() { return Object.assign({}, SOUL.mood || {}); },
+      setMood(d) { if (SOUL.on && d && typeof d === 'object') soulNudge(Object.fromEntries(Object.entries(d).map(([k, v]) => [k, (Number(v) || 0) - (SOUL.mood[k] || 0)]))); },
+      setSoul(on) { if (paidOnly('setSoul')) return; SOUL.on = on !== false; if (!SOUL.on) SOUL.acts.length = 0; },
+      // Speech (full pack): the mouth follows a voice — an <audio>/<video> element, a URL or a MediaStream
+      // (any text-to-speech). Returns { audio, stop() }. setMouth(open 0..1, wide -1..1) drives it by hand
+      // (visemes, a frame-by-frame render); setMouth(null) gives it back.
+      speak(source) { if (paidOnly('speak')) return null; return talkStart(source); },
+      stopSpeaking() { talkStop(); TALK.manual = false; },
+      setMouth(open, wide = 0) { if (paidOnly('setMouth')) return; talkSet(open, wide); },
+      isSpeaking() { return talking(); },
       getSvgElement() { return svgEl; },
       // Debug/QA: the pose that was last drawn (joint positions in the 1024×1536 viewBox).
       getPose() { return shown ? cpy(shown) : null; },
@@ -4949,6 +5088,7 @@
       step(ms) { CLOCK.time += Math.max(0, ms); frame(motionNow()); },
       destroy() {
         destroyed = true;
+        talkStop();
         if (rafId) cancelAnimationFrame(rafId);
         if (flowTimer) clearTimeout(flowTimer);
         el.removeEventListener('pointermove', onPointerMove);
@@ -4957,6 +5097,9 @@
         document.removeEventListener('visibilitychange', onVisibility);
         window.removeEventListener('pointermove', onPagePointer);
         window.removeEventListener('pointerdown', onPagePointer);
+        window.removeEventListener('pointermove', onPressMove);
+        window.removeEventListener('pointerup', onPressEnd);
+        window.removeEventListener('pointercancel', onPressEnd);
         document.removeEventListener('pointerleave', onPageLeave);
         themeObserver.disconnect();
         if (viewObserver) viewObserver.disconnect();
@@ -5019,7 +5162,7 @@
 
 
   root.UkoMascot = {
-    version: "2.5.0",
+    version: "2.5.1",
     edition: EDITION,
     create: createUkoMascot,
     ORDER,

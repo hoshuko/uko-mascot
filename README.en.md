@@ -8,7 +8,7 @@ Try it in your app, and keep it in production if you like: that is allowed
 
 | | For | File |
 |---|---|---|
-| **Web engine** | websites and web apps (HTML, React, Vue, Svelte…) | `uko-mascot-engine.min.js` (≈ 53 KB gzip, zero dependencies); `uko-mascot-engine.js` = the same, readable |
+| **Web engine** | websites and web apps (HTML, React, Vue, Svelte…) | `uko-mascot-engine.min.js` (≈ 55 KB gzip, zero dependencies); `uko-mascot-engine.js` = the same, readable |
 | **Rive file** | web, Flutter, iOS, Android, React Native… | `rive/uko.riv`, `rive/aituko.riv`, `rive/meowuko.riv` + "Uko" state machine |
 
 ## Starter or full pack
@@ -132,9 +132,9 @@ shows `original` and the console says where to get it.
 ### Accessibility and performance
 
 - `prefers-reduced-motion` is respected (still poses, no effects).
-- The animation pauses when the tab is hidden. `setMaxFps(30)` for very busy pages.
+- The animation pauses when the tab is hidden. The frame rate adapts on its own (`maxFps: 'auto'`, the default): 60 fps, then 30 or 20, with simplified hair, when the page's mascots cost too much (a modest phone, many mascots); it goes back up as soon as it can. Long hair only computes its physics while the head moves. A number fixes the rate: `maxFps: 60`, or `setMaxFps(30)`.
 - Off screen (scrolled away, `display: none`), a mascot redraws only 4 times per second; its states and moves carry on. Detailed hairstyles lighten themselves when small (under ~200 screen pixels wide), with no visible difference.
-- Size: web engine **≈ 53 KB gzip** (`uko-mascot-engine.min.js`, 164 KB raw; the readable version is 310 KB). Rive files: uko.riv 74 · aituko.riv 72 · meowuko.riv 73 KB.
+- Size: web engine **≈ 55 KB gzip** (`uko-mascot-engine.min.js`, 168 KB raw; the readable version is 321 KB). Rive files: uko.riv 74 · aituko.riv 72 · meowuko.riv 73 KB.
 
 ---
 

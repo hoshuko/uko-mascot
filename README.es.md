@@ -8,7 +8,7 @@ Pruébalo en tu app y quédatelo en producción si quieres: está permitido
 
 | | Para | Archivo |
 |---|---|---|
-| **Motor web** | sitios y apps web (HTML, React, Vue, Svelte…) | `uko-mascot-engine.min.js` (≈ 53 KB gzip, cero dependencias); `uko-mascot-engine.js` = el mismo, legible |
+| **Motor web** | sitios y apps web (HTML, React, Vue, Svelte…) | `uko-mascot-engine.min.js` (≈ 55 KB gzip, cero dependencias); `uko-mascot-engine.js` = el mismo, legible |
 | **Archivo Rive** | web, Flutter, iOS, Android, React Native… | `rive/uko.riv`, `rive/aituko.riv`, `rive/meowuko.riv` + máquina de estados «Uko» |
 
 ## Starter o pack completo
@@ -132,9 +132,9 @@ muestra `original` y la consola indica dónde conseguirlo.
 ### Accesibilidad y rendimiento
 
 - Se respeta `prefers-reduced-motion` (poses fijas, sin efectos).
-- La animación se pausa cuando la pestaña está oculta. `setMaxFps(30)` para páginas muy cargadas.
+- La animación se pausa cuando la pestaña está oculta. La cadencia se adapta sola (`maxFps: 'auto'`, por defecto): 60 fps, luego 30 o 20, con el pelo simplificado, cuando las mascotas de la página cuestan demasiado (un móvil modesto, muchas mascotas); vuelve a subir en cuanto puede. El pelo largo solo calcula su física mientras la cabeza se mueve. Un número fija la cadencia: `maxFps: 60`, o `setMaxFps(30)`.
 - Fuera de la pantalla (página desplazada, `display: none`), una mascota solo se redibuja 4 veces por segundo; sus estados y movimientos siguen. Los peinados detallados se aligeran solos en tamaño pequeño (menos de ~200 píxeles de pantalla de ancho), sin diferencia visible.
-- Peso: motor web **≈ 53 KB gzip** (`uko-mascot-engine.min.js`, 164 KB sin comprimir; la versión legible pesa 310 KB). Archivos Rive: uko.riv 74 · aituko.riv 72 · meowuko.riv 73 KB.
+- Peso: motor web **≈ 55 KB gzip** (`uko-mascot-engine.min.js`, 168 KB sin comprimir; la versión legible pesa 321 KB). Archivos Rive: uko.riv 74 · aituko.riv 72 · meowuko.riv 73 KB.
 
 ---
 

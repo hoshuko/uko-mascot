@@ -1,5 +1,13 @@
 # Changelog
 
+## 2.5.1 — 3 octobre 2026
+- **Les deux éditions : fluide sur mobile.** La cadence s'adapte toute seule (`maxFps: 'auto'`, par défaut) : 60
+  images/s, puis 30 ou 20, avec des cheveux simplifiés, quand les mascottes de la page coûtent trop ; elle remonte dès
+  que possible. Les cheveux longs ne calculent plus leur physique tant que la tête reste calme. Mesuré sur un téléphone
+  modeste (processeur 4× plus lent qu'un ordinateur) : une mascotte aux dreadlocks passe de 85 % à 32 % du thread
+  principal, sans à-coups ; trois mascottes aux cheveux lourds gardent la page fluide. Sur ordinateur, une mascotte
+  garde ses 60 images/s.
+
 ## 2.5.0 — 2 octobre 2026
 - **Starter : les trois personnages.** Aituko le robot et Meowuko le chat rejoignent Uko dans la version gratuite :
   moteur web (9 états) et fichiers Rive (4 états) pour chacun.
