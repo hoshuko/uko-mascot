@@ -1,4 +1,4 @@
-# Licence Uko Starter — version 1.2 (2 octobre 2026)
+# Licence Uko Starter — version 1.3 (4 octobre 2026)
 
 **En une phrase :** Uko Starter est gratuit, pour tes projets personnels comme commerciaux,
 mais tu ne peux pas revendre ni redistribuer ses fichiers.
@@ -8,7 +8,7 @@ La présente licence gratuite est accordée par l'auteur d'Uko (le « Concédant
 Uko Starter (le « Licencié »). Elle porte sur les fichiers d'Uko Starter : moteur JavaScript, fichiers Rive `.riv`,
 dessins, animations, documentation et exemples (le « Starter »).
 
-Dans cette licence, « Uko » désigne le personnage fourni dans le Starter.
+Dans cette licence, « Uko » désigne les personnages fournis dans le Starter : Uko, Aituko et Meowuko.
 
 ## 2. Ce que tu peux faire
 - Intégrer le Starter dans un nombre **illimité** de produits finaux, personnels ou commerciaux : sites, applications web,

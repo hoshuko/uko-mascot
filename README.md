@@ -11,7 +11,7 @@
 
 <p align="center">
   <a href="https://uko-mascot.pages.dev/en/"><b>Website</b></a> ·
-  <a href="https://uko-mascot.pages.dev/en/#galerie"><b>Try the colours and hairstyles</b></a> ·
+  <a href="https://uko-mascot.pages.dev/en/#galerie"><b>Try the colors and hairstyles</b></a> ·
   <a href="https://uko-mascot.pages.dev/free/Uko-Starter.zip"><b>Download (free)</b></a> ·
   <a href="https://www.youtube.com/@Hosh-uko"><b>YouTube</b></a>
 </p>
@@ -52,8 +52,8 @@ Moving to it means replacing the files: your code does not change.
 ```html
 <script src="uko-mascot-engine.min.js"></script>
 
-<uko-mascot state="loading" hair="classique" brand="#FFE3C4"></uko-mascot>
-<uko-mascot character="meowuko" state="welcome" brand="#FFD9B3"></uko-mascot>   <!-- or "aituko" -->
+<uko-mascot state="loading" hair="classique" brand="#FFE3C4" style="width:160px;height:240px"></uko-mascot>
+<uko-mascot character="meowuko" state="welcome" brand="#FFD9B3" style="width:160px;height:240px"></uko-mascot>   <!-- or "aituko" -->
 ```
 
 ```js
@@ -84,10 +84,13 @@ uko.resolveSuccess();    // … then the celebration
 ```js
 import { Rive } from '@rive-app/canvas-lite';
 
-const uko = new Rive({ src: 'rive/uko.riv', canvas: document.querySelector('canvas'), stateMachines: 'Uko', autoplay: true });
 const input = name => uko.stateMachineInputs('Uko').find(i => i.name === name);
-input('state').value = 2;   // 0 idle, 2 loading
-input('success').fire();    // triggers: welcome, success (the free Rive files have 4 states)
+const uko = new Rive({
+  src: 'rive/uko.riv', canvas: document.querySelector('canvas'), stateMachines: 'Uko', autoplay: true,
+  onLoad: () => { uko.resizeDrawingSurfaceToCanvas(); input('state').value = 2; },   // 0 idle, 2 loading
+});
+// later, when the request has succeeded (triggers: welcome, success; the free Rive files have 4 states)
+function done() { input('state').value = 0; input('success').fire(); }
 ```
 
 Complete examples for React, Flutter, iOS (Swift) and Android (Kotlin) are in [`examples/`](examples).

@@ -25,7 +25,7 @@ Contexte
   rive/*.riv (pour une app mobile native : iOS, Android, Flutter, React Native).
 - Lis d'abord README.md en entier. N'invente aucune méthode ni attribut : utilise seulement ceux documentés.
 - Si le moteur indique edition "starter", les personnages uko, aituko, meowuko et les coiffures original, classique,
-  chauve existent (les 9 états sont là) : n'utilise ni climb(), ni lookAt(). Les fichiers Rive gratuits n'ont que idle,
+  chauve existent (les 9 états sont là) : n'utilise ni les mouvements et postures (climb, startWalk, setPosture, dance, hop), ni lookAt(), ni follow="page", ni l'âme (setSoul) ni la parole (speak, setMouth). Les fichiers Rive gratuits n'ont que idle,
   welcome, loading et success.
 
 Ce que je veux
@@ -60,7 +60,7 @@ Context
   rive/*.riv (for a native mobile app: iOS, Android, Flutter, React Native).
 - Read README.en.md in full first. Do not invent any method or attribute: only use the documented ones.
 - If the engine reports edition "starter", the uko, aituko and meowuko characters and the original, classique,
-  chauve hairstyles exist (all 9 states are there): do not use climb() or lookAt(). The free Rive files only have
+  chauve hairstyles exist (all 9 states are there): do not use the moves and postures (climb, startWalk, setPosture, dance, hop), lookAt(), follow="page", the soul (setSoul) or speech (speak, setMouth). The free Rive files only have
   idle, welcome, loading and success.
 
 What I want
@@ -95,7 +95,7 @@ Contexto
   rive/*.riv (para una app móvil nativa: iOS, Android, Flutter, React Native).
 - Lee primero README.es.md entero. No inventes ningún método ni atributo: usa solo los documentados.
 - Si el motor indica edition "starter", existen los personajes uko, aituko y meowuko y los peinados original,
-  classique, chauve (los 9 estados están): no uses climb() ni lookAt(). Los archivos Rive gratuitos solo tienen
+  classique, chauve (los 9 estados están): no uses los movimientos ni las posturas (climb, startWalk, setPosture, dance, hop), ni lookAt(), ni follow="page", ni el alma (setSoul) ni el habla (speak, setMouth). Los archivos Rive gratuitos solo tienen
   idle, welcome, loading y success.
 
 Lo que quiero

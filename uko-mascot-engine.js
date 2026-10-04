@@ -1,5 +1,5 @@
 /**
- * Uko Mascot Engine v2.5.1 · vector runtime (SVG, 60 FPS)
+ * Uko Mascot Engine v2.5.2 · vector runtime (SVG, 60 FPS)
  * Canonical fixed-length skeleton with soft IK, blended state transitions,
  * modular hairstyles with secondary motion, attention tracking, walk cycle,
  * WCAG contrast helpers. Each instance is fully isolated.
@@ -17,6 +17,7 @@
   const ORDER = EDITION === 'starter' ? ["idle","welcome","thinking","loading","success","error","empty","sleep","wake"] : FULL_ORDER;
   // Characters sharing the skeleton. Starter (free): all three, 3 hairstyles, 9 states; full pack: 17 hairstyles, moves.
   const CHARACTER_LIST = ['uko', 'aituko', 'meowuko'];
+  const CHARACTER_NAMES = { uko: 'Uko', aituko: 'Aituko', meowuko: 'Meowuko' };
   const FULL_PACK_URL = "https://uko-mascot.pages.dev/#prix";
   const DUR = { idle: 4000, welcome: 3200, thinking: 1000, loading: 1000, success: 3600, error: 3800, empty: 3400, sleep: 2600, wake: 2200 };
   const MASCOT_SVG_STYLES = ".bone{stroke:var(--bodyStrokeColor, #0B0B0B);stroke-width:15;stroke-linecap:round;}\n.hand{fill:var(--handFillColor, #FFFFFF);stroke:var(--bodyStrokeColor, #0B0B0B);stroke-width:15;}\n.foot{fill:var(--footFillColor, #FFFFFF);stroke:var(--bodyStrokeColor, #0B0B0B);stroke-width:15;}\n.headCircle{fill:var(--headFillColor, #FFFFFF);stroke:var(--bodyStrokeColor, #0B0B0B);stroke-width:15;}\n.hair{fill:none;stroke:var(--hairColor, #0B0B0B);stroke-width:15;stroke-linecap:round;stroke-linejoin:round;}\n.hairStroke{fill:none;stroke:var(--hairColor, #0B0B0B);stroke-linecap:round;stroke-linejoin:round;}\n.hairFill{fill:var(--hairColor, #0B0B0B);}\n.moustache{fill:none;stroke:var(--hairColor, #0B0B0B);stroke-linecap:round;stroke-linejoin:round;}\n.hairDetail{fill:none;stroke:var(--hairDetailColor, #FFFFFF);stroke-width:4.5;stroke-linecap:round;opacity:.58;}\n.hairFadeMid{fill:var(--hairColor, #0B0B0B);opacity:.68;}\n.hairFadeTip{fill:var(--hairColor, #0B0B0B);opacity:.42;}\n.faceStroke{fill:none;stroke:var(--detailColor, #0B0B0B);stroke-width:11;stroke-linecap:round;stroke-linejoin:round;}\n.eye{fill:var(--detailColor, #0B0B0B);}\n.accessory{fill:none;stroke:var(--bodyStrokeColor, #0B0B0B);stroke-width:12;stroke-linecap:round;stroke-linejoin:round;}\n.blue{stroke:var(--bodyStrokeColor, #0B0B0B);fill:none;}\n.red{stroke:var(--bodyStrokeColor, #0B0B0B);fill:none;}\n.fxLoading .loadingSpinner{fill:none;stroke:var(--bodyStrokeColor, #0B0B0B);stroke-width:12;stroke-linecap:round;}\n.fxWelcome .accessory,.fxEmpty .accessory{stroke:var(--bodyStrokeColor, #0B0B0B);}\n.fxSuccess .accessory{stroke:var(--bodyStrokeColor, #0B0B0B);}\n.fxError .accessory{stroke:var(--bodyStrokeColor, #0B0B0B);}\n.fxError circle{fill:var(--bodyStrokeColor, #0B0B0B);}\n.fxSleep .accessory{stroke:var(--bodyStrokeColor, #0B0B0B);}\n.fxSleep text{fill:var(--bodyStrokeColor, #0B0B0B);}\n.fxThoughtBubble .bubble{fill:var(--surfaceColor, #FFFFFF);stroke:var(--bodyStrokeColor, #0B0B0B);stroke-width:12;stroke-linejoin:round;}\n.fxThoughtBubble .bubbleTail{fill:var(--surfaceColor, #FFFFFF);stroke:var(--bodyStrokeColor, #0B0B0B);stroke-width:10;}\n.fxThoughtBubble .question{fill:none;stroke:var(--bodyStrokeColor, #0B0B0B);stroke-width:12;stroke-linecap:round;stroke-linejoin:round;}\n.fxThoughtBubble .questionDot{fill:var(--bodyStrokeColor, #0B0B0B);}\n.faceOpenMouth{fill:var(--headFillColor, #FFFFFF);stroke:var(--detailColor, #0B0B0B);stroke-width:11;stroke-linejoin:round;}\n.faceTalkMouth{fill:var(--detailColor, #0B0B0B);stroke:var(--detailColor, #0B0B0B);stroke-width:9;stroke-linejoin:round;}\n.faceTongue{fill:#FF8FB1;}\n.thinkingForeground .hand{fill:var(--handFillColor, #FFFFFF);stroke:var(--bodyStrokeColor, #0B0B0B);stroke-width:15;}\n.loadingLaptop .laptopSurface{fill:var(--stageBackground, #FFFFFF);stroke:var(--bodyStrokeColor, #0B0B0B);stroke-width:9;stroke-linecap:round;stroke-linejoin:round;}\n.loadingLaptop .laptopEdge{fill:var(--stageBackground, #FFFFFF);stroke:var(--bodyStrokeColor, #0B0B0B);stroke-width:8;stroke-linecap:round;stroke-linejoin:round;}\n.loadingLaptop .laptopDetail{fill:none;stroke:var(--bodyStrokeColor, #0B0B0B);stroke-width:5;stroke-linecap:round;opacity:.58;}\n.blush{fill:var(--blushColor, #F6A7B7);opacity:.55;}\n.eyeShine{fill:var(--headFillColor, #FFFFFF);}\n.fxSpark{fill:var(--bodyStrokeColor, #0B0B0B);}\n.boneHalo{stroke:var(--surfaceColor, #FFFFFF);stroke-width:29;stroke-linecap:round;}\n.robotScreen{fill:#1C2033;}\n.robotGlare{fill:none;stroke:#FFFFFF;stroke-width:10;stroke-linecap:round;opacity:.35;}\n.robotMark{fill:var(--characterAccent, #FFC93C);stroke:var(--bodyStrokeColor, #0B0B0B);stroke-width:12;}\n.led{fill:none;stroke:#6CF0E0;stroke-width:14;stroke-linecap:round;stroke-linejoin:round;}\n.ledFill{fill:#6CF0E0;stroke:#6CF0E0;stroke-width:6;stroke-linejoin:round;}\n.catInnerEar{fill:var(--blushColor, #F6A7B7);}\n.catNose{fill:#F48FA2;stroke:var(--detailColor, #0B0B0B);stroke-width:5;stroke-linejoin:round;}\n.catWhisker{fill:none;stroke:var(--detailColor, #0B0B0B);stroke-width:7;stroke-linecap:round;}\n.catTail{fill:none;stroke:var(--bodyStrokeColor, #0B0B0B);stroke-width:15;stroke-linecap:round;stroke-linejoin:round;}\n.touchInk{fill:none;stroke:var(--bodyStrokeColor, #0B0B0B);stroke-width:10;stroke-linecap:round;stroke-linejoin:round;}\n.touchBold{stroke-width:16;}\n.touchDot{fill:var(--bodyStrokeColor, #0B0B0B);}\n.touchStar{fill:#FFC93C;stroke:var(--bodyStrokeColor, #0B0B0B);stroke-width:7;stroke-linejoin:round;}\n.touchHeart{fill:#FF7AAE;stroke:var(--bodyStrokeColor, #0B0B0B);stroke-width:7;stroke-linejoin:round;}\n.touchPuff{fill:var(--surfaceColor, #FFFFFF);stroke:var(--bodyStrokeColor, #0B0B0B);stroke-width:7;}\n.touchConfetti{stroke:var(--bodyStrokeColor, #0B0B0B);stroke-width:4;}\n.touchC0{fill:#FFC93C;}.touchC1{fill:#FF7AAE;}.touchC2{fill:#3B5BFF;}.touchC3{fill:#3DDC97;}\n.touchNote{fill:#3B5BFF;stroke:var(--bodyStrokeColor, #0B0B0B);stroke-width:6;}\n.touchSweat{fill:#9ED8FF;stroke:var(--bodyStrokeColor, #0B0B0B);stroke-width:6;stroke-linejoin:round;}\n.touchAnger{fill:none;stroke:#E5484D;stroke-width:11;stroke-linecap:round;}\n.fxNote .noteHead{fill:var(--bodyStrokeColor, #0B0B0B);}\n.fxNote .noteStem,.fxNote .noteFlag{fill:none;stroke:var(--bodyStrokeColor, #0B0B0B);stroke-width:11;stroke-linecap:round;}";
@@ -4012,7 +4013,7 @@
       }
     }
 
-    const SOUL = { on: false, acts: [], touch: {}, mood: {} };
+    const SOUL = { get on() { return false; }, set on(v) {}, acts: [], touch: {}, mood: {} };
     function soulFrame() { return null; }
     function soulFace(f) { return f; }
     function soulAttention() {}
@@ -4330,7 +4331,7 @@
 
     el.innerHTML = `
       <div class="uko-mascot-wrapper" style="position:relative;width:100%;height:100%;display:flex;align-items:center;justify-content:center;">
-        <svg viewBox="0 0 1024 1536" class="uko-mascot-svg" style="width:100%;height:100%;max-height:100%;display:block;overflow:visible;-webkit-tap-highlight-color:transparent;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Uko mascot">
+        <svg viewBox="0 0 1024 1536" class="uko-mascot-svg" style="width:100%;height:100%;max-height:100%;display:block;overflow:visible;-webkit-tap-highlight-color:transparent;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;" preserveAspectRatio="xMidYMid meet" role="img" aria-label="${CHARACTER_NAMES[CHARACTER.id]}">
           <defs><style>${MASCOT_SVG_STYLES}</style>
             <filter id="${INSTANCE_ID}-hair-outline" x="-10%" y="-10%" width="120%" height="120%">
               <feMorphology in="SourceAlpha" operator="dilate" radius="7" result="grown"/>
@@ -4470,7 +4471,7 @@
       const seen = fullPackNotice.seen || (fullPackNotice.seen = new Set());
       if (seen.has(state)) return;
       seen.add(state);
-      console.info(`[UkoMascot] "${state}" fait partie du pack complet (l'âme, la parole, 17 coiffures, mouvements, regard sur toute la page) : ${FULL_PACK_URL}`);
+      console.info(`[UkoMascot] ${state.includes('"') ? state : `"${state}"`} fait partie du pack complet (l'âme, la parole, 17 coiffures, mouvements, regard sur toute la page) : ${FULL_PACK_URL}`);
     }
 
     // Core state change. Always blends from what is on screen.
@@ -5022,7 +5023,7 @@
         if (r && r.wake) go('wake', 'poke');
         return r ? r.reaction : null;
       },
-      setCharacter(id) { CHARACTER.id = normalizeCharacter(id); },
+      setCharacter(id) { CHARACTER.id = normalizeCharacter(id); if (svgEl) svgEl.setAttribute('aria-label', CHARACTER_NAMES[CHARACTER.id]); },
       setAccentColor(hex) { CHARACTER.accent = hex || '#FFC93C'; updateColors(); },
       setBrandContrast(mode) { brandContrastMode = mode; updateColors(); },
       setHairContrast(mode) { hairContrastMode = mode; updateColors(); },
@@ -5121,7 +5122,7 @@
         this.mascot = createUkoMascot(this, {
           state: this.getAttribute('state') || 'idle',
           brandColor: this.getAttribute('brand') || '#FFFFFF',
-          hairStyle: this.getAttribute('hair') || 'dreadlocks',
+          hairStyle: this.getAttribute('hair') || (EDITION === 'starter' ? 'original' : 'dreadlocks'),
           hairColor: this.getAttribute('hair-color') || '#0B0B0B',
           contrastMode: this.getAttribute('contrast') || 'auto',
           theme: this.getAttribute('theme') || 'auto',
@@ -5162,7 +5163,7 @@
 
 
   root.UkoMascot = {
-    version: "2.5.1",
+    version: "2.5.2",
     edition: EDITION,
     create: createUkoMascot,
     ORDER,
@@ -5171,4 +5172,4 @@
     HAIR_ALIASES,
     CHARACTERS: CHARACTER_LIST,
   };
-})(typeof window !== 'undefined' ? window : this);
+})(typeof window !== 'undefined' ? window : globalThis);

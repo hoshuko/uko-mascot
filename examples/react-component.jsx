@@ -2,7 +2,7 @@
 import './vendor/uko-mascot-engine.min.js';
 
 export function UkoStatus({ status = 'idle', hair = 'classique', color = '#FFD6E0' }) {
-  // status: idle | welcome | loading | success (Starter) — le pack complet ajoute thinking, error, empty, sleep, wake
+  // status: idle | welcome | thinking | loading | success | error | empty | sleep | wake (les 9 états, version gratuite comprise)
   return <uko-mascot state={status} hair={hair} brand={color} style={{ width: 200, height: 300 }} />;
 }
 

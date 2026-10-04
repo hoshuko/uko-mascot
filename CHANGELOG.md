@@ -1,5 +1,14 @@
 # Changelog
 
+## 2.5.2 — 4 octobre 2026
+- `<uko-mascot>` sans attribut `hair` prend la coiffure par défaut de l'édition (`original` dans le Starter) : plus
+  de message « pack complet » trompeur dans la console.
+- Le moteur s'importe aussi côté serveur (Next.js, rendu SSR) sans erreur ; la mascotte se crée dans le navigateur.
+- Le SVG porte le nom du personnage (`aria-label` « Uko », « Aituko » ou « Meowuko »), mis à jour par `setCharacter()`.
+- README : l'exemple Rive pour le web utilise les entrées une fois le fichier chargé (`onLoad`), et les exemples
+  HTML donnent une taille à la mascotte. `AI-PROMPT.md` liste tout ce que le Starter n'a pas.
+- Licence du Starter 1.3 : « Uko » y désigne les trois personnages (Uko, Aituko, Meowuko).
+
 ## 2.5.1 — 3 octobre 2026
 - **Les deux éditions : fluide sur mobile.** La cadence s'adapte toute seule (`maxFps: 'auto'`, par défaut) : 60
   images/s, puis 30 ou 20, avec des cheveux simplifiés, quand les mascottes de la page coûtent trop ; elle remonte dès
@@ -32,6 +41,7 @@
 ## 2.2.0 — 27 septembre 2026
 - **Uko devient entièrement gratuit** : le pack complet (9 états, mouvements, regard) se télécharge sans compte,
   avec une licence gratuite pour tous les projets, y compris commerciaux (`LICENSE.md`).
+  (Jusqu'à la 2.3.0, qui sépare la version gratuite et le pack complet.)
 - Poids : `uko-mascot-engine.min.js`, le moteur minifié (≈ 58 Ko gzip au lieu de ≈ 97), livré à côté de la
   version lisible `uko-mascot-engine.js` (même code, pour le lire ou le donner à une IA). Rendu identique.
 - `AI-PROMPT.md` : un prompt prêt à coller (français, anglais, espagnol) pour adapter la mascotte à ton app

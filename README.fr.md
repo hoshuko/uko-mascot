@@ -68,7 +68,7 @@ document.querySelector('uko-mascot').setAttribute('state', 'success');
 | `theme` | `auto` (suit `html.dark` / `data-theme`), `system`, `light`, `dark` | `auto` |
 | `contrast` | `auto` (couleurs ajustées pour le contraste WCAG) ou `direct` | `auto` |
 | `interactive` | la mascotte suit le curseur et réagit au clic | `true` |
-| `one-shot` | `return` (revient à idle après welcome ou success) ou `loop` | `return` |
+| `one-shot` | `return` (revient à idle après welcome, success, error, empty ou wake) ou `loop` | `return` |
 | `cheeks` | joues roses | `true` |
 | `accent` | couleur de l'antenne d'Aituko | `#FFC93C` |
 
@@ -154,14 +154,22 @@ Les numéros sont ceux du pack complet (qui ajoute `1` thinking, `3` sleep, et l
 ```js
 import { Rive } from '@rive-app/canvas-lite';
 
+const input = (n) => uko.stateMachineInputs('Uko').find(i => i.name === n);
 const uko = new Rive({
   src: 'uko.riv', canvas: document.querySelector('canvas'),
   stateMachines: 'Uko', autoplay: true, autoBind: true,
-  onLoad: () => uko.resizeDrawingSurfaceToCanvas(),
+  onLoad: () => {
+    uko.resizeDrawingSurfaceToCanvas();
+    // Les entrées existent une fois le fichier chargé
+    input('state').value = 2;   // loading
+  },
 });
-const input = (n) => uko.stateMachineInputs('Uko').find(i => i.name === n);
-input('state').value = 2;   // loading
-input('success').fire();
+
+// Plus tard, quand la requête a réussi
+function done() {
+  input('state').value = 0;
+  input('success').fire();
+}
 ```
 
 Exemples dans `examples/` : web, React, Flutter, iOS (Swift), Android (Kotlin).
