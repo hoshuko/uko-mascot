@@ -20,6 +20,7 @@ Pruébalo en tu app y quédatelo en producción si quieres: está permitido
 | Peinados, colores, tema | 3 peinados, colores libres | 17 peinados, colores libres |
 | Archivos Rive (móvil) | los 3 personajes, 4 estados cada uno | los 3 personajes, 9 estados cada uno |
 | Movimientos: sentarse en una tarjeta, apoyarse, bailar, flotar, saltar, trepar `climb()`, caminar, darse la vuelta | — | sí |
+| Colocar la mascota sobre un elemento en una línea (`placeOn()`, `goHome()`) | — | sí |
 | Mirada: sigue el ratón al pasar por encima | sí | sí |
 | Mirada en toda la página (`follow="page"`, dedo en móvil), `lookAt()` | — | sí |
 | Uso comercial | sí | sí |

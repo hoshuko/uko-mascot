@@ -1,8 +1,18 @@
 # Changelog
 
+## 2.6.0 — 4 octobre 2026
+- **Pack complet : la poser où tu veux, en une ligne.** `placeOn(élément, { posture, move })` met ses pieds sur le
+  bord haut d'un élément de la page (carte, fenêtre, bouton) : elle y saute (`hop`), y grimpe par l'arrière (`climb`)
+  ou y glisse, prend la posture demandée et suit la page quand elle défile ou change de taille. Elle passe devant
+  l'élément pour s'asseoir ou s'allonger, derrière pour s'accouder. `goHome()` la ramène à sa place ; si l'élément
+  disparaît, elle rentre seule (`onLost`). Rien ne bouge tant que l'app ne l'appelle pas.
+- Starter : `placeOn()` et `goHome()` répondent `false` sans rien déplacer, et la console indique le pack complet.
+
 ## 2.5.2 — 4 octobre 2026
 - `<uko-mascot>` sans attribut `hair` prend la coiffure par défaut de l'édition (`original` dans le Starter) : plus
   de message « pack complet » trompeur dans la console.
+- Plus rapide à créer : le modèle d'une coiffure est calculé une fois par page, plus pour chaque mascotte (une page
+  avec plusieurs Uko démarre nettement plus vite sur téléphone).
 - Le moteur s'importe aussi côté serveur (Next.js, rendu SSR) sans erreur ; la mascotte se crée dans le navigateur.
 - Le SVG porte le nom du personnage (`aria-label` « Uko », « Aituko » ou « Meowuko »), mis à jour par `setCharacter()`.
 - README : l'exemple Rive pour le web utilise les entrées une fois le fichier chargé (`onLoad`), et les exemples

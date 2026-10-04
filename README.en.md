@@ -20,6 +20,7 @@ Try it in your app, and keep it in production if you like: that is allowed
 | Hairstyles, colors, theme | 3 hairstyles, any colors | 17 hairstyles, any colors |
 | Rive files (mobile) | all 3 characters, 4 states each | all 3 characters, 9 states each |
 | Movements: sit on a card, lean on a window, dance, float, hop, climb `climb()`, walk, turn around | — | yes |
+| Place the mascot on an element in one line (`placeOn()`, `goHome()`) | — | yes |
 | Gaze: follows the mouse on hover | yes | yes |
 | Gaze over the whole page (`follow="page"`, finger on mobile), `lookAt()` | — | yes |
 | Commercial use | yes | yes |

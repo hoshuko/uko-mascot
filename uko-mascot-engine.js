@@ -1,5 +1,5 @@
 /**
- * Uko Mascot Engine v2.5.2 · vector runtime (SVG, 60 FPS)
+ * Uko Mascot Engine v2.6.0 · vector runtime (SVG, 60 FPS)
  * Canonical fixed-length skeleton with soft IK, blended state transitions,
  * modular hairstyles with secondary motion, attention tracking, walk cycle,
  * WCAG contrast helpers. Each instance is fully isolated.
@@ -57,6 +57,7 @@
     return 'dreadlocks';
   }
 
+  const SHARED_HAIR_MODELS = new Map();
   if (EDITION === 'starter') for (const k of Object.keys(HAIR_CATALOG)) if (!['original', 'classique', 'chauve'].includes(k)) delete HAIR_CATALOG[k];   // Starter: 3 hairstyles
 
   function createUkoMascot(target, userOptions) {
@@ -497,7 +498,8 @@
 
     const HAIR_STYLES=HAIR_CATALOG;
     const HAIR_DYNAMICS={model:null,style:null,chains:[],last:0,frame:null,sleepSettled:null,sleepSettleCount:0};
-    const HAIR_MODELS=new Map();
+    // A hairstyle's model depends on its style only: built once per page, shared by every mascot.
+    const HAIR_MODELS=SHARED_HAIR_MODELS;
     const hMix=(a,b,t)=>a.length===3?[a[0]+(b[0]-a[0])*t,a[1]+(b[1]-a[1])*t,a[2]+(b[2]-a[2])*t]:a.map((v,i)=>v+(b[i]-v)*t);
     const hLen=(a,b)=>a.length===3?Math.hypot(a[0]-b[0],a[1]-b[1],a[2]-b[2]):a.length===2?Math.hypot(a[0]-b[0],a[1]-b[1]):Math.hypot(...a.map((v,i)=>v-b[i]));
     function hairModel(style){
@@ -3769,6 +3771,10 @@
     function pzSpringV(k, v) { return v; }
     function pzAlignHands() {}
     const PZ_REACTIONS = [];
+    function placeStart() { return Promise.resolve(false); }
+    function placeHome() { return Promise.resolve(false); }
+    function placeStop() {}
+    function placedOn() { return null; }
     // Life layer: keeps the persistent states (idle, thinking, loading, sleep) alive.
     //
     // What people read as "alive" in a character, and how it is built here:
@@ -4981,6 +4987,14 @@
         setPosture(name, opts, motionNow(), shown);
       },
       getPosture() { return PZ.name; },
+      // Placement (full pack): its feet on the top edge of a page element, kept there while the
+      // page scrolls or resizes; the app decides where and when. Returns a Promise (true on arrival).
+      //   placeOn(element | selector, { posture: 'sit'|'lean'|'lie'|'stand'|'float',
+      //           move: 'hop'|'climb'|'glide'|'instant', align: 'left'|'center'|'right'|0..1, offset: { x, y }, zIndex, onLost })
+      placeOn(target, opts = {}) { if (paidOnly('placeOn')) return Promise.resolve(false); return placeStart(this, target, opts || {}); },
+      // Back to its own place (where the page put it), standing.
+      goHome(opts = {}) { if (paidOnly('goHome')) return Promise.resolve(false); return placeHome(this, opts || {}); },
+      getPlace() { return placedOn(); },
       dance(opts = {}) { if (paidOnly('dance')) return; if (WALK.active) stopWalk(); if (cur !== 'idle') go('idle'); blend = null; setPosture('dance', opts, motionNow(), shown); },
       stopDance() { if (PZ.name === 'dance') { blend = null; setPosture('stand', {}, motionNow(), shown); } },
       // A light jump. The host moves the box between onTakeoff and onLand (an arc);
@@ -5090,6 +5104,7 @@
       destroy() {
         destroyed = true;
         talkStop();
+        placeStop(true);
         if (rafId) cancelAnimationFrame(rafId);
         if (flowTimer) clearTimeout(flowTimer);
         el.removeEventListener('pointermove', onPointerMove);
@@ -5163,7 +5178,7 @@
 
 
   root.UkoMascot = {
-    version: "2.5.2",
+    version: "2.6.0",
     edition: EDITION,
     create: createUkoMascot,
     ORDER,

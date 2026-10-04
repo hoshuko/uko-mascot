@@ -25,7 +25,7 @@ Contexte
   rive/*.riv (pour une app mobile native : iOS, Android, Flutter, React Native).
 - Lis d'abord README.md en entier. N'invente aucune méthode ni attribut : utilise seulement ceux documentés.
 - Si le moteur indique edition "starter", les personnages uko, aituko, meowuko et les coiffures original, classique,
-  chauve existent (les 9 états sont là) : n'utilise ni les mouvements et postures (climb, startWalk, setPosture, dance, hop), ni lookAt(), ni follow="page", ni l'âme (setSoul) ni la parole (speak, setMouth). Les fichiers Rive gratuits n'ont que idle,
+  chauve existent (les 9 états sont là) : n'utilise ni les mouvements et postures (climb, startWalk, setPosture, dance, hop, placeOn, goHome), ni lookAt(), ni follow="page", ni l'âme (setSoul) ni la parole (speak, setMouth). Les fichiers Rive gratuits n'ont que idle,
   welcome, loading et success.
 
 Ce que je veux
@@ -37,6 +37,8 @@ Ce que je veux
    - mobile natif : le fichier .riv avec le runtime Rive officiel de ma plateforme (machine à états "Uko").
 3. Branche les états sur mon code existant : loading pendant les requêtes, success après une action réussie,
    error sur une erreur, empty sur une liste vide, welcome à l'arrivée, sleep après une longue inactivité.
+   Pack complet : pour poser la mascotte sur un élément (carte, fenêtre, bouton), utilise placeOn(élément, { posture })
+   puis goHome(), seulement aux moments que je valide ; ne la fais pas bouger ailleurs.
 4. Reprends les couleurs de ma marque : [couleurs, ex. #3B5BFF] (attributs brand, hair-color, accent,
    ou le view model du fichier Rive), et le thème clair/sombre de mon app.
 5. Ne modifie pas le fichier du moteur. Tout le code spécifique à mon app va dans mes propres fichiers.
@@ -60,7 +62,7 @@ Context
   rive/*.riv (for a native mobile app: iOS, Android, Flutter, React Native).
 - Read README.en.md in full first. Do not invent any method or attribute: only use the documented ones.
 - If the engine reports edition "starter", the uko, aituko and meowuko characters and the original, classique,
-  chauve hairstyles exist (all 9 states are there): do not use the moves and postures (climb, startWalk, setPosture, dance, hop), lookAt(), follow="page", the soul (setSoul) or speech (speak, setMouth). The free Rive files only have
+  chauve hairstyles exist (all 9 states are there): do not use the moves and postures (climb, startWalk, setPosture, dance, hop, placeOn, goHome), lookAt(), follow="page", the soul (setSoul) or speech (speak, setMouth). The free Rive files only have
   idle, welcome, loading and success.
 
 What I want
@@ -72,6 +74,8 @@ What I want
    - native mobile: the .riv file with my platform's official Rive runtime (state machine "Uko").
 3. Wire the states to my existing code: loading during requests, success after a successful action,
    error on an error, empty on an empty list, welcome on arrival, sleep after a long inactivity.
+   Full pack: to put the mascot on an element (card, modal, button), use placeOn(element, { posture }) then
+   goHome(), only at the moments I approve; do not move it anywhere else.
 4. Use my brand colors: [colors, e.g. #3B5BFF] (brand, hair-color, accent attributes, or the Rive
    file's view model), and my app's light/dark theme.
 5. Do not modify the engine file. All app-specific code goes in my own files.
@@ -95,7 +99,7 @@ Contexto
   rive/*.riv (para una app móvil nativa: iOS, Android, Flutter, React Native).
 - Lee primero README.es.md entero. No inventes ningún método ni atributo: usa solo los documentados.
 - Si el motor indica edition "starter", existen los personajes uko, aituko y meowuko y los peinados original,
-  classique, chauve (los 9 estados están): no uses los movimientos ni las posturas (climb, startWalk, setPosture, dance, hop), ni lookAt(), ni follow="page", ni el alma (setSoul) ni el habla (speak, setMouth). Los archivos Rive gratuitos solo tienen
+  classique, chauve (los 9 estados están): no uses los movimientos ni las posturas (climb, startWalk, setPosture, dance, hop, placeOn, goHome), ni lookAt(), ni follow="page", ni el alma (setSoul) ni el habla (speak, setMouth). Los archivos Rive gratuitos solo tienen
   idle, welcome, loading y success.
 
 Lo que quiero
@@ -107,6 +111,8 @@ Lo que quiero
    - móvil nativo: el archivo .riv con el runtime oficial de Rive de mi plataforma (máquina de estados "Uko").
 3. Conecta los estados a mi código: loading durante las peticiones, success tras una acción correcta,
    error ante un error, empty en una lista vacía, welcome al llegar, sleep tras una larga inactividad.
+   Pack completo: para poner la mascota sobre un elemento (tarjeta, ventana, botón), usa placeOn(elemento, { posture })
+   y luego goHome(), solo en los momentos que yo valide; no la muevas a ningún otro sitio.
 4. Usa los colores de mi marca: [colores, p. ej. #3B5BFF] (atributos brand, hair-color, accent,
    o el view model del archivo Rive), y el tema claro/oscuro de mi app.
 5. No modifiques el archivo del motor. Todo el código propio de mi app va en mis archivos.

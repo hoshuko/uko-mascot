@@ -19,6 +19,7 @@ Essaie-le dans ton app, et garde-le en production si tu veux : c'est permis (voi
 | Coiffures, couleurs, thème | 3 coiffures, couleurs libres | 17 coiffures, couleurs libres |
 | Fichiers Rive (mobile) | les 3 personnages, 4 états chacun | les 3 personnages, 9 états chacun |
 | Mouvements : s'asseoir sur une carte, s'accouder, danser, flotter, sauter, grimper `climb()`, marcher, se retourner | — | oui |
+| Poser la mascotte sur un élément en une ligne (`placeOn()`, `goHome()`) | — | oui |
 | Regard : suit la souris au survol | oui | oui |
 | Regard sur toute la page (`follow="page"`, doigt sur mobile), `lookAt()` | — | oui |
 | Usage commercial | oui | oui |
