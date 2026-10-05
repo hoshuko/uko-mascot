@@ -1,5 +1,5 @@
 /**
- * Uko Mascot Engine v2.6.0 · vector runtime (SVG, 60 FPS)
+ * Uko Mascot Engine v2.6.1 · vector runtime (SVG, 60 FPS)
  * Canonical fixed-length skeleton with soft IK, blended state transitions,
  * modular hairstyles with secondary motion, attention tracking, walk cycle,
  * WCAG contrast helpers. Each instance is fully isolated.
@@ -52,7 +52,7 @@
     const key = String(id || '').trim();
     if (HAIR_CATALOG[key]) return key;
     if (HAIR_ALIASES[key] && HAIR_CATALOG[HAIR_ALIASES[key]]) return HAIR_ALIASES[key];
-    if (EDITION === 'starter') { console.info(`[UkoMascot] hairStyle "${key}" : pack complet → ${FULL_PACK_URL}`); return 'original'; }
+    if (EDITION === 'starter') { console.info(`[UkoMascot] hairStyle "${key}" : pack complet / full pack → ${FULL_PACK_URL}`); return 'original'; }
     console.warn(`[UkoMascot] Unknown hairStyle "${key}". Available: ${Object.keys(HAIR_CATALOG).join(', ')}`);
     return 'dreadlocks';
   }
@@ -4477,7 +4477,7 @@
       const seen = fullPackNotice.seen || (fullPackNotice.seen = new Set());
       if (seen.has(state)) return;
       seen.add(state);
-      console.info(`[UkoMascot] ${state.includes('"') ? state : `"${state}"`} fait partie du pack complet (l'âme, la parole, 17 coiffures, mouvements, regard sur toute la page) : ${FULL_PACK_URL}`);
+      console.info(`[UkoMascot] ${state.includes('"') ? state : `"${state}"`} fait partie du pack complet / is in the full pack (l'âme, la parole, 17 coiffures, mouvements, regard sur toute la page) : ${FULL_PACK_URL}`);
     }
 
     // Core state change. Always blends from what is on screen.
@@ -4857,7 +4857,9 @@
       const delta = CLOCK.lastWall === null ? 0 : Math.min(50, Math.max(0, wall - CLOCK.lastWall));
       CLOCK.lastWall = wall;
       // Time runs under reduced motion too (one-shots still complete); only the visuals are static.
-      if (!document.hidden && !CLOCK.paused) CLOCK.time += delta;
+      // Paused: no more frame callbacks until resume().
+      if (CLOCK.paused) { rafId = null; return; }
+      if (!document.hidden) CLOCK.time += delta;
       sinceDraw += delta;
       if (sinceDraw + 1 >= (onScreen ? frameMs() : OFFSCREEN_FRAME_MS) && !CLOCK.paused) {
         sinceDraw = 0;
@@ -5055,7 +5057,7 @@
       setOneShotMode(mode) { oneShotMode = mode === 'loop' ? 'loop' : 'return'; },
       setMaxFps(fps) { autoFps = !(Number(fps) > 0); minFrameMs = fpsCap(fps); },
       pause() { CLOCK.paused = true; },
-      resume() { CLOCK.paused = false; CLOCK.lastWall = null; },
+      resume() { CLOCK.paused = false; CLOCK.lastWall = null; if (!rafId && !destroyed) rafId = requestAnimationFrame(loopTick); },
 
       getState() { return WALK.active ? 'walk' : cur; },
       getBrandColor() { return brandColor; },
@@ -5178,7 +5180,7 @@
 
 
   root.UkoMascot = {
-    version: "2.6.0",
+    version: "2.6.1",
     edition: EDITION,
     create: createUkoMascot,
     ORDER,

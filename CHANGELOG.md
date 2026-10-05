@@ -1,5 +1,12 @@
 # Changelog
 
+## 2.6.1 — 5 octobre 2026
+- Une mascotte en pause (`pause()`, hors de l'écran dans la galerie…) n'occupe plus du tout la boucle d'animation
+  du navigateur ; `resume()` la relance.
+- Messages de la console en français et en anglais (« pack complet / full pack »).
+- Pack complet : sa licence (`LICENSE.md`, version 1.0, français et anglais) : usage illimité pour l'acheteur et
+  son équipe, projets clients compris, mises à jour de la version 2 incluses, sans redistribution des fichiers.
+
 ## 2.6.0 — 4 octobre 2026
 - **Pack complet : la poser où tu veux, en une ligne.** `placeOn(élément, { posture, move })` met ses pieds sur le
   bord haut d'un élément de la page (carte, fenêtre, bouton) : elle y saute (`hop`), y grimpe par l'arrière (`climb`)
