@@ -6,7 +6,8 @@
 
 <p align="center">
   A stick-figure mascot that acts out every state of your interface: <b>welcome, loading, success, error, empty, sleep…</b><br>
-  It breathes, blinks, reacts to touch and never freezes. One tag on the web, one Rive file everywhere else.
+  It breathes, blinks, reacts to touch and never freezes. One tag on the web, one Rive file everywhere else.<br>
+  With the full pack, it sits on your cards, climbs your modals, hops and dances, wherever you decide.
 </p>
 
 <p align="center">
@@ -18,6 +19,7 @@
 
 <p align="center">
   <img alt="Free, commercial use included" src="https://img.shields.io/badge/price-free%20·%20commercial%20use%20OK-FF7AAE">
+  <img alt="Version" src="https://img.shields.io/badge/version-2.6.1-16161D">
   <img alt="Web + Rive" src="https://img.shields.io/badge/web%20%2B%20Rive-iOS%20·%20Android%20·%20Flutter%20·%20React-3B5BFF">
   <img alt="Zero dependencies" src="https://img.shields.io/badge/dependencies-0-3DDC97">
   <img alt="Web engine size" src="https://img.shields.io/badge/web%20engine-55%20KB%20gzip-FFC93C">
@@ -28,20 +30,46 @@
 ---
 
 This repository is **Uko Starter**, the free edition: the files you get in the download, ready to use.
+Version 2.6.1.
 
 | | Free (this repository) | Full pack ★ |
 |---|---|---|
 | Characters | Uko, Aituko the robot, Meowuko the cat | same |
-| Hairstyles (Uko) | 3: `original`, `classique`, `chauve` | 17 |
 | States (web engine) | all 9: `idle` `welcome` `thinking` `loading` `success` `error` `empty` `sleep` `wake` | same |
-| Rive files (mobile) | all 3 characters, 4 states each | all 3 characters, 9 states each |
-| Colours, light and dark themes, touch reactions | ✓ | ✓ |
-| Movements: sits on a card, leans on a window, dances, floats, hops, climbs, walks, turns around | — | ✓ |
-| Gaze over the whole page | — | ✓ |
+| Hairstyles (Uko) | 3: `original`, `classique`, `chauve` | 17 |
+| Colors, light and dark themes, touch reactions | ✓ | ✓ |
+| Rive files (iOS, Android, Flutter, React Native) | all 3 characters, 4 states each | all 3 characters, 9 states each |
+| Postures: sits on a card, leans on a window, lies along an edge, dances, floats | — | ✓ |
+| Moves: hops, climbs, walks, turns around | — | ✓ |
+| One line to place it on any element: `uko.placeOn(card, { posture: 'sit' })` | — | ✓ |
+| A soul: reacts to where it is touched, to the moment and to its mood | — | ✓ |
+| Speech: its mouth follows a voice, recorded or synthesized | — | ✓ |
+| Eyes that follow the whole page | — | ✓ |
 | Commercial use | ✓ | ✓ |
+| Price | free | €5.99 launch price, then €9.99 · paid once |
 
-The full pack is not on sale yet: [tell us if you are interested](https://uko-mascot.pages.dev/en/#prix).
+The full pack is not on sale yet: [get a single email when it is out](https://uko-mascot.pages.dev/en/#prix).
 Moving to it means replacing the files: your code does not change.
+
+### The full pack, filmed in a real app
+
+Each move is one line, wherever you decide. In [SubFlow](https://uko-mascot.pages.dev/en/#ia), a subscription tracker, it sits on the empty list's button, climbs onto the form, hops back home and dances on every saving:
+
+<p align="center">
+  <img src="media/pack-sit.gif" alt="Empty list: Uko sits on the button" width="200">
+  <img src="media/pack-climb.gif" alt="A form opens: Uko climbs on top of it" width="200">
+  <img src="media/pack-hop.gif" alt="Saved: Uko hops back home" width="200">
+  <img src="media/pack-dance.gif" alt="Every saving: Uko dances" width="200">
+</p>
+
+```js
+uko.placeOn('#empty-list button', { posture: 'sit' });     // sits on the button
+uko.placeOn(modal, { posture: 'lean', move: 'climb' });    // climbs up and leans on the modal
+await uko.goHome();                                        // back to its place
+uko.dance();                                               // a free dance, never twice the same
+```
+
+### Free: every state, touch reactions included
 
 <p align="center"><img src="media/touch.gif" alt="Tapping the head, a hand, a foot, the body; three taps make it dizzy, five make it jump for joy" width="420"></p>
 
