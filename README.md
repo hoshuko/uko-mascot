@@ -73,7 +73,7 @@ uko.dance();                                               // a free dance, neve
 
 ### Free: every state, touch reactions included
 
-<p align="center"><img src="media/touch.gif" alt="Tapping the head, a hand, a foot, the body; three taps make it dizzy, five make it jump for joy" width="420"></p>
+<p align="center"><img src="media/touch.gif" alt="Uko with pink dreadlocks and a green face: tapping the head, a hand, a foot, the body; three taps make it dizzy, five make it jump for joy" width="420"><br><sub>Touch reactions are free; the dreadlocks are one of the 14 extra hairstyles of the full pack ★</sub></p>
 
 ## Quick start
 
