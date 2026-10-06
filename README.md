@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="media/hero.gif" alt="Aituko the robot, Uko and Meowuko the cat wave, then jump for joy" width="720">
+  <img src="media/hero.gif" alt="A pen draws a line; it becomes Uko, who comes alive, hops onto a subscription card and floats over the app" width="720">
 </p>
 
 <h1 align="center">Uko — a living mascot for your app</h1>
@@ -53,7 +53,7 @@ Moving to it means replacing the files: your code does not change.
 
 ### The full pack, filmed in a real app
 
-Each move is one line, wherever you decide. In [SubFlow](https://uko-mascot.pages.dev/en/#ia), a subscription tracker, it sits on the empty list's button, climbs onto the form, hops back home and dances on every saving:
+It has a soul: it reacts to where it is touched, to the moment and to its mood. Each move is one line, wherever you decide. In [SubFlow](https://uko-mascot.pages.dev/en/#ia), a subscription tracker, it sits on the empty list's button, climbs onto the form, hops back home and dances on every saving:
 
 <p align="center">
   <img src="media/pack-sit.gif" alt="Empty list: Uko sits on the button" width="200">
@@ -61,6 +61,8 @@ Each move is one line, wherever you decide. In [SubFlow](https://uko-mascot.page
   <img src="media/pack-hop.gif" alt="Saved: Uko hops back home" width="200">
   <img src="media/pack-dance.gif" alt="Every saving: Uko dances" width="200">
 </p>
+
+<p align="center"><img src="media/pack-soul.gif" alt="Touch it: hearts, dizziness, a sneeze, then it gets annoyed and crosses its arms. It has a soul." width="420"></p>
 
 ```js
 uko.placeOn('#empty-list button', { posture: 'sit' });     // sits on the button
