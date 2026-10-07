@@ -144,3 +144,5 @@ Free, commercial use included: use Uko in as many personal or commercial project
 including with AI. Do not redistribute or resell the files on their own, or present the characters as your own
 creation or brand. See [LICENSE.md](LICENSE.md) (French; it prevails over any translation).
 Questions and bug reports: [issues](https://github.com/hoshuko/uko-mascot/issues).
+
+Made by [AadaTech](https://aadatech.com) · [mascot-uko.com](https://mascot-uko.com)
