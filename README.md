@@ -11,15 +11,15 @@
 </p>
 
 <p align="center">
-  <a href="https://uko-mascot.pages.dev/en/"><b>Website</b></a> ·
-  <a href="https://uko-mascot.pages.dev/en/#galerie"><b>Try the colors and hairstyles</b></a> ·
-  <a href="https://uko-mascot.pages.dev/free/Uko-Starter.zip"><b>Download (free)</b></a> ·
+  <a href="https://mascot-uko.com/en/"><b>Website</b></a> ·
+  <a href="https://mascot-uko.com/en/#galerie"><b>Try the colors and hairstyles</b></a> ·
+  <a href="https://mascot-uko.com/free/Uko-Starter.zip"><b>Download (free)</b></a> ·
   <a href="https://www.youtube.com/@Hosh-uko"><b>YouTube</b></a>
 </p>
 
 <p align="center">
   <img alt="Free, commercial use included" src="https://img.shields.io/badge/price-free%20·%20commercial%20use%20OK-FF7AAE">
-  <img alt="Version" src="https://img.shields.io/badge/version-2.6.1-16161D">
+  <img alt="Version" src="https://img.shields.io/badge/version-2.6.2-16161D">
   <img alt="Web + Rive" src="https://img.shields.io/badge/web%20%2B%20Rive-iOS%20·%20Android%20·%20Flutter%20·%20React-3B5BFF">
   <img alt="Zero dependencies" src="https://img.shields.io/badge/dependencies-0-3DDC97">
   <img alt="Web engine size" src="https://img.shields.io/badge/web%20engine-55%20KB%20gzip-FFC93C">
@@ -30,7 +30,7 @@
 ---
 
 This repository is **Uko Starter**, the free edition: the files you get in the download, ready to use.
-Version 2.6.1.
+Version 2.6.2.
 
 | | Free (this repository) | Full pack ★ |
 |---|---|---|
@@ -48,12 +48,12 @@ Version 2.6.1.
 | Commercial use | ✓ | ✓ |
 | Price | free | €5.99 launch price, then €9.99 · paid once |
 
-The full pack is not on sale yet: [get a single email when it is out](https://uko-mascot.pages.dev/en/#prix).
+The full pack is not on sale yet: [get a single email when it is out](https://mascot-uko.com/en/#prix).
 Moving to it means replacing the files: your code does not change.
 
 ### The full pack, filmed in a real app
 
-It has a soul: it reacts to where it is touched, to the moment and to its mood. Each move is one line, wherever you decide. In [SubFlow](https://uko-mascot.pages.dev/en/#ia), a subscription tracker, it sits on the empty list's button, climbs onto the form, hops back home and dances on every saving:
+It has a soul: it reacts to where it is touched, to the moment and to its mood. Each move is one line, wherever you decide. In [SubFlow](https://mascot-uko.com/en/#ia), a subscription tracker, it sits on the empty list's button, climbs onto the form, hops back home and dances on every saving:
 
 <p align="center">
   <img src="media/pack-sit.gif" alt="Empty list: Uko sits on the button" width="200">

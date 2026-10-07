@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.6.2 — 7 octobre 2026
+- Le site s'installe à sa propre adresse : **https://mascot-uko.com** (l'ancienne, uko-mascot.pages.dev, y redirige).
+  Les liens du moteur (« pack complet → … ») et de la documentation pointent vers elle.
+
 ## 2.6.1 — 5 octobre 2026
 - Une mascotte en pause (`pause()`, hors de l'écran dans la galerie…) n'occupe plus du tout la boucle d'animation
   du navigateur ; `resume()` la relance.

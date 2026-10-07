@@ -29,7 +29,7 @@ Pruébalo en tu app y quédatelo en producción si quieres: está permitido
 Si tu código ya pide un movimiento del pack completo (por ejemplo `climb()` o `lookAt()`), la mascota se queda en su estado actual
 y la consola indica dónde encontrarlo: nada se rompe.
 
-Pack completo: https://uko-mascot.pages.dev/es/#prix
+Pack completo: https://mascot-uko.com/es/#prix
 
 ## Qué recibes
 

@@ -29,7 +29,7 @@ Try it in your app, and keep it in production if you like: that is allowed
 If your code already asks for a full-pack movement (for example `climb()` or `lookAt()`), the mascot stays in its current state
 and the console says where to get it: nothing breaks.
 
-Full pack: https://uko-mascot.pages.dev/en/#prix
+Full pack: https://mascot-uko.com/en/#prix
 
 ## What you get
 
