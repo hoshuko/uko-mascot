@@ -1,5 +1,5 @@
 /**
- * Uko Mascot Engine v2.6.2 · vector runtime (SVG, 60 FPS)
+ * Uko Mascot Engine v2.7.0 · vector runtime (SVG, 60 FPS)
  * Canonical fixed-length skeleton with soft IK, blended state transitions,
  * modular hairstyles with secondary motion, attention tracking, walk cycle,
  * WCAG contrast helpers. Each instance is fully isolated.
@@ -498,6 +498,11 @@
 
     const HAIR_STYLES=HAIR_CATALOG;
     const HAIR_DYNAMICS={model:null,style:null,chains:[],last:0,frame:null,sleepSettled:null,sleepSettleCount:0};
+    // Where the whole drawing has been moved on the page (placeOn, in drawing units): the hair feels the trip.
+    const HAIR_FRAME=[0,0];
+    // A clip path (id) masking the head and its hair, in drawing units (a hat flattens what is under it): setHeadClip().
+    let HEAD_CLIP=null;
+    const headClipped=svg=>HEAD_CLIP&&svg?`<g clip-path="url(#${HEAD_CLIP})">${svg}</g>`:svg;
     // A hairstyle's model depends on its style only: built once per page, shared by every mascot.
     const HAIR_MODELS=SHARED_HAIR_MODELS;
     const hMix=(a,b,t)=>a.length===3?[a[0]+(b[0]-a[0])*t,a[1]+(b[1]-a[1])*t,a[2]+(b[2]-a[2])*t]:a.map((v,i)=>v+(b[i]-v)*t);
@@ -658,7 +663,8 @@
       h.sleepSettled=null;h.sleepSettleCount=0;
      }
      // A tied bun is firm; a puff has small distributed compliance. Both stay rooted.
-     const soft=h.soft,base=hairTransform([0,-230,0],f),vel=base.map((v,i)=>lp(soft.baseVelocity[i],(v-soft.base[i])/dt,1-Math.exp(-dt/.04)));
+     const soft=h.soft,base=hairTransform([0,-230,0],f);base[0]+=HAIR_FRAME[0];base[1]+=HAIR_FRAME[1];
+     const vel=base.map((v,i)=>lp(soft.baseVelocity[i],(v-soft.base[i])/dt,1-Math.exp(-dt/.04)));
      const acceleration=vel.map((v,i)=>clamp((v-soft.baseVelocity[i])/dt,-4000,4000));
      // Activity gate: hair only shows secondary motion when the head really moves
      // (jump, walk, turn). Breathing and eye-tracking drift stay below the threshold,
@@ -677,10 +683,12 @@
       // The neutral groom already includes gravity. Rotation adds the difference
       // between world gravity and that neutral direction, only at the loose ends.
       const roll=rot*Math.PI/180,k=model.sway?model.sway.k:model.style==='mi_long'?76:205,gravity=420*f.scale;
+      // Long loose hair (sway) swings further and answers the head's moves more than a groom.
+      const tipLimit=(model.sway&&model.sway.limit||12)*f.scale,gain=model.sway&&model.sway.gain||.23;
       const residual=[Math.sin(roll)*gravity,(1-Math.cos(roll))*gravity];
       for(let i=0;i<2;i++){
-       soft.tipVelocity[i]+=(-k*soft.tipOffset[i]-1.8*Math.sqrt(k)*soft.tipVelocity[i]-acceleration[i]*.23+residual[i])*dt;
-       soft.tipOffset[i]=clamp(soft.tipOffset[i]+soft.tipVelocity[i]*dt,-12*f.scale,12*f.scale);
+       soft.tipVelocity[i]+=(-k*soft.tipOffset[i]-1.8*Math.sqrt(k)*soft.tipVelocity[i]-acceleration[i]*gain+residual[i])*dt;
+       soft.tipOffset[i]=clamp(soft.tipOffset[i]+soft.tipVelocity[i]*dt,-tipLimit,tipLimit);
       }
       // Static gravity equilibrium of the loose ends (always shown, even at rest).
       soft.tipEq=[clamp(residual[0]/k,-12*f.scale,12*f.scale),clamp(residual[1]/k,-12*f.scale,12*f.scale)];
@@ -1615,7 +1623,7 @@
       const farOpacity=1;
       const [cx,cy]=p.head_center;
       // Hair behind the head is also behind the body (long hair, ponytails, braids).
-      let out=projectedHair(cx,cy,p.head_radius,rot,headYaw,"back");
+      let out=headClipped(projectedHair(cx,cy,p.head_radius,rot,headYaw,"back"));
       const chBody=characterDef();if(chBody)out+=chBody.body(p,yaw);
 
       // Far limbs are painted first: they live behind the torso in depth.
@@ -1639,10 +1647,10 @@
         +orientationHandMarkup(p,near,true,yaw)
         +orientationFootMarkup(p,near,true,yaw);
 
-      out+=orientedHeadMarkup(cx,cy,p.head_radius,rot,headYaw);
+      out+=headClipped(orientedHeadMarkup(cx,cy,p.head_radius,rot,headYaw));
       // The face is built first: the beard opens around the mouth it draws.
       const faceSvg=orientedFaceSpec(faceMode,cx,cy,p.head_radius,rot,blink,eyeOffset,headYaw);
-      out+=headAppearanceMarkup(cx,cy,p.head_radius,rot,headYaw);
+      out+=headClipped(headAppearanceMarkup(cx,cy,p.head_radius,rot,headYaw));
       out+=faceSvg;
       return out;
     }
@@ -1683,7 +1691,7 @@
       const hand=(c,a)=>`<ellipse class="hand" cx="${c[0]}" cy="${c[1]}" rx="46" ry="26" transform="rotate(${a} ${c[0]} ${c[1]})"/>`;
 
       // Hair behind the head is also behind the body (long hair, ponytails, braids).
-      let out=projectedHair(cx,cy,p.head_radius,rot,headYaw,"back");
+      let out=headClipped(projectedHair(cx,cy,p.head_radius,rot,headYaw,"back"));
       const chBody=characterDef();if(chBody)out+=chBody.body(p,yaw);
 
       out+=seg(p.neck,p.pelvis);
@@ -1711,10 +1719,10 @@
       const fsc=p.footScale||{},footE=(c,s)=>{const k=fsc[s]||[1,1];return `<ellipse class="foot" cx="${c[0]}" cy="${c[1]}" rx="${(58*k[0]).toFixed(1)}" ry="${(22*k[1]).toFixed(1)}"/>`;};
       out+=footE(fcL,'L')+footE(fcR,'R');
 
-      out+=orientedHeadMarkup(cx,cy,p.head_radius,rot,headYaw);
+      out+=headClipped(orientedHeadMarkup(cx,cy,p.head_radius,rot,headYaw));
       // The face is built first: the beard opens around the mouth it draws.
       const faceSvg=orientedFaceSpec(faceMode,cx,cy,p.head_radius,rot,blink,eyeOffset,headYaw);
-      out+=headAppearanceMarkup(cx,cy,p.head_radius,rot,headYaw);
+      out+=headClipped(headAppearanceMarkup(cx,cy,p.head_radius,rot,headYaw));
       out+=faceSvg;
 
       if(front.L||front.R){
@@ -4251,7 +4259,7 @@
       // Brand colour = fill of the face, hands and feet (lightened / darkened for contrast).
       brandColor: '#FFFFFF',
       hairColor: '#0B0B0B',
-      // Line colour follows the theme: 'auto' = site theme (html.dark / [data-theme=dark]),
+      // Line colour follows the theme: 'auto' = site theme (html.dark / [data-theme]), else the OS preference,
       // 'system' = OS preference, or force 'light' / 'dark'.
       theme: 'auto',
       lineColor: 'auto',
@@ -4329,6 +4337,7 @@
     let lastGazeFrame = 0;
     let shownFace = 'idle';
     let shownRot = 0;
+    let shownHeadYaw = 0;          // head turn drawn last (0 = facing, ± towards a profile)
     let wasGaitLive = false;
     APPEARANCE.hairStyle = normalizeHairStyle(options.hairStyle);
     APPEARANCE.cheeks = options.cheeks !== false;
@@ -4357,8 +4366,11 @@
     function currentThemeMode() {
       if (themeOpt === 'light' || themeOpt === 'dark') return themeOpt;
       if (themeOpt === 'system') return systemDarkQuery && systemDarkQuery.matches ? 'dark' : 'light';
-      const html = document.documentElement;
-      return html.classList.contains('dark') || html.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
+      // 'auto': the site's own theme when it sets one, otherwise the OS preference
+      const html = document.documentElement, set = html.getAttribute('data-theme');
+      if (html.classList.contains('dark') || set === 'dark') return 'dark';
+      if (html.classList.contains('light') || set === 'light') return 'light';
+      return systemDarkQuery && systemDarkQuery.matches ? 'dark' : 'light';
     }
 
     // Colour model
@@ -4836,6 +4848,7 @@
       shown = q;
       shownFace = dominantFace(faceMode);
       shownRot = rot;
+      shownHeadYaw = headYaw;
 
       const [hx, hy] = q.head_center;
       HAIR_COARSE = autoFps && LOAD.fps < 60;
@@ -4997,6 +5010,10 @@
       // Back to its own place (where the page put it), standing.
       goHome(opts = {}) { if (paidOnly('goHome')) return Promise.resolve(false); return placeHome(this, opts || {}); },
       getPlace() { return placedOn(); },
+      // Let go of the element it is on and stay where it is (a page scrolling under it, say).
+      // Mask the head and its hair with a clip path of the page (drawing units), e.g. under a hat; null removes it.
+      setHeadClip(id) { HEAD_CLIP = id || null; },
+      holdPlace() { if (paidOnly('holdPlace')) return false; return placeHold(); },
       dance(opts = {}) { if (paidOnly('dance')) return; if (WALK.active) stopWalk(); if (cur !== 'idle') go('idle'); blend = null; setPosture('dance', opts, motionNow(), shown); },
       stopDance() { if (PZ.name === 'dance') { blend = null; setPosture('stand', {}, motionNow(), shown); } },
       // A light jump. The host moves the box between onTakeoff and onLand (an arc);
@@ -5077,7 +5094,8 @@
       isSpeaking() { return talking(); },
       getSvgElement() { return svgEl; },
       // Debug/QA: the pose that was last drawn (joint positions in the 1024×1536 viewBox).
-      getPose() { return shown ? cpy(shown) : null; },
+      // The pose drawn last; rot = the head's tilt (degrees, around head_center), headYaw = its turn.
+      getPose() { if (!shown) return null; const p = cpy(shown); p.rot = shownRot; p.headYaw = shownHeadYaw; return p; },
       // Canonical bone lengths (viewBox px) shared with the Rive export.
       getSkeleton() { return cpy(SKELETON); },
       // QA builds only (build_mascot_engine.js --debug): internal state for tests.
@@ -5180,7 +5198,7 @@
 
 
   root.UkoMascot = {
-    version: "2.6.2",
+    version: "2.7.0",
     edition: EDITION,
     create: createUkoMascot,
     ORDER,

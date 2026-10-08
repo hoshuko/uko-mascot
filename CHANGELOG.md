@@ -1,5 +1,18 @@
 # Changelog
 
+## 2.7.0 — 8 octobre 2026
+- Thème sombre : avec `theme="auto"` (par défaut), la mascotte suit le thème imposé par le site (`html.dark`,
+  `[data-theme]`) et, quand le site n'en impose pas, le réglage clair/sombre de l'appareil. Avant, un site sombre
+  par `prefers-color-scheme` gardait des traits noirs, invisibles sur fond noir.
+- Déplacements plus fluides : sur un long trajet, la mascotte flotte jusqu'à sa place (`glide` en apesanteur, à
+  un rythme qui suit la distance) au lieu de sauter ; un saut vers le bas ne monte presque plus avant de retomber.
+- Cheveux longs (lisse, ondulé, bouclé) : ils balancent vraiment, avec plus d'amplitude, et tous les cheveux sentent
+  maintenant les trajets de la mascotte sur la page (`placeOn`) : ils traînent derrière, puis reviennent.
+- `setHeadClip(id)` : masque la tête et les cheveux avec un chemin de découpe de la page (unités du dessin), par
+  exemple sous un chapeau ; `getPose()` donne aussi l'inclinaison (`rot`) et la rotation (`headYaw`) de la tête.
+- `holdPlace()` : elle lâche l'élément où elle est posée et reste où elle est (la page peut défiler dessous) ; le
+  prochain `placeOn()` ou `goHome()` part de là. Starter : répond `false`.
+
 ## 2.6.2 — 7 octobre 2026
 - Le site s'installe à sa propre adresse : **https://mascot-uko.com** (l'ancienne, uko-mascot.pages.dev, y redirige).
   Les liens du moteur (« pack complet → … ») et de la documentation pointent vers elle.
