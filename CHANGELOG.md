@@ -1,9 +1,25 @@
 # Changelog
 
+## 2.7.4 · 9 octobre 2026
+- **Licence de la version gratuite : le code passe en open source (licence MIT).** Le moteur, les exemples et la
+  documentation d'Uko Starter peuvent être lus, modifiés et republiés librement, usage commercial compris (`LICENSE`).
+- Les personnages Uko, Aituko et Meowuko ont leur propre licence (`LICENSE-CHARACTERS.md`) : utilisation libre dans
+  tes produits, même commerciaux et même comme logo, et avec des outils d'IA ; seules limites, ne pas les vendre tels
+  quels et ne pas se les approprier. Une mention est appréciée, pas obligatoire.
+- Pack complet : licence 1.1, alignée sur ces assouplissements pour les personnages (logo, outils d'IA) ; ses fichiers
+  restent réservés à l'acheteur et à son équipe.
+- Aucun changement de code ni de comportement.
+
 ## 2.7.3 — 9 octobre 2026
 - Effets du toucher plus lisibles dans les états chargés (succès, accueil) : ils cherchent un peu plus loin une place à
   leur taille normale avant de rapetisser, et un cœur n'est jamais dessiné minuscule.
 - Pack complet, chargement : quand une main monte vers la roue de chargement (geste de l'âme), la roue glisse de côté.
+- Un toucher montre toujours un effet : à court de place, une forme compacte (une étoile, un cœur, une note) le remplace.
+  La zone à éviter autour des cheveux suit leur vraie forme (cheveux longs, dreadlocks…), et un effet proche du
+  toucher passe avant un effet plus grand mais loin. En succès, le « ! » se place à côté de la poitrine.
+- Pack complet : les effets de l'âme partent dans l'ordre du temps ; la poignée de main et l'éternuement réagissent
+  tout de suite.
+- Corrigé : `poke('hand')` au repos dans le pack complet ne déclenchait aucune réaction (un vrai toucher, si).
 
 ## 2.7.2 — 9 octobre 2026
 - **Effets du toucher toujours à côté de la mascotte, jamais dessus.** Étoiles, cœurs, notes, traits de surprise,

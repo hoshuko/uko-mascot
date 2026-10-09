@@ -4,7 +4,7 @@
 
 Uko, Aituko el robot y Meowuko el gato en versión gratuita: **los 9 estados**, **3 peinados** para Uko (`original`, `classique`, `chauve`), colores libres, tema claro u oscuro. Reacciona al tacto en todos los estados, y su mirada puede seguir el puntero por toda la página (`follow="page"`).
 Pruébalo en tu app y quédatelo en producción si quieres: está permitido
-(ver `LICENSE.md`; prevalece el texto francés de la licencia).
+(código bajo licencia MIT, personajes: ver `LICENSE-CHARACTERS.md`).
 
 | | Para | Archivo |
 |---|---|---|
@@ -193,4 +193,6 @@ Ejemplos en `examples/`: web, React, Flutter, iOS (Swift), Android (Kotlin).
 
 ## Licencia
 
-Gratis, uso comercial incluido, sin reventa ni redistribución de los archivos: ver `LICENSE.md` (en francés; prevalece sobre cualquier traducción).
+El código es de código abierto, bajo licencia MIT (`LICENSE`): léelo, modifícalo y vuelve a publicarlo. Los personajes
+Uko, Aituko y Meowuko se usan libremente en tus productos, incluso comerciales y como logo, siempre que no se vendan
+tal cual ni te los apropies: ver `LICENSE-CHARACTERS.md` (prevalece el texto francés).

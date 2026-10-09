@@ -19,7 +19,7 @@
 
 <p align="center">
   <img alt="Free, commercial use included" src="https://img.shields.io/badge/price-free%20·%20commercial%20use%20OK-FF7AAE">
-  <img alt="Version" src="https://img.shields.io/badge/version-2.7.3-16161D">
+  <img alt="Version" src="https://img.shields.io/badge/version-2.7.4-16161D">
   <img alt="Web + Rive" src="https://img.shields.io/badge/web%20%2B%20Rive-iOS%20·%20Android%20·%20Flutter%20·%20React-3B5BFF">
   <img alt="Zero dependencies" src="https://img.shields.io/badge/dependencies-0-3DDC97">
   <img alt="Web engine size" src="https://img.shields.io/badge/web%20engine-57%20KB%20gzip-FFC93C">
@@ -30,7 +30,7 @@
 ---
 
 This repository is **Uko Starter**, the free edition: the files you get in the download, ready to use.
-Version 2.7.3.
+Version 2.7.4.
 
 | | Free (this repository) | Full pack ★ |
 |---|---|---|
@@ -144,9 +144,13 @@ Full documentation: [README.en.md](README.en.md).
 
 ## License
 
-Free, commercial use included: use Uko in as many personal or commercial projects as you like and modify it,
-including with AI. Do not redistribute or resell the files on their own, or present the characters as your own
-creation or brand. See [LICENSE.md](LICENSE.md) (French; it prevails over any translation).
+**Code: [MIT](LICENSE).** The engine, examples and docs of this free edition are open source: read, change, fork and
+republish them, commercial use included.
+
+**Characters: [Uko characters licence](LICENSE-CHARACTERS.md).** Uko, Aituko and Meowuko can be used freely in your
+products, commercial ones included and even as your product's logo, and with AI tools. Two limits: do not sell the
+characters as they are (mascot or sticker packs), and do not claim them as yours (trademark, authorship). A credit
+("Uko mascot by AadaTech") is not required, but warmly appreciated.
 Questions and bug reports: [issues](https://github.com/hoshuko/uko-mascot/issues) or hello@aadatech.com.
 
 Made by [AadaTech](https://aadatech.com) · [mascot-uko.com](https://mascot-uko.com)

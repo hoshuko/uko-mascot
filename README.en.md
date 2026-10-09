@@ -4,7 +4,7 @@
 
 Uko, Aituko the robot and Meowuko the cat, free edition: **all 9 states**, **3 hairstyles** for Uko (`original`, `classique`, `chauve`), any colors, light or dark theme. It reacts to touch in every state, and its eyes can follow the pointer across the whole page (`follow="page"`).
 Try it in your app, and keep it in production if you like: that is allowed
-(see `LICENSE.md`; the French text of the license prevails).
+(code under the MIT license, characters: see `LICENSE-CHARACTERS.md`).
 
 | | For | File |
 |---|---|---|
@@ -193,4 +193,6 @@ Examples in `examples/`: web, React, Flutter, iOS (Swift), Android (Kotlin).
 
 ## License
 
-Free, commercial use included, no resale or redistribution of the files: see `LICENSE.md` (French; it prevails over any translation).
+The code is open source under the MIT license (`LICENSE`): read it, change it, republish it. The characters Uko, Aituko
+and Meowuko can be used freely in your products, commercial ones included and even as a logo, as long as they are not
+sold as they are or claimed as yours: see `LICENSE-CHARACTERS.md` (the French text prevails).

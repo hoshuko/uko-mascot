@@ -1,11 +1,11 @@
 /**
- * Uko Mascot Engine v2.7.3 · vector runtime (SVG, 60 FPS)
+ * Uko Mascot Engine v2.7.4 · vector runtime (SVG, 60 FPS)
  * Canonical fixed-length skeleton with soft IK, blended state transitions,
  * modular hairstyles with secondary motion, attention tracking, walk cycle,
  * WCAG contrast helpers. Each instance is fully isolated.
  *
  * Generated file — edit mascot_engine/src/ and run build_mascot_engine.js.
- * Starter edition (free): Uko, Aituko and Meowuko, 3 hairstyles (original, classique, chauve), all 9 states. Full pack: https://mascot-uko.com/#prix
+ * Starter edition (free): Uko, Aituko and Meowuko, 3 hairstyles (original, classique, chauve), all 9 states. Code: MIT licence (c) 2026 AadaTech; characters: see LICENSE-CHARACTERS.md. Full pack: https://mascot-uko.com/#prix
  */
 (function (root) {
   'use strict';
@@ -5409,7 +5409,7 @@
 
 
   root.UkoMascot = {
-    version: "2.7.3",
+    version: "2.7.4",
     edition: EDITION,
     create: createUkoMascot,
     ORDER,

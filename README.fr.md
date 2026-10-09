@@ -3,7 +3,7 @@
 *English: `README.en.md` · Español: `README.es.md`*
 
 Uko, Aituko le robot et Meowuko le chat en version gratuite : **les 9 états**, **3 coiffures** pour Uko (`original`, `classique`, `chauve`), toutes les couleurs, thème clair ou sombre. Elle réagit au toucher dans tous les états, et son regard peut suivre le pointeur sur toute la page (`follow="page"`).
-Essaie-le dans ton app, et garde-le en production si tu veux : c'est permis (voir `LICENSE.md`).
+Essaie-le dans ton app, et garde-le en production si tu veux : c'est permis (code sous licence MIT, personnages : voir `LICENSE-CHARACTERS.md`).
 
 | | Pour qui | Fichier |
 |---|---|---|
@@ -189,4 +189,6 @@ Exemples dans `examples/` : web, React, Flutter, iOS (Swift), Android (Kotlin).
 
 ## Licence
 
-Gratuit, y compris pour un usage commercial, sans revente ni redistribution des fichiers : voir `LICENSE.md`.
+Le code est open source, sous licence MIT (`LICENSE`) : tu peux le lire, le modifier et le republier. Les personnages
+Uko, Aituko et Meowuko s'utilisent librement dans tes produits, même commerciaux et même comme logo, sans être vendus
+tels quels ni appropriés : voir `LICENSE-CHARACTERS.md`.
