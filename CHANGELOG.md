@@ -1,5 +1,18 @@
 # Changelog
 
+## 2.7.1 — 9 octobre 2026
+- **Version gratuite : elle réagit au toucher dans tous les états éveillés.** Avant, seul le repos (`idle`)
+  répondait. Maintenant, en accueil, chargement, succès, erreur, liste vide ou réveil, une réaction simple joue par-dessus
+  le mouvement de l'état, sans changer son visage. Les effets (étoiles, cœurs, notes, poussière) ne se posent plus
+  jamais sur le visage, mais à côté de la tête ; en erreur et pour une liste vide, pas de fête : une petite marque de
+  surprise. Endormie, un toucher la réveille, comme avant.
+- **Version gratuite : le regard suit le pointeur sur toute la page.** `follow="page"` (ou `setFollow('page')`) n'est plus
+  réservé au pack complet : la souris partout sur la page, le doigt sur mobile. Après quelques secondes sans mouvement,
+  elle détourne le regard et reprend sa vie. Par défaut, `follow` reste `hover` (au survol). `lookAt()` (regarder un
+  élément précis) reste dans le pack complet.
+- Documentation : les fichiers Rive gratuits contiennent 4 états (idle, welcome, loading, success) alors que le moteur
+  web gratuit en a 9 ; la parole du pack complet suit la voix que tu fournis (aucune voix n'est incluse).
+
 ## 2.7.0 — 8 octobre 2026
 - Thème sombre : avec `theme="auto"` (par défaut), la mascotte suit le thème imposé par le site (`html.dark`,
   `[data-theme]`) et, quand le site n'en impose pas, le réglage clair/sombre de l'appareil. Avant, un site sombre

@@ -2,7 +2,7 @@
 
 *English: `README.en.md` · Español: `README.es.md`*
 
-Uko, Aituko le robot et Meowuko le chat en version gratuite : **les 9 états**, **3 coiffures** pour Uko (`original`, `classique`, `chauve`), toutes les couleurs, thème clair ou sombre.
+Uko, Aituko le robot et Meowuko le chat en version gratuite : **les 9 états**, **3 coiffures** pour Uko (`original`, `classique`, `chauve`), toutes les couleurs, thème clair ou sombre. Elle réagit au toucher dans tous les états, et son regard peut suivre le pointeur sur toute la page (`follow="page"`).
 Essaie-le dans ton app, et garde-le en production si tu veux : c'est permis (voir `LICENSE.md`).
 
 | | Pour qui | Fichier |
@@ -17,11 +17,14 @@ Essaie-le dans ton app, et garde-le en production si tu veux : c'est permis (voi
 | Mascottes | Uko, Aituko le robot, Meowuko le chat | pareil |
 | États (moteur web) | les 9 : `idle` `welcome` `thinking` `loading` `success` `error` `empty` `sleep` `wake` | pareil |
 | Coiffures, couleurs, thème | 3 coiffures, couleurs libres | 17 coiffures, couleurs libres |
-| Fichiers Rive (mobile) | les 3 personnages, 4 états chacun | les 3 personnages, 9 états chacun |
+| Fichiers Rive (mobile) | les 3 personnages, 4 états chacun (repos, accueil, chargement, succès) | les 3 personnages, 9 états chacun |
+| Toucher : la zone touchée réagit, dans tous les états éveillés | oui (réaction simple, effets jamais sur le visage) | oui, avec l'âme |
+| Regard : suit le pointeur au survol ou sur toute la page (`follow="page"`, doigt sur mobile), puis se détourne après quelques secondes sans mouvement | oui | oui |
+| Regarder un élément précis (`lookAt()`) | — | oui |
+| Une âme : humeur, réactions propres à chaque état, caresses, poignée de main, vie autonome | — | oui |
+| Parole : la bouche suit la voix que tu fournis (`speak()`, `setMouth()`) ; aucune voix n'est fournie | — | oui |
 | Mouvements : s'asseoir sur une carte, s'accouder, danser, flotter, sauter, grimper `climb()`, marcher, se retourner | — | oui |
 | Poser la mascotte sur un élément en une ligne (`placeOn()`, `goHome()`) | — | oui |
-| Regard : suit la souris au survol | oui | oui |
-| Regard sur toute la page (`follow="page"`, doigt sur mobile), `lookAt()` | — | oui |
 | Usage commercial | oui | oui |
 
 **Passer au pack complet** : remplace `uko-mascot-engine.min.js` (et `uko-mascot-engine.js`) et les fichiers `rive/*.riv` par ceux du pack. Ton code ne change pas.
@@ -69,6 +72,7 @@ document.querySelector('uko-mascot').setAttribute('state', 'success');
 | `theme` | `auto` (suit `html.dark` / `data-theme`), `system`, `light`, `dark` | `auto` |
 | `contrast` | `auto` (couleurs ajustées pour le contraste WCAG) ou `direct` | `auto` |
 | `interactive` | la mascotte suit le curseur et réagit au clic | `true` |
+| `follow` | où les yeux suivent le pointeur : `hover` (au survol), `page` (partout sur la page, et le doigt sur mobile), `none` | `hover` |
 | `one-shot` | `return` (revient à idle après welcome, success, error, empty ou wake) ou `loop` | `return` |
 | `cheeks` | joues roses | `true` |
 | `accent` | couleur de l'antenne d'Aituko | `#FFC93C` |
@@ -78,8 +82,12 @@ document.querySelector('uko-mascot').setAttribute('state', 'success');
 ### Toucher
 
 Touche la mascotte (souris ou doigt) : la zone touchée réagit, avec un petit effet. Tête : boop, fou rire, grimace ; main : coucou, tope-là ; pied : petit saut, coup de pied, aïe ; corps : rebond, chatouilles, surprise.
-Plusieurs touches de suite : trois sur la tête, elle a la tête qui tourne ; trois sur le corps, elle rit aux éclats ; cinq n'importe où, elle saute de joie. Endormie, un tap la réveille.
+Plusieurs touches de suite : trois sur la tête, elle a la tête qui tourne ; trois sur le corps, elle rit aux éclats ; cinq n'importe où, elle saute de joie. Endormie, un tap la réveille. Dans les autres états éveillés (chargement, succès, erreur…), elle réagit aussi, par une réaction simple dont les effets ne se posent jamais sur le visage ; en erreur ou pour une liste vide, pas de fête : une petite marque de surprise.
 Depuis ton code : `uko.poke('head')` (ou `'hand'`, `'foot'`, `'body'`), avec une réaction précise si tu veux : `uko.poke('body', 'joy')`. `interactive="false"` désactive le toucher.
+
+### Regard
+
+Par défaut, les yeux suivent le pointeur quand il est sur la mascotte (`follow="hover"`). Avec `follow="page"` (ou `uko.setFollow('page')`), ils le suivent sur toute la page, et le doigt sur mobile ; après quelques secondes sans mouvement, elle détourne le regard et reprend sa vie. `follow="none"` coupe le suivi. Regarder un élément précis (`lookAt()`) est dans le pack complet.
 
 ### React
 
@@ -146,6 +154,8 @@ affiche `original` et la console indique où la trouver.
 | `state` | Number | `0` idle · `2` loading |
 | `welcome` | Trigger | salut |
 | `success` | Trigger | célébration (depuis loading : enchaînement dédié) |
+
+Ces fichiers contiennent 4 états : repos (`state = 0`), chargement (`state = 2`), accueil (`welcome`) et succès (`success`). Les 9 états sont dans le moteur web ; les fichiers Rive du pack complet ont les 9.
 
 Après un chargement réussi : mets `state = 0` **et** déclenche `success` en même temps.
 Les numéros sont ceux du pack complet (qui ajoute `1` thinking, `3` sleep, et les triggers `error`, `empty`).

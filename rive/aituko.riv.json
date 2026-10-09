@@ -5,8 +5,8 @@
   "rig": "bones",
   "artboard": "Aituko",
   "stateMachine": "Uko",
-  "bytes": 73609,
-  "keyFrames": 3794,
+  "bytes": 73691,
+  "keyFrames": 3800,
   "inputs": {
     "state": "number: 0 idle, 2 loading",
     "welcome": "trigger",

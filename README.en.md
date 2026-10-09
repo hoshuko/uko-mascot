@@ -2,7 +2,7 @@
 
 *Français : `README.md` · Español: `README.es.md`*
 
-Uko, Aituko the robot and Meowuko the cat, free edition: **all 9 states**, **3 hairstyles** for Uko (`original`, `classique`, `chauve`), any colors, light or dark theme.
+Uko, Aituko the robot and Meowuko the cat, free edition: **all 9 states**, **3 hairstyles** for Uko (`original`, `classique`, `chauve`), any colors, light or dark theme. It reacts to touch in every state, and its eyes can follow the pointer across the whole page (`follow="page"`).
 Try it in your app, and keep it in production if you like: that is allowed
 (see `LICENSE.md`; the French text of the license prevails).
 
@@ -18,11 +18,14 @@ Try it in your app, and keep it in production if you like: that is allowed
 | Mascots | Uko, Aituko the robot, Meowuko the cat | same |
 | States (web engine) | all 9: `idle` `welcome` `thinking` `loading` `success` `error` `empty` `sleep` `wake` | same |
 | Hairstyles, colors, theme | 3 hairstyles, any colors | 17 hairstyles, any colors |
-| Rive files (mobile) | all 3 characters, 4 states each | all 3 characters, 9 states each |
+| Rive files (mobile) | all 3 characters, 4 states each (idle, welcome, loading, success) | all 3 characters, 9 states each |
+| Touch: the zone touched reacts, in every awake state | yes (simple reaction, effects never on the face) | yes, with the soul |
+| Gaze: follows the pointer on hover or over the whole page (`follow="page"`, finger on mobile), then looks away after a few seconds without movement | yes | yes |
+| Look at one precise element (`lookAt()`) | — | yes |
+| A soul: mood, reactions of its own for each state, pats, handshake, a life of its own | — | yes |
+| Speech: the mouth follows the voice you provide (`speak()`, `setMouth()`); no voice is provided | — | yes |
 | Movements: sit on a card, lean on a window, dance, float, hop, climb `climb()`, walk, turn around | — | yes |
 | Place the mascot on an element in one line (`placeOn()`, `goHome()`) | — | yes |
-| Gaze: follows the mouse on hover | yes | yes |
-| Gaze over the whole page (`follow="page"`, finger on mobile), `lookAt()` | — | yes |
 | Commercial use | yes | yes |
 
 **Moving to the full pack**: replace `uko-mascot-engine.min.js` (and `uko-mascot-engine.js`) and the `rive/*.riv` files with the pack's files. Your code does not change.
@@ -70,6 +73,7 @@ document.querySelector('uko-mascot').setAttribute('state', 'success');
 | `theme` | `auto` (follows `html.dark` / `data-theme`), `system`, `light`, `dark` | `auto` |
 | `contrast` | `auto` (colors adjusted for WCAG contrast) or `direct` | `auto` |
 | `interactive` | the mascot follows the cursor and reacts to clicks | `true` |
+| `follow` | where the eyes follow the pointer: `hover` (over the mascot), `page` (anywhere on the page, and the finger on touch screens), `none` | `hover` |
 | `one-shot` | `return` (back to idle after welcome, success, error, empty or wake) or `loop` | `return` |
 | `cheeks` | pink cheeks | `true` |
 | `accent` | color of Aituko's antenna light | `#FFC93C` |
@@ -79,8 +83,12 @@ Events: `statechange`, `complete` (`event.detail.state`) and `tap` (`event.detai
 ### Touch
 
 Touch the mascot (mouse or finger): the zone touched reacts, with a small effect. Head: boop, giggle, squint; hand: wave, high five; foot: hop, kick, ouch; body: bounce, tickle, surprise.
-Several taps in a row: three on the head make it dizzy; three on the body make it burst out laughing; five anywhere make it jump for joy. Asleep, a tap wakes it up.
+Several taps in a row: three on the head make it dizzy; three on the body make it burst out laughing; five anywhere make it jump for joy. Asleep, a tap wakes it up. In the other awake states (loading, success, error…) it reacts too, with a simple reaction whose effects never land on the face; in error or for an empty list, no party: a small surprise mark.
 From your code: `uko.poke('head')` (or `'hand'`, `'foot'`, `'body'`), with a given reaction if you like: `uko.poke('body', 'joy')`. `interactive="false"` turns touch off.
+
+### Gaze
+
+By default the eyes follow the pointer when it is over the mascot (`follow="hover"`). With `follow="page"` (or `uko.setFollow('page')`) they follow it across the whole page, and the finger on touch screens; after a few seconds without movement, it looks away and goes back to its own life. `follow="none"` turns following off. Looking at one precise element (`lookAt()`) is in the full pack.
 
 In every background state Uko breathes, shifts its weight and makes small gestures on its own
 (looking around, shrugging, checking the progress while loading…): it never freezes.
@@ -150,6 +158,8 @@ shows `original` and the console says where to get it.
 | `state` | Number | `0` idle · `2` loading |
 | `welcome` | Trigger | hello |
 | `success` | Trigger | celebration (from loading: dedicated transition) |
+
+These files contain 4 states: idle (`state = 0`), loading (`state = 2`), welcome (`welcome`) and success (`success`). All 9 states are in the web engine; the full pack's Rive files have all 9.
 
 After a successful load: set `state = 0` **and** fire `success` at the same time.
 The numbers are the full pack's (which adds `1` thinking, `3` sleep, and the `error`, `empty` triggers).

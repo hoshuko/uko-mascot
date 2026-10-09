@@ -1,5 +1,5 @@
 /**
- * Uko Mascot Engine v2.7.0 · vector runtime (SVG, 60 FPS)
+ * Uko Mascot Engine v2.7.1 · vector runtime (SVG, 60 FPS)
  * Canonical fixed-length skeleton with soft IK, blended state transitions,
  * modular hairstyles with secondary motion, attention tracking, walk cycle,
  * WCAG contrast helpers. Each instance is fully isolated.
@@ -2023,6 +2023,11 @@
     function microAllowed(){
       return current==='idle' && !freeze.checked && !smInternal && !(typeof WALK!=='undefined'&&WALK.active);
     }
+    // A tap reaction plays in every awake state (welcome, loading, success, error…), on top of the
+    // state's own motion and keeping its face; idle variations stay idle-only (microAllowed).
+    function tapAllowed(){
+      return current!=='sleep' && !freeze.checked && !smInternal && !(typeof WALK!=='undefined'&&WALK.active);
+    }
     function scheduleIdleVariation(now=motionNow()){
       MICRO.idleVariation.next=now+rand(15000,30000);
     }
@@ -2063,7 +2068,7 @@
       return chosen;
     }
     function triggerTapReaction(zone='body',point=null,now=motionNow()){
-      if(!microAllowed())return false;
+      if(!tapAllowed())return false;
 
       const reaction=chooseTapReaction(zone);
       MICRO.idleVariation.active=false;
@@ -2197,13 +2202,16 @@
     function applyMicroInteractions(p,now){
       let rotOffset=0;
 
-      if(!microAllowed()){
-        MICRO.tap.active=false;
+      const idleOk=microAllowed();
+      if(!idleOk){
         MICRO.idleVariation.active=false;
-        return rotOffset;
+        if(!MICRO.tap.active||!tapAllowed()){
+          MICRO.tap.active=false;
+          return rotOffset;
+        }
       }
 
-      if(MICRO.autoIdleEnabled &&
+      if(idleOk && MICRO.autoIdleEnabled &&
          !MICRO.tap.active &&
          !MICRO.idleVariation.active &&
          now>=MICRO.idleVariation.next){
@@ -2360,7 +2368,8 @@
       return TAP_REACTIONS[family].find(v=>v.id===MICRO.tap.variant)||(typeof TAP_COMBOS!=='undefined'&&TAP_COMBOS[MICRO.tap.variant])||null;
     }
     function applyMicroFace(baseFace,now){
-      if(!MICRO.tap.active)return baseFace;
+      // Outside idle the state keeps its own expression (loading, error, success…).
+      if(!MICRO.tap.active||current!=='idle')return baseFace;
       const def=tapReactionDef();
       if(!def)return baseFace;
 
@@ -2386,6 +2395,9 @@
       const alpha=1-u;
       const r=18+34*ease;
       const [x,y]=MICRO.tap.point;
+      // No impact ring on the face: a head tap shows its effect beside the head (core/touch.js).
+      const hc=lastPose&&lastPose.head_center, hr=(lastPose&&lastPose.head_radius)||95;
+      if(hc&&Math.hypot(x-hc[0],y-hc[1])<hr*1.1)return'';
 
       return `<g class="microTapFx" opacity="${alpha.toFixed(3)}" pointer-events="none">
         <circle cx="${x}" cy="${y}" r="${r.toFixed(1)}"
@@ -3413,7 +3425,8 @@
     // small effect drawn at the right place: stars on a boop, hearts on a giggle, a clap
     // burst on a high five, dust on a hop… Taps in a row escalate: three on the head make
     // it dizzy, three on the body make it laugh, five anywhere make it jump for joy.
-    // Asleep, a tap wakes it up. In the other states the tap only draws its effect.
+    // Asleep, a tap wakes it up. In the other awake states the reaction plays on top of the state's
+    // motion (keeping its face); effects never land on the face, and sad states get no party.
     //
     // Gaze with the body: when what it looks at (lookAt() target, or the pointer with
     // follow="page") is far to one side, the mascot turns its body towards it (¾), and
@@ -3442,7 +3455,8 @@
       const family = tapFamily(zone);
       const hc = pose.head_center, hr = pose.head_radius || 95;
       if (state === 'sleep') { touchFx('exclaim', hc[0] + hr * 1.9, hc[1] - hr * 1.1, now, 900); return { zone, reaction: 'wake', wake: true }; }
-      if (state !== 'idle' || !microAllowed()) { touchFx('stars', pt[0], pt[1], now, 650); return { zone, reaction: 'fx' }; }
+      // Walking, frozen or mid-transition: sparkles only. Any awake state gets a real reaction.
+      if (!tapAllowed()) { touchFx('stars', pt[0], pt[1], now, 650); return { zone, reaction: 'fx' }; }
       const inRow = f => TOUCH.taps.filter(t => now - t.at < 1500 && (!f || tapFamily(t.zone) === f)).length;
       let reaction = forcedReaction && TAP_COMBOS[forcedReaction] ? TAP_COMBOS[forcedReaction] : null;
       if (reaction) TOUCH.taps = [];
@@ -3450,7 +3464,7 @@
         if (!triggerTapReaction(zone, pt, now)) return null;
         const def = TAP_REACTIONS[family].find(r => r.id === forcedReaction);
         MICRO.tap.variant = def.id; MICRO.tap.duration = def.duration;
-        spawnTapFx(def.id, zone, pt, pose, now);
+        spawnTapFx(def.id, zone, pt, pose, now, state);
         return { zone, reaction: def.id };
       }
       else if (TOUCH.taps.length >= 5) { reaction = TAP_COMBOS.joy; TOUCH.taps = []; }
@@ -3463,7 +3477,7 @@
         if (!triggerTapReaction(zone, pt, now)) return null;
         reaction = tapReactionDef();
       }
-      spawnTapFx(reaction.id, zone, pt, pose, now);
+      spawnTapFx(reaction.id, zone, pt, pose, now, state);
       return { zone, reaction: reaction.id };
     }
 
@@ -3480,14 +3494,26 @@
       const r = pose.head_radius || 95;
       return pt[0] > x0 - 60 && pt[0] < x1 + 60 && pt[1] > y0 - r - 40 && pt[1] < y1 + 50;
     }
-    function spawnTapFx(id, zone, pt, pose, now) {
+    function spawnTapFx(id, zone, pt, pose, now, state = 'idle') {
       const hc = pose.head_center, hr = pose.head_radius || 95, d = MICRO.tap.direction || 1;
       const side = zone.endsWith('_L') ? 'L' : 'R';
       const hand = pose[`hand_${side}_center`] || pt, foot = pose[`foot_${side}_center`] || pt;
-      const top = [hc[0] + d * hr * 1.9, hc[1] - hr * 1.1];   // beside the head, clear of the hair
+      // Never on the face: a tap point inside the head moves out, just past its outline.
+      const dx = pt[0] - hc[0], dy = pt[1] - hc[1], dist = Math.hypot(dx, dy);
+      // Out to the side the finger came from (above the head the effects would leave the drawing).
+      if (dist < hr * 1.15) { const sx = dx < 0 ? -1 : 1; pt = [hc[0] + sx * hr * 1.6, Math.max(260, hc[1] - hr * .15)]; }
+      // Beside the head, clear of the hair, and kept inside the drawing (a jumping mascot's head is high).
+      // (the "!" rises ~170 units above its point once scaled)
+      const top = [hc[0] + d * hr * 1.9, Math.max(230, hc[1] - hr * 1.1)];
+      // Sad or empty states: no party (stars, hearts, notes), a small surprise mark instead.
+      if (state === 'error' || state === 'empty') {
+        if (zone === 'head' || tapFamily(zone) === 'head') touchFx('bonk', pt[0], pt[1], now, 480, { soft: true });
+        touchFx('exclaim', top[0], top[1], now + 60, 800);
+        return;
+      }
       switch (id) {
         case 'boop': touchFx('stars', pt[0], pt[1], now, 700); break;
-        case 'giggle': touchFx('hearts', hc[0] + d * hr * 1.9, hc[1] - hr * .5, now, 1300); break;
+        case 'giggle': touchFx('hearts', hc[0] + d * hr * 1.9, Math.max(200, hc[1] - hr * .5), now, 1300); break;
         case 'squint': touchFx('bonk', pt[0], pt[1], now, 520); break;
         case 'wave': touchFx('arcs', hand[0], hand[1] - 90, now, 950, { dir: side === 'L' ? -1 : 1 }); break;
         case 'highFive': touchFx('clap', hand[0], hand[1] - 150, now, 620); touchFx('stars', hand[0], hand[1] - 150, now + 60, 700); break;
@@ -3496,10 +3522,10 @@
         case 'kick': touchFx('dust', foot[0] + (side === 'L' ? -40 : 40), LEDGE_FLOOR, now, 620); touchFx('stars', foot[0] + (side === 'L' ? -90 : 90), foot[1] - 60, now + 120, 600); break;
         case 'ouch': touchFx('bonk', pt[0], pt[1], now, 520); touchFx('exclaim', top[0], top[1], now + 80, 800); break;
         case 'bounce': touchFx('ring', hc[0], LEDGE_FLOOR, now, 700); break;
-        case 'shimmy': touchFx('notes', hc[0] + d * hr * 1.9, hc[1] - hr * .3, now, 1300); break;
+        case 'shimmy': touchFx('notes', hc[0] + d * hr * 1.35, Math.max(330, hc[1] - hr * .6), now, 1300); break;
         case 'surprise': touchFx('exclaim', top[0], top[1], now, 900); break;
         case 'dizzy': touchFx('orbit', 0, 0, now, 1900); break;
-        case 'laugh': touchFx('notes', hc[0] + hr * 1.9, hc[1] - hr * .3, now, 1500); touchFx('hearts', hc[0] - hr * 1.9, hc[1] - hr * .4, now + 350, 1400); break;
+        case 'laugh': touchFx('notes', hc[0] + hr * 1.35, Math.max(330, hc[1] - hr * .6), now, 1500); touchFx('hearts', hc[0] - hr * 1.9, hc[1] - hr * .4, now + 350, 1400); break;
         case 'joy': touchFx('confetti', hc[0], hc[1] - hr * 1.7, now + 380, 1500); touchFx('ring', hc[0], LEDGE_FLOOR, now + 1100, 650); break;
         default: touchFx('stars', pt[0], pt[1], now, 650);
       }
@@ -3616,7 +3642,7 @@
         return s;
       },
       bonk(f, u) {
-        let s = ''; const a = fadeOut(u, .3);
+        let s = ''; const a = fadeOut(u, .3) * (f.soft ? .5 : 1);
         for (let i = 0; i < 7; i++) {
           const ang = i / 7 * Math.PI * 2 + f.seed, r0 = 34 + 40 * u, r1 = r0 + 26 * (1 - u) + 8;
           s += `<line class="touchInk" x1="${n1(f.x + Math.cos(ang) * r0)}" y1="${n1(f.y + Math.sin(ang) * r0)}" x2="${n1(f.x + Math.cos(ang) * r1)}" y2="${n1(f.y + Math.sin(ang) * r1)}"/>`;
@@ -4403,10 +4429,10 @@
 
     // Gaze. Priority: lookAt() target > pointer (hover or page) > nothing.
     let followMode = ['hover', 'page', 'none'].includes(options.follow) ? options.follow : 'hover';
-    // Full pack only: movements (walk, turn, climb) and the extended gaze (page, lookAt).
-    // The Starter keeps the mascot where it is and says where to get them.
+    // Full pack only: movements (walk, turn, climb), lookAt(), the soul and speech. The Starter keeps
+    // the mascot where it is and says where to get them. Since 2.7.1 its gaze follows the whole page
+    // too (follow="page"): the first thing people notice should be alive in both editions.
     const paidOnly = (name) => { if (EDITION !== 'starter') return false; fullPackNotice(name); return true; };
-    if (followMode === 'page' && paidOnly('follow="page"')) followMode = 'hover';
     // Soul (core/soul.js, full pack): mood, touch scenes, attention, free time. soul: false
     // keeps the simple touch reactions.
     SOUL.on = EDITION !== 'starter' && options.soul !== false;
@@ -4762,6 +4788,10 @@
         rotOffset += applyIdleLife(p, loop);
         rotOffset += applyMicroInteractions(p, now);
       }
+      // Other awake states: a tap reaction plays on top of the state's motion (legacy tapAllowed).
+      else if (cur !== 'sleep' && MICRO.tap.active && !walkActive && !CLOCK.reduced && !mv && !posed) {
+        rotOffset += applyMicroInteractions(p, now);
+      }
 
       // Life layer (core/life.js): breathing, weight shifts and small gestures in the
       // persistent states, paused while a tap reaction or the pointer owns Uko.
@@ -5063,7 +5093,7 @@
       setContrastMode(mode) { brandContrastMode = mode; hairContrastMode = mode; updateColors(); },
       setInteractive(val) { interactive = Boolean(val); if (!interactive) { MICRO.eyeTracking.pointerInside = false; MICRO.eyeTracking.hovering = false; } },
       // Eyes follow the pointer: 'hover', 'page' (whole page, finger on touch) or 'none'.
-      setFollow(mode) { if (mode === 'page' && paidOnly('follow="page"')) mode = 'hover'; followMode = ['hover', 'page', 'none'].includes(mode) ? mode : 'hover'; if (followMode === 'none') MICRO.eyeTracking.pointerInside = false; },
+      setFollow(mode) { followMode = ['hover', 'page', 'none'].includes(mode) ? mode : 'hover'; if (followMode === 'none') MICRO.eyeTracking.pointerInside = false; },
       // Look at an element, a point on the page ({ x, y } in client px) or a point of the
       // mascot's own drawing ({ x, y, viewBox: true }); null gives the gaze back.
       lookAt(target) {
@@ -5146,7 +5176,7 @@
 
   }
 
-  // <uko-mascot state="idle" hair="original|classique|chauve" brand="#FFFFFF" hair-color="#0B0B0B" theme="auto|system|light|dark" contrast="direct|auto" interactive="true|false" one-shot="return|loop" cheeks="true|false" character="uko|aituko|meowuko" accent="#FFC93C" follow="hover|none">
+  // <uko-mascot state="idle" hair="original|classique|chauve" brand="#FFFFFF" hair-color="#0B0B0B" theme="auto|system|light|dark" contrast="direct|auto" interactive="true|false" one-shot="return|loop" cheeks="true|false" character="uko|aituko|meowuko" accent="#FFC93C" follow="hover|page|none">
   if (typeof customElements !== 'undefined' && !customElements.get('uko-mascot')) {
     class UkoMascotElement extends HTMLElement {
       static get observedAttributes() {
@@ -5198,7 +5228,7 @@
 
 
   root.UkoMascot = {
-    version: "2.7.0",
+    version: "2.7.1",
     edition: EDITION,
     create: createUkoMascot,
     ORDER,
