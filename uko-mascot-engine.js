@@ -1,5 +1,5 @@
 /**
- * Uko Mascot Engine v2.7.2 · vector runtime (SVG, 60 FPS)
+ * Uko Mascot Engine v2.7.3 · vector runtime (SVG, 60 FPS)
  * Canonical fixed-length skeleton with soft IK, blended state transitions,
  * modular hairstyles with secondary motion, attention tracking, walk cycle,
  * WCAG contrast helpers. Each instance is fully isolated.
@@ -1852,6 +1852,17 @@
       if(m.groom)m.groom.outer.forEach(p=>upd(p));
       return (m.reach=r);
     }
+    // The loading spinner sits above the laptop (810, 455), and slides aside when a hand comes up to it
+    // (a gesture of the soul), staying inside the drawing.
+    function loadingSpinnerShift(p){
+      let x=LIFE.laptopShift[0],y=LIFE.laptopShift[1];
+      for(const k of ['hand_L_center','hand_R_center']){
+        const h=p&&p[k];if(!h)continue;
+        const dx=810+x-h[0],dy=455+y-h[1],d=Math.hypot(dx,dy)||1;
+        if(d<140){x+=dx/d*(140-d);y+=dy/d*(140-d);}
+      }
+      return [Math.min(x,1024-80-810),Math.max(y,80-455)];
+    }
     function fxMarkup(state,p,t,loop,entered=false){
     // Thinking is intentionally artifact-free: pose + face + motion carry the state.
     if(state==='thinking')return '';
@@ -1872,10 +1883,10 @@
     }
 
     if(state==='loading'){
-      const spin=loop*360;
+      const spin=loop*360,[sx,sy]=loadingSpinnerShift(p);
       return `<g class="fxLoading" opacity="${a}">
         <!-- The device itself is rendered inside the rig for correct hand occlusion. -->
-        <g class="loadingSpinner" transform="translate(${LIFE.laptopShift[0].toFixed(2)} ${LIFE.laptopShift[1].toFixed(2)}) rotate(${spin} 810 455)">
+        <g class="loadingSpinner" transform="translate(${sx.toFixed(2)} ${sy.toFixed(2)}) rotate(${spin} 810 455)">
           ${[0,45,90,135,180,225,270,315].map(d=>`<line x1="810" y1="410" x2="810" y2="383" transform="rotate(${d} 810 455)"/>`).join('')}
         </g>
       </g>`;
@@ -3515,6 +3526,8 @@
       // Beside the head, clear of the hair, and kept inside the drawing (a jumping mascot's head is high).
       // (the "!" rises ~170 units above its point once scaled)
       const top = [hc[0] + d * hr * 1.9, Math.max(230, hc[1] - hr * 1.1)];
+      // Success: arms up, sparkles and a jump fill the space above; the "!" goes beside the chest.
+      if (state === 'success') { top[0] = hc[0] + d * hr * 1.7; top[1] = hc[1] + hr * 1.4; }
       // Sad or empty states: no party (stars, hearts, notes), a small surprise mark instead.
       if (state === 'error' || state === 'empty') {
         const bonk = zone === 'head' || tapFamily(zone) === 'head';
@@ -3547,13 +3560,13 @@
     function touchFx(kind, x, y, now, dur, extra) {
       // Stars, hearts, notes, bonks, high-five bursts and "!" go to the nearest spot that is clear of the mascot.
       // Placed effects then move with the body (a jump, a step), so they stay where they were put.
-      let size = 1, fit = null, anchor = null;
+      // Short of room, a compact form (a single star, heart or note) takes the place: a tap always shows something.
+      let size = 1, fit = null, anchor = null, compact = false;
       if (fxShape(kind) && shown) {
-        [x, y, size, fit] = fxSpot(kind, x, y, shown, extra && extra.avoid);
-        if (fit < 0) return;            // no room anywhere near: better no effect than one over the mascot or cut off
+        [x, y, size, fit, compact] = fxSpot(kind, x, y, shown, extra && extra.avoid);
         anchor = shown.pelvis && shown.pelvis.slice();
       }
-      TOUCH.fx.push(Object.assign({ kind, x, y, size, fit, anchor, start: now, dur, seed: Math.random() * 1000 }, extra || {}));
+      TOUCH.fx.push(Object.assign({ kind, x, y, size, fit, compact, anchor, start: now, dur, seed: Math.random() * 1000 }, extra || {}));
       if (TOUCH.fx.length > 16) TOUCH.fx.shift();
     }
 
@@ -3649,7 +3662,7 @@
     const FX_DRAW = {
       stars(f, u) {
         let s = ''; const k = popIn(u), a = fadeOut(u, .45);
-        for (let i = 0; i < 5; i++) {
+        for (let i = f.compact ? 2 : 0; i < (f.compact ? 3 : 5); i++) {
           const ang = -Math.PI / 2 + (i - 2) * .62 + Math.sin(f.seed + i) * .15, rad = 40 + 95 * (1 - Math.pow(1 - u, 2));
           s += star4(f.x + Math.cos(ang) * rad, f.y + Math.sin(ang) * rad, (i % 2 ? 15 : 22) * k);
         }
@@ -3657,9 +3670,9 @@
       },
       hearts(f, u) {
         let s = '';
-        for (let i = 0; i < 3; i++) {
-          const v = clamp((u - i * .12) / .88); if (v <= 0) continue;
-          s += `<g opacity="${n1(fadeOut(v, .5) * clamp(v * 5))}">${heart(f.x + Math.sin(v * 7 + i * 2) * 14 + (i - 1) * 22, f.y - 120 * v - i * 20, (18 + i * 5) * popIn(v))}</g>`;
+        for (let i = f.compact ? 1 : 0; i < (f.compact ? 2 : 3); i++) {
+          const v = clamp((u - i * .15) / .85); if (v <= 0) continue;
+          s += `<g opacity="${n1(fadeOut(v, .5) * clamp(v * 10))}">${heart(f.x + Math.sin(v * 7 + i * 2) * 10 + (f.compact ? 0 : (i - 1) * 32), f.y - 120 * v - i * 26, (18 + i * 5) * Math.max(.45, popIn(v)))}</g>`;
         }
         return s;
       },
@@ -3706,9 +3719,9 @@
       },
       notes(f, u) {
         let s = '';
-        for (let i = 0; i < 3; i++) {
+        for (let i = f.compact ? 1 : 0; i < (f.compact ? 2 : 3); i++) {
           const v = clamp((u - i * .18) / .82); if (v <= 0) continue;
-          const x = f.x + (i - 1) * 26 + Math.sin(v * 8 + i) * 12, y = f.y - 120 * v - i * 16, k = popIn(v);
+          const x = f.x + (f.compact ? 0 : (i - 1) * 26) + Math.sin(v * 8 + i) * 12, y = f.y - 120 * v - i * 16, k = popIn(v);
           s += `<g opacity="${n1(fadeOut(v, .5) * clamp(v * 5))}" transform="translate(${n1(x)} ${n1(y)}) scale(${n1(k)}) rotate(${n1(Math.sin(v * 6 + i) * 12)})"><ellipse class="touchNote" cx="-10" cy="22" rx="14" ry="10" transform="rotate(-20 -10 22)"/><path class="touchInk" d="M 2 20 L 2 -30 Q 18 -24 22 -8"/></g>`;
         }
         return s;
@@ -3745,23 +3758,25 @@
     // spot asked for is not clear, the nearest clear one wins; with no room close by, the effect
     // is drawn smaller rather than over the mascot.
     const FX_SHAPES = {};
-    function fxShape(kind) {
-      if (FX_SHAPES[kind] !== undefined) return FX_SHAPES[kind];
+    function fxShape(kind, compact) {
+      const key = compact ? kind + ':c' : kind;
+      if (FX_SHAPES[key] !== undefined) return FX_SHAPES[key];
       const c = [], U = [0, .08, .16, .25, .35, .45, .55, .65, .75, .85, .95], pop = 1.15;
+      const lo = compact ? 1 : 0, hi = compact ? 2 : 3;
       if (kind === 'stars') for (const u of U) {
         if (fadeOut(u, .45) < .3) continue;
-        for (let i = 0; i < 5; i++) {
+        for (let i = compact ? 2 : 0; i < (compact ? 3 : 5); i++) {
           const a = -Math.PI / 2 + (i - 2) * .62, rad = 40 + 95 * (1 - Math.pow(1 - u, 2));
           c.push([Math.cos(a) * rad, Math.sin(a) * rad, (i % 2 ? 15 : 22) * pop + rad * .15]);
         }
       }
-      else if (kind === 'hearts') for (const u of U) for (let i = 0; i < 3; i++) {
-        const v = clamp((u - i * .12) / .88); if (v <= 0 || fadeOut(v, .5) < .5) continue;
-        c.push([(i - 1) * 22, -120 * v - i * 20, (18 + i * 5) * 1.15 * pop + 14]);
+      else if (kind === 'hearts') for (const u of U) for (let i = lo; i < hi; i++) {
+        const v = clamp((u - i * .15) / .85); if (v <= 0 || fadeOut(v, .5) < .5) continue;
+        c.push([compact ? 0 : (i - 1) * 32, -120 * v - i * 26, (18 + i * 5) * 1.15 * pop + 10]);
       }
-      else if (kind === 'notes') for (const u of U) for (let i = 0; i < 3; i++) {
+      else if (kind === 'notes') for (const u of U) for (let i = lo; i < hi; i++) {
         const v = clamp((u - i * .18) / .82); if (v <= 0 || fadeOut(v, .5) < .5) continue;
-        c.push([(i - 1) * 26, -120 * v - i * 16 + 1, 32 * pop + 12]);
+        c.push([compact ? 0 : (i - 1) * 26, -120 * v - i * 16 + 1, 32 * pop + 12]);
       }
       // (a ring of strokes: its outer ends, the widest it gets)
       else if (kind === 'bonk') for (const u of [0, .5, 1]) for (let i = 0; i < 12; i++) {
@@ -3780,70 +3795,104 @@
         for (const s of [-70, -55, -40, -25, -12]) c.push([0, (y + s) * pop, 8 * pop]);
         c.push([0, (y + 18) * pop, 11 * pop]);
       }
-      if (!c.length) return (FX_SHAPES[kind] = null);
+      if (!c.length) return (FX_SHAPES[key] = null);
       // Bounding circle, used when this effect is itself in the way of a later one.
       const bx = c.reduce((s, q) => s + q[0], 0) / c.length, by = c.reduce((s, q) => s + q[1], 0) / c.length;
       const br = Math.max(...c.map(q => Math.hypot(q[0] - bx, q[1] - by) + q[2]));
-      return (FX_SHAPES[kind] = { c, bx, by, br });
+      return (FX_SHAPES[key] = { c, bx, by, br });
+    }
+    // The hair's silhouette around the head: the farthest hair in each of 32 directions (head units,
+    // head radius 185), so that long or wide hair is kept clear by its real shape, not by a big disc.
+    let HAIR_PROFILE = null, HAIR_PROFILE_KEY = '';
+    function hairProfile() {
+      const ch = characterDef(), key = ch ? 'c:' + CHARACTER.id : 'h:' + APPEARANCE.hairStyle, n = 32;
+      if (HAIR_PROFILE && HAIR_PROFILE_KEY === key) return HAIR_PROFILE;
+      const prof = new Array(n).fill(ch ? ch.reach : 185);
+      if (!ch) {
+        const m = hairModel(APPEARANCE.hairStyle);
+        const add = (q, extra = 0) => {
+          const i = Math.round(Math.atan2(q[1], q[0]) / (2 * Math.PI) * n), d = Math.hypot(q[0], q[1]) + extra;
+          for (const j of [-1, 0, 1]) { const b = ((i + j) % n + n) % n; prof[b] = Math.max(prof[b], d - Math.abs(j) * 14); }
+        };
+        m.cap.forEach(cv => cv.forEach(q => add(q)));
+        m.locks.forEach(l => l.points.forEach(q => add(q, l.width * .5)));
+        m.curls.forEach(cu => add(cu.p, cu.r));
+        if (m.bun) add(m.bun.center, 60);
+        if (m.groom) m.groom.outer.forEach(q => add(q));
+      }
+      HAIR_PROFILE_KEY = key;
+      return (HAIR_PROFILE = prof);
     }
     function fxSpot(kind, x, y, p, avoid) {
-      const shape = fxShape(kind), k0 = 1.9 * Math.sqrt(LIFE.gain || 1);
-      const hc = p.head_center, hr = p.head_radius || 185, hair = Math.max(hr, hairReach() * hr / 185);
+      const k0 = 1.9 * Math.sqrt(LIFE.gain || 1);
+      const hc = p.head_center, hr = p.head_radius || 185, prof = hairProfile();
+      // head + hair limit in the direction of a point
+      const headLim = (cx, cy) => Math.max(hr, prof[((Math.round(Math.atan2(cy - hc[1], cx - hc[0]) / (2 * Math.PI) * 32)) % 32 + 32) % 32] * hr / 185);
       const onHead = kind === 'sweat';
       const segs = onHead ? [] : [['neck', 'pelvis'], ['shoulder_L', 'elbow_L'], ['elbow_L', 'wrist_L'], ['shoulder_R', 'elbow_R'], ['elbow_R', 'wrist_R'],
         ['pelvis', 'knee_L'], ['knee_L', 'ankle_L'], ['pelvis', 'knee_R'], ['knee_R', 'ankle_R']].filter(([a, b]) => p[a] && p[b]).map(([a, b]) => [p[a], p[b]]);
       const st = typeof current === 'string' ? current : '';
       // Hands and feet; around the hands, the state's own marks (success sparkles, welcome ripples, empty shrug lines).
-      const handR = st === 'success' ? 165 : 36, armPad = st === 'success' ? 30 : 0;
+      // (a high five's burst belongs next to the palm: only the hand itself is kept clear)
+      const clap = kind === 'clap';
+      const handR = st === 'success' && !clap ? 165 : clap ? 50 : 36, armPad = st === 'success' && !clap ? 30 : 0;
       const blobs = ['hand_L_center', 'hand_R_center'].filter(n => p[n]).map(n => [p[n][0], p[n][1], n === 'hand_L_center' && st === 'welcome' ? 130 : handR])
         .concat(['foot_L_center', 'foot_R_center'].filter(n => p[n]).map(n => [p[n][0], p[n][1], 42]));
-      if (st === 'loading') blobs.push([810 + LIFE.laptopShift[0], 455 + LIFE.laptopShift[1], 80]);
+      if (st === 'loading') { const [sx, sy] = loadingSpinnerShift(p); blobs.push([810 + sx, 455 + sy, 80]); }
       if (st === 'empty') for (const [n, sx] of [['hand_L_center', -1], ['hand_R_center', 1]]) if (p[n]) blobs.push([p[n][0] + sx * 130, p[n][1] - 15, 55]);
       if (st === 'error') { const reach = hairReach(), a = -0.86 + .42 * clamp((reach - 230) / 140); blobs.push([hc[0] + Math.cos(a) * (reach + 96), hc[1] + Math.sin(a) * (reach + 74), 100]); }
       if (st === 'success') {
         blobs.push([hc[0], hc[1] - hairReach() - 30, 50]);
-        for (const [n, dir] of [['shoulder_L', -1], ['shoulder_R', 1]]) if (p[n]) for (const deg of [30, 45, 60]) {
+        if (!clap) for (const [n, dir] of [['shoulder_L', -1], ['shoulder_R', 1]]) if (p[n]) for (const deg of [30, 45, 60]) {
           const a = deg * Math.PI / 180, h = [p[n][0] + dir * 395 * Math.cos(a), p[n][1] - 395 * Math.sin(a)];
           segs.push([p[n], h]); blobs.push([h[0], h[1], 165]);
         }
       }
-      const lift = st === 'success' ? p.celebrationLift || 0 : 0, up = st === 'success' ? CELEBRATION.HEIGHT - lift : 0, down = st === 'success' ? lift + CELEBRATION.CROUCH : 0;
       if (avoid) blobs.push(...avoid);
       // Effects already on screen (from this tap or a recent one).
-      for (const f of TOUCH.fx) { const s = fxShape(f.kind), fk = k0 * (f.size || 1); if (s) blobs.push([f.x + s.bx * fk, f.y + s.by * fk, s.br * fk]); }
+      for (const f of TOUCH.fx) { const s = fxShape(f.kind, f.compact), fk = k0 * (f.size || 1); if (s) blobs.push([f.x + s.bx * fk, f.y + s.by * fk, s.br * fk]); }
       const segDist = (q, a, b) => {
         const vx = b[0] - a[0], vy = b[1] - a[1], t = clamp(((q[0] - a[0]) * vx + (q[1] - a[1]) * vy) / (vx * vx + vy * vy || 1));
         return Math.hypot(q[0] - a[0] - vx * t, q[1] - a[1] - vy * t);
       };
       // Smallest margin left at an origin (negative: something overlaps); stops early below floor.
+      // (while it jumps, the drawing may overflow its box like the mascot itself: the frame is checked as placed)
+      let shape = fxShape(kind);
       const slack = (ox, oy, k, floor) => {
         let m = Infinity;
         for (const [cx0, cy0, r0] of shape.c) {
           const cx = ox + cx0 * k, cy = oy + cy0 * k, r = r0 * k;
-          m = Math.min(m, onHead ? Infinity : Math.hypot(cx - hc[0], cy - hc[1]) - (cy < hc[1] + hr ? hair : hr) - r - 26,
-            cx - r - 6, 1024 - 6 - cx - r, cy - r - 6 - up, 1536 - 6 - cy - r - down);
+          m = Math.min(m, onHead ? Infinity : Math.hypot(cx - hc[0], cy - hc[1]) - headLim(cx, cy) - r - 26,
+            cx - r - 6, 1024 - 6 - cx - r, cy - r - 6, 1536 - 6 - cy - r);
           for (const [a, b] of segs) m = Math.min(m, segDist([cx, cy], a, b) - 10 - r - 18 - armPad);
           for (const [bx, by, br] of blobs) m = Math.min(m, Math.hypot(cx - bx, cy - by) - br - r - 18);
           if (m <= floor) return m;
         }
         return m;
       };
-      // Full size within reach of the spot asked for, else a little smaller, else the best there is.
+      // Close to the tap first: full size only near the spot asked for, smaller a little further, then the
+      // compact form (one star, heart or note); with no clear spot at all, the compact form at the best one.
+      const steps = [[1, 240], [.85, 300], [.7, 360], [.55, 420], [.45, 480]];
+      const compactOk = fxShape(kind, true) && kind !== 'exclaim' && kind !== 'bonk' && kind !== 'clap';
+      if (compactOk) steps.push(['c', 1, 480], ['c', .75, 480]);
+      else steps.push([.35, 480]);
       let best = null;
-      for (const size of [1, .85, .7, .55, .45]) {
-        const k = k0 * size, far = size > .45 ? 400 : 480;
+      for (const st0 of steps) {
+        const compact = st0[0] === 'c', size = compact ? st0[1] : st0[0], far = compact ? st0[2] : st0[1];
+        shape = fxShape(kind, compact);
+        const k = k0 * size;
         let b = null;
         for (let d = 0; d <= far; d += 20) {
           const n = d ? 16 : 1;
           for (let i = 0; i < n; i++) {
             const a = i / n * Math.PI * 2, ox = x + Math.cos(a) * d, oy = y + Math.sin(a) * d, s = slack(ox, oy, k, b ? b.s : -Infinity);
-            if (!b || s > b.s) b = { s, ox, oy, size };
+            if (!b || s > b.s) b = { s, ox, oy, size, compact };
           }
-          if (b.s >= 0) return [b.ox, b.oy, size, b.s];
+          if (b.s >= 0) return [b.ox, b.oy, size, b.s, compact];
         }
-        if (!best || b.s > best.s) best = b;
+        if (!best || b.s > best.s || (b.compact && !best.compact)) best = b;
       }
-      return [best.ox, best.oy, best.size, best.s];
+      return [best.ox, best.oy, best.size, best.s, best.compact];
     }
 
     // ---------------------------------------------------------------- gaze with the body
@@ -5207,7 +5256,8 @@
           const pt = sz === 'top' ? [hc[0], hc[1] - hr * .8] : sz === 'face' ? [hc[0] + 10, hc[1] + hr * .2] : sz === 'cheek' ? [hc[0] + hr * .7, hc[1] + hr * .3]
             : sz === 'hand' || sz === 'arm' ? shown[zone === 'hand_L' ? 'hand_L_center' : 'hand_R_center'] : sz === 'foot' || sz === 'leg' ? shown[zone === 'foot_L' ? 'foot_L_center' : 'foot_R_center'] : zonePoint('body', shown);
           const r = soulPress(pt.slice(), shown, cur, motionNow(), { posture: PZ.name || 'stand' }, sz, reaction);
-          if (SOUL.touch.press && !SOUL.touch.press.held) SOUL.touch.press = null;
+          // A poke is a tap: press and release at once (a hand's reaction waits for the release).
+          if (SOUL.touch.press && !SOUL.touch.press.held) soulRelease(motionNow());
           if (r && r.wake) go('wake', 'poke');
           return r ? r.reaction : null;
         }
@@ -5359,7 +5409,7 @@
 
 
   root.UkoMascot = {
-    version: "2.7.2",
+    version: "2.7.3",
     edition: EDITION,
     create: createUkoMascot,
     ORDER,

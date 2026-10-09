@@ -19,7 +19,7 @@
 
 <p align="center">
   <img alt="Free, commercial use included" src="https://img.shields.io/badge/price-free%20·%20commercial%20use%20OK-FF7AAE">
-  <img alt="Version" src="https://img.shields.io/badge/version-2.7.2-16161D">
+  <img alt="Version" src="https://img.shields.io/badge/version-2.7.3-16161D">
   <img alt="Web + Rive" src="https://img.shields.io/badge/web%20%2B%20Rive-iOS%20·%20Android%20·%20Flutter%20·%20React-3B5BFF">
   <img alt="Zero dependencies" src="https://img.shields.io/badge/dependencies-0-3DDC97">
   <img alt="Web engine size" src="https://img.shields.io/badge/web%20engine-57%20KB%20gzip-FFC93C">
@@ -30,7 +30,7 @@
 ---
 
 This repository is **Uko Starter**, the free edition: the files you get in the download, ready to use.
-Version 2.7.2.
+Version 2.7.3.
 
 | | Free (this repository) | Full pack ★ |
 |---|---|---|

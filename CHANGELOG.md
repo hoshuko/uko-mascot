@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.7.3 — 9 octobre 2026
+- Effets du toucher plus lisibles dans les états chargés (succès, accueil) : ils cherchent un peu plus loin une place à
+  leur taille normale avant de rapetisser, et un cœur n'est jamais dessiné minuscule.
+- Pack complet, chargement : quand une main monte vers la roue de chargement (geste de l'âme), la roue glisse de côté.
+
 ## 2.7.2 — 9 octobre 2026
 - **Effets du toucher toujours à côté de la mascotte, jamais dessus.** Étoiles, cœurs, notes, traits de surprise,
   « ! » et éclat de « tape-m'en cinq » se placent à l'endroit libre le plus proche : à distance de la tête et des
