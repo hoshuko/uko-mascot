@@ -5,7 +5,7 @@
 <h1 align="center">Uko — a living mascot for your app</h1>
 
 <p align="center">
-  A stick-figure mascot that acts out every state of your interface: <b>welcome, loading, success, error, empty, sleep…</b><br>
+  An animated stickman (stick-figure) mascot that acts out every state of your interface: <b>welcome, loading, success, error, empty, sleep…</b><br>
   It breathes, blinks, reacts to touch and never freezes. One tag on the web, one Rive file everywhere else.<br>
   With the full pack, it sits on your cards, climbs your modals, hops and dances, wherever you decide.
 </p>
