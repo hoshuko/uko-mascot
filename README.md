@@ -19,10 +19,10 @@
 
 <p align="center">
   <img alt="Free, commercial use included" src="https://img.shields.io/badge/price-free%20·%20commercial%20use%20OK-FF7AAE">
-  <img alt="Version" src="https://img.shields.io/badge/version-2.7.1-16161D">
+  <img alt="Version" src="https://img.shields.io/badge/version-2.7.2-16161D">
   <img alt="Web + Rive" src="https://img.shields.io/badge/web%20%2B%20Rive-iOS%20·%20Android%20·%20Flutter%20·%20React-3B5BFF">
   <img alt="Zero dependencies" src="https://img.shields.io/badge/dependencies-0-3DDC97">
-  <img alt="Web engine size" src="https://img.shields.io/badge/web%20engine-55%20KB%20gzip-FFC93C">
+  <img alt="Web engine size" src="https://img.shields.io/badge/web%20engine-57%20KB%20gzip-FFC93C">
 </p>
 
 <p align="center"><i>Français : <a href="README.fr.md">README.fr.md</a> · Español: <a href="README.es.md">README.es.md</a></i></p>
@@ -30,7 +30,7 @@
 ---
 
 This repository is **Uko Starter**, the free edition: the files you get in the download, ready to use.
-Version 2.7.1.
+Version 2.7.2.
 
 | | Free (this repository) | Full pack ★ |
 |---|---|---|
@@ -135,7 +135,7 @@ Full documentation: [README.en.md](README.en.md).
 
 | File | What |
 |---|---|
-| `uko-mascot-engine.min.js` | The web engine to load in your site or app (55 KB gzip, zero dependencies) |
+| `uko-mascot-engine.min.js` | The web engine to load in your site or app (57 KB gzip, zero dependencies) |
 | `uko-mascot-engine.js` | The same code, readable |
 | `rive/uko.riv`, `rive/aituko.riv`, `rive/meowuko.riv` | The same mascots for iOS, Android, Flutter, React Native and the web (74 KB each) |
 | `examples/` | One ready-to-open example per platform |

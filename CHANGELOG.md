@@ -1,5 +1,16 @@
 # Changelog
 
+## 2.7.2 — 9 octobre 2026
+- **Effets du toucher toujours à côté de la mascotte, jamais dessus.** Étoiles, cœurs, notes, traits de surprise,
+  « ! » et éclat de « tape-m'en cinq » se placent à l'endroit libre le plus proche : à distance de la tête et des
+  cheveux, des bras, des mains et des pieds, des marques de l'état (roue de chargement, étincelles du succès, bulle de
+  l'erreur, traits de la liste vide) et des autres effets, sans sortir du cadre. Quand la place manque, l'effet est
+  dessiné un peu plus petit plutôt que de recouvrir la mascotte ; sans aucune place, il n'est pas dessiné. Les effets
+  suivent le corps (le saut du succès, un pas). Valable pour la version gratuite et le pack complet.
+- En erreur et pour une liste vide, une main touchée sursaute au lieu de tendre un « tape-m'en cinq » ; l'éclat du
+  « tape-m'en cinq » se pose à côté de la paume levée.
+- Le site : la démo « Colle une ligne » s'ouvre sur Uko aux 3 poils, au repos (`idle`).
+
 ## 2.7.1 — 9 octobre 2026
 - **Version gratuite : elle réagit au toucher dans tous les états éveillés.** Avant, seul le repos (`idle`)
   répondait. Maintenant, en accueil, chargement, succès, erreur, liste vide ou réveil, une réaction simple joue par-dessus
