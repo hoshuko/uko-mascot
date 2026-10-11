@@ -11,8 +11,8 @@
 </p>
 
 <p align="center">
-  <a href="https://mascot-uko.com/en/"><b>Website</b></a> ·
-  <a href="https://mascot-uko.com/en/#galerie"><b>Try the colors and hairstyles</b></a> ·
+  <a href="https://mascot-uko.com/"><b>Website</b></a> ·
+  <a href="https://mascot-uko.com/#galerie"><b>Try the colors and hairstyles</b></a> ·
   <a href="https://mascot-uko.com/free/Uko-Starter.zip"><b>Download (free)</b></a> ·
   <a href="https://www.youtube.com/@Hosh-uko"><b>YouTube</b></a>
 </p>
@@ -50,12 +50,12 @@ Version 2.7.4.
 | Commercial use | ✓ | ✓ |
 | Price | free | €5.99 launch price, then €9.99 · paid once |
 
-The full pack is on sale: [see it and buy it](https://mascot-uko.com/en/#prix) (one payment, instant download after payment, receipt by email, sold through Stripe).
+The full pack is on sale: [see it and buy it](https://mascot-uko.com/#prix) (one payment, instant download after payment, receipt by email, sold through Stripe).
 Moving to it means replacing the files: your code does not change.
 
 ### The full pack, filmed in a real app
 
-It has a soul: it reacts to where it is touched, to the moment and to its mood. Each move is one line, wherever you decide. In [SubFlow](https://mascot-uko.com/en/#ia), a subscription tracker, it sits on the empty list's button, climbs onto the form, hops back home and dances on every saving:
+It has a soul: it reacts to where it is touched, to the moment and to its mood. Each move is one line, wherever you decide. In [SubFlow](https://mascot-uko.com/#ia), a subscription tracker, it sits on the empty list's button, climbs onto the form, hops back home and dances on every saving:
 
 <p align="center">
   <img src="media/pack-sit.gif" alt="Empty list: Uko sits on the button" width="200">

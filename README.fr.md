@@ -31,7 +31,7 @@ Essaie-le dans ton app, et garde-le en production si tu veux : c'est permis (cod
 Si ton code demande déjà un mouvement du pack complet (par exemple `climb()` ou `lookAt()`), la mascotte reste dans son état actuel
 et la console indique où le trouver : rien ne casse.
 
-Pack complet : https://mascot-uko.com/#prix
+Pack complet : https://mascot-uko.com/fr/#prix
 
 ## Ce que tu reçois
 
